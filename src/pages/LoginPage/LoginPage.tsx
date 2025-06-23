@@ -31,7 +31,7 @@ const LoginPage = () => {
             return;
         } else if (username === 'lector' && password === 'lector123') {
             login(username, 'dummy-token', 'lector');
-            navigate('/recorder');
+            navigate('/lector');
             return;
         }
 

@@ -15,28 +15,28 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     const toArchive = () => {
-        navigate('archive_viewer');
+        navigate('/archive');
     }
 
     const toMonitor = () => {
-        navigate('monitor');
+        navigate('/monitor');
     }
     const toSessions = () => {
-        navigate('sessions');
+        navigate('/sessions');
     }
 
     const toListener = () => {
-        navigate('listener');
+        navigate('/listener');
     }
     const toRecorder = () => {
-        navigate('recorder');
+        navigate('/recorder');
     }
 
     return (
         <div className={commonStyles.appContainer}>
             {/* Левое меню */}
             <div className={commonStyles.sidePanel}>
-                <div className={commonStyles.infoCard}>
+                {/* <div className={commonStyles.infoCard}>
                     <h2 className={commonStyles.subHeader}>
                         <CogIcon />
                         Настройки
@@ -80,7 +80,7 @@ const HomePage = () => {
                         <span>WebSocket:</span>
                         <span>0</span>
                     </div>
-                </div>
+                </div> */}
 
                 <div className={commonStyles.infoCard}>
                     <h2 className={commonStyles.subHeader}>
@@ -147,7 +147,7 @@ const HomePage = () => {
                 <Header />
 
                 {/* Выбор роли */}
-                <div className={commonStyles.roleSelection}>
+                {/* <div className={commonStyles.roleSelection}>
                     <h2 className={commonStyles.sectionTitle}>Выберите вашу роль:</h2>
                     <div className={commonStyles.roleButtons}>
                         <button className={`${commonStyles.roleButton} ${commonStyles.primaryRoleButton}`} onClick={toRecorder}>
@@ -157,7 +157,7 @@ const HomePage = () => {
                             Я СЛУШАТЕЛЬ
                         </button>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Быстрый доступ */}
                 <div className={commonStyles.quickAccess}>

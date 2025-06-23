@@ -1,12 +1,15 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import StudentPage from "./pages/StudentPage/ListenerPage";
+import StudentPage from "./pages/ListenerPage/ListenerPage";
 import MonitoringPage from "./pages/MonitorPage/MonitoringPage";
 import SessionsPage from "./pages/SessionsPage/SessionsPage";
 import ArchivePage from "./pages/ArchivePage/ArchivePage";
 import RecorderPage from "./pages/RecorderPage/RecorderPage";
 import HomePage from "./pages/HomePage/HomePage";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import LectureViewer from "./pages/LectureViewer/LectureViewer";
+import ActiveLecturesPage from "./pages/ActiveLectures/ActiveLectures";
+import LectorPage from "./pages/LectorPage/LectorPage";
 
 function App() {
   return (
@@ -19,7 +22,11 @@ function App() {
         <Route path="/monitor" element={<MonitoringPage />} /> {/* Мониторинг */}
         <Route path="/recorder" element={<RecorderPage />} /> {/* Лектор */}
         <Route path="/sessions" element={<SessionsPage />} />
-        <Route path="/archive_viewer" element={<ArchivePage />} /> {/* Архи сессий */}
+        <Route path="/archive" element={<ArchivePage />} /> {/* Архив сессий */}
+        <Route path="/archive/lecture/:id" element={<LectureViewer />} />
+        <Route path="/active" element={<ActiveLecturesPage />} />
+        <Route path="/active/lecture/:id" element={<LectureViewer />} />
+        <Route path="/lector" element={<LectorPage />} />
         <Route path="*" element={<Navigate to="/" />} /> {/* Редирект на главную, если страница не найдена */}
       </Routes>
     </BrowserRouter>

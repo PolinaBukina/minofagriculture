@@ -114,13 +114,13 @@
 }
 
 /* Карточки и блоки */
-.infoCard {
+/* .infoCard {
     background: white;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
+} */
 
 /* Кнопки */
 .buttonGroup {
@@ -525,6 +525,7 @@
     height: 100%;
     outline: none;
     border: .5px solid rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .quickLink:hover {
@@ -564,4 +565,70 @@
     .quickLinks {
         grid-template-columns: 1fr;
     }
+}
+
+/*LectureViewer.tsx*/
+.mainContentLecture {
+    flex: 1;
+    padding: 30px;
+    background-color: #f5f7fa;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.infoCardLecture {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.listItemLecture {
+    width: 45%;
+    padding: 12px 15px;
+    margin-bottom: 8px;
+    background-color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.listItemLecture:hover {
+    background-color: #ebf8ff;
+}
+
+.listItemLecture h2 {
+    text-align: center;
+}
+
+.ItemLecture {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.LectureFullText {
+    width: 75%
+}
+
+.textButton {
+    background: #4a6fa5;
+    width: 20%;
+    height: 30%;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.textButton:hover {
+    background: #3a5a8f;
 }
