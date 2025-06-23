@@ -1,0 +1,44 @@
+.linkButton {
+    background: none;
+    border: none;
+    color: #0066cc;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.linkButton:hover {
+    text-decoration: underline;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.breadcrumbItem {
+    display: flex;
+    align-items: center;
+}
+
+.separator {
+    margin: 0 8px;
+    color: #666;
+}
+
+.link {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.current {
+    color: #333;
+    font-weight: 500;
+}
