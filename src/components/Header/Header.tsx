@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onSupport }) => {
 
     const handleSupport = () => {
         // Логика открытия поддержки
-        console.log('Support clicked');
+        console.log('Поддержка');
         onSupport?.();
     };
 
