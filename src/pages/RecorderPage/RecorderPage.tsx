@@ -1,214 +1,9 @@
 // import { useState } from 'react';
-// import commonStyles from '../commonStyles.module.css';
-// import { CogIcon } from '../../icons/CogIcon';
-// import { CheckCircleIcon } from '../../icons/CheckIcon';
-// import MusicIcon from '../../icons/MusicIcon';
-// import FolderIcon from '../../icons/FolderIcon';
-// import NotCheckIcon from '../../icons/NotCheckIcon';
-// import Header from '../../components/Header/Header';
-
-
-// const RecorderPage = () => {
-//     const [isRecording, setIsRecording] = useState(false);
-//     const [sampleRate, setSampleRate] = useState(16000);
-//     const [channels, setChannels] = useState(1);
-//     const [chunkSize, setChunkSize] = useState(1024);
-
-//     const handleStartRecording = () => {
-//         setIsRecording(true);
-//         // Логика начала записи
-//     };
-
-//     const handleStopRecording = () => {
-//         setIsRecording(false);
-//         // Логика остановки записи
-//     };
-
-//     return (
-//         <div className={commonStyles.appContainer}>
-//             {/* Боковая панель (меню) */}
-//             <div className={commonStyles.sidePanel}>
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>
-//                         <CogIcon />
-//                         Настройки
-//                     </h2>
-
-//                     <div className={commonStyles.subHeader}>
-//                         Сервер
-//                     </div>
-//                     <div className={commonStyles.statusItem}>
-//                         <span>Адрес:</span>
-//                         <span>51.250.115.73:8000</span>
-//                     </div>
-//                     <div className={commonStyles.statusItem}>
-//                         <span>Статус:</span>
-//                         <span className={commonStyles.statusActive}>
-//                             <CheckCircleIcon />
-//                             Сервер доступен
-//                         </span>
-//                     </div>
-
-//                     <div className={commonStyles.statusItem}>
-//                         <span>MongoDB:</span>
-//                         <span className={commonStyles.statusActive}>
-//                             <CheckCircleIcon />
-//                         </span>
-//                     </div>
-
-//                     <div className={commonStyles.statusItem}>
-//                         <span>API ключи:</span>
-//                         <span className={commonStyles.statusActive}>
-//                             <CheckCircleIcon />
-//                         </span>
-//                     </div>
-
-//                     <div className={commonStyles.statusItem}>
-//                         <span>Активные сессии:</span>
-//                         <span>0</span>
-//                     </div>
-
-//                     <div className={commonStyles.statusItem}>
-//                         <span>WebSocket:</span>
-//                         <span>0</span>
-//                     </div>
-//                 </div>
-
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>
-//                         <FolderIcon />
-//                         Текущая сессия
-//                     </h2>
-//                     <div className={commonStyles.statusItem}>
-//                         <span>Статус:</span>
-//                         <span className={isRecording ? commonStyles.statusActive : commonStyles.statusInactive}>
-//                             {isRecording ? (
-//                                 <>
-//                                     <CheckCircleIcon /> Идет запись
-//                                 </>
-//                             ) : (
-//                                 <>
-//                                     <NotCheckIcon /> Нет активной записи
-//                                 </>
-//                             )}
-//                         </span>
-//                     </div>
-//                     <div className={commonStyles.noteText}>
-//                         ID появится после начала записи
-//                     </div>
-//                 </div>
-
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>
-//                         <MusicIcon />
-//                         Настройки аудио</h2>
-
-//                     <div className={commonStyles.filterControl}>
-//                         <label className={commonStyles.filterLabel}>Частота дискретизации</label>
-//                         <select
-//                             className={commonStyles.filterSelect}
-//                             value={sampleRate}
-//                             onChange={(e) => setSampleRate(Number(e.target.value))}
-//                         >
-//                             <option value="8000">8000</option>
-//                             <option value="16000">16000</option>
-//                             <option value="44100">44100</option>
-//                         </select>
-//                     </div>
-
-//                     <div className={commonStyles.filterControl}>
-//                         <label className={commonStyles.filterLabel}>Количество каналов</label>
-//                         <select
-//                             className={commonStyles.filterSelect}
-//                             value={channels}
-//                             onChange={(e) => setChannels(Number(e.target.value))}
-//                         >
-//                             <option value="1">1 (моно)</option>
-//                             <option value="2">2 (стерео)</option>
-//                         </select>
-//                     </div>
-
-//                     <div className={commonStyles.filterControl}>
-//                         <label className={commonStyles.filterLabel}>Размер чанка</label>
-//                         <select
-//                             className={commonStyles.filterSelect}
-//                             value={chunkSize}
-//                             onChange={(e) => setChunkSize(Number(e.target.value))}
-//                         >
-//                             <option value="512">512</option>
-//                             <option value="1024">1024</option>
-//                             <option value="2048">2048</option>
-//                         </select>
-//                     </div>
-//                 </div>
-
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>Диагностика</h2>
-//                     <div className={commonStyles.noteText}>
-//                         Для работы WebSocket на HTTPS сайтах нужен WSS протокол. Рекомендуется открыть сайт по HTTP для тестирования.
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {/* Основное содержимое */}
-//             <div className={commonStyles.mainContent}>
-//                 <Header />
-//                 <h1 className={commonStyles.sectionHeader}>Запись аудио</h1>
-
-//                 <div className={commonStyles.infoCard}>
-//                     <div className={commonStyles.buttonGroup}>
-//                         <button
-//                             onClick={handleStartRecording}
-//                             disabled={isRecording}
-//                             className={`${commonStyles.primaryButton} ${isRecording ? commonStyles.disabledButton : ''}`}
-//                         >
-//                             Начать запись
-//                         </button>
-//                         <button
-//                             onClick={handleStopRecording}
-//                             disabled={!isRecording}
-//                             className={`${commonStyles.secondaryButton} ${!isRecording ? commonStyles.disabledButton : ''}`}
-//                         >
-//                             Остановить запись
-//                         </button>
-//                     </div>
-
-//                     <div className={commonStyles.noteText}>
-//                         Используется AudioContext для лучшего качества записи
-//                     </div>
-//                 </div>
-
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>Результаты обработки</h2>
-//                     {isRecording ? (
-//                         <div className={commonStyles.statusItem}>
-//                             <span>18:55:31:</span>
-//                             <span>Улучшенная направленная завершена - используется AudioContext + PCM16</span>
-//                         </div>
-//                     ) : (
-//                         <div className={commonStyles.noteText}>
-//                             Начните запись для просмотра результатов
-//                         </div>
-//                     )}
-//                 </div>
-//             </div>
-//         </div >
-//     );
-// };
-
-// export default RecorderPage;
-
-
-// import { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import commonStyles from '../commonStyles.module.css';
-// import { CogIcon } from '../../icons/CogIcon';
-// import { CheckCircleIcon } from '../../icons/CheckIcon';
-// import MusicIcon from '../../icons/MusicIcon';
-// import FolderIcon from '../../icons/FolderIcon';
-// import NotCheckIcon from '../../icons/NotCheckIcon';
 // import Header from '../../components/Header/Header';
 // import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
+// import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 
 // type LectureData = {
 //     id: string;
@@ -220,15 +15,10 @@
 //     createdAt: string;
 // };
 
-// type LectureStatus = 'not_started' | 'in_progress' | 'paused' | 'ended';
-
 // const RecorderPage = () => {
-//     const [isRecording, setIsRecording] = useState<boolean>(false);
-//     const [sampleRate, setSampleRate] = useState<number>(16000);
-//     const [channels, setChannels] = useState<number>(1);
-//     const [chunkSize, setChunkSize] = useState<number>(1024);
-//     const [showLectureForm, setShowLectureForm] = useState<boolean>(false);
-//     const [lectureData, setLectureData] = useState<Omit<LectureData, 'id' | 'createdAt'>>({
+//     const [isRecording, setIsRecording] = useState(false);
+//     const [isPaused, setIsPaused] = useState(false);
+//     const [lectureData, setLectureData] = useState({
 //         title: '',
 //         lecturer: '',
 //         startTime: '',
@@ -236,251 +26,199 @@
 //         location: ''
 //     });
 //     const [currentLecture, setCurrentLecture] = useState<LectureData | null>(null);
-//     const [lectureStatus, setLectureStatus] = useState<LectureStatus>('not_started');
+//     const [originalText, setOriginalText] = useState('');
+//     const [translatedText, setTranslatedText] = useState('');
+//     const [language, setLanguage] = useState('en'); // 'en', 'fr', 'zh' и т.д.
+//     const userRole = getRoleFromStorage();
 //     const navigate = useNavigate();
-
-//     const handleStartRecording = () => {
-//         setIsRecording(true);
-//         // Логика начала записи
-//     };
-
-//     const handleStopRecording = () => {
-//         setIsRecording(false);
-//         // Логика остановки записи
-//     };
-
-//     const handleNewLectureClick = () => {
-//         setShowLectureForm(true);
-//     };
 
 //     const handleLectureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 //         const { name, value } = e.target;
-//         setLectureData(prev => ({
-//             ...prev,
-//             [name]: value
-//         }));
+//         setLectureData(prev => ({ ...prev, [name]: value }));
 //     };
 
-//     const handleCreateLecture = (e: React.FormEvent) => {
+//     const handleStartLecture = (e: React.FormEvent) => {
 //         e.preventDefault();
-//         const lectureId = `lecture-${Date.now()}`;
 
+//         // Создаем и сразу начинаем новую лекцию
 //         const newLecture: LectureData = {
 //             ...lectureData,
-//             id: lectureId,
+//             id: `lecture-${Date.now()}`,
+//             startTime: lectureData.startTime || new Date().toISOString(),
 //             createdAt: new Date().toISOString()
 //         };
 
 //         setCurrentLecture(newLecture);
-//         setShowLectureForm(false);
-//         setLectureStatus('not_started');
-//         // Здесь можно добавить отправку данных на сервер
+//         setIsRecording(true);
+//         setIsPaused(false);
+
+//         // Заглушка для демонстрации
+//         setOriginalText('Это пример текста лекции. Здесь будет отображаться расшифровка речи лектора в реальном времени.');
+//         setTranslatedText('This is an example lecture text. Here will be displayed the real-time translation of the lecturer\'s speech.');
+
+//         console.log('Лекция начата:', newLecture);
 //     };
 
-//     const handleStartLecture = () => {
-//         setLectureStatus('in_progress');
-//         // Дополнительная логика для начала лекции
+//     const handleStopLecture = () => {
+//         setIsRecording(false);
+//         setIsPaused(false);
+//         setCurrentLecture(null);
+//         navigate('/archive');
 //     };
 
-//     const handlePauseLecture = () => {
-//         setLectureStatus('paused');
-//         // Дополнительная логика для паузы лекции
-//     };
-
-//     const handleEndLecture = () => {
-//         setLectureStatus('ended');
-//         // Дополнительная логика для завершения лекции
-//         // Можно добавить навигацию в архив или сообщение о завершении
+//     const handleTogglePause = () => {
+//         setIsPaused(prev => !prev);
+//         console.log(`Лекция ${isPaused ? 'возобновлена' : 'приостановлена'}`);
 //     };
 
 //     return (
 //         <div className={commonStyles.appContainer}>
-//             {/* Основное содержимое */}
 //             <div className={commonStyles.mainContent}>
 //                 <Header />
 //                 <Breadcrumbs
 //                     items={[
-//                         { label: 'Главная', path: '/lector' },
-//                         { label: 'Запись лекции', path: '/recorder' }
+//                         { label: getHomeLabel(userRole), path: getHomePath(userRole) },
+//                         { label: 'Запись лекции', path: '' }
 //                     ]}
 //                 />
+
 //                 <h1 className={commonStyles.sectionHeader}>
-//                     {currentLecture ? `Лекция: ${currentLecture.title}` : 'Запись аудио'}
+//                     {currentLecture ? `Лекция: ${currentLecture.title}` : 'Новая лекция'}
 //                 </h1>
 
-//                 {!currentLecture && !showLectureForm && (
+//                 {!currentLecture ? (
 //                     <div className={commonStyles.infoCard}>
-//                         <div className={commonStyles.buttonGroup}>
-//                             <button
-//                                 onClick={handleNewLectureClick}
-//                                 className={commonStyles.primaryButton}
-//                             >
-//                                 Запустить новую лекцию
-//                             </button>
-//                             <button
-//                                 onClick={handleStartRecording}
-//                                 disabled={isRecording}
-//                                 className={`${commonStyles.primaryButton} ${!isRecording ? commonStyles.disabledButton : ''}`}
-//                             >
-//                                 Начать запись
-//                             </button>
-//                             <button
-//                                 onClick={handleStopRecording}
-//                                 disabled={!isRecording}
-//                                 className={`${commonStyles.secondaryButton} ${!isRecording ? commonStyles.disabledButton : ''}`}
-//                             >
-//                                 Остановить запись
-//                             </button>
-//                         </div>
+//                         <h2 className={commonStyles.subHeader}>Параметры лекции</h2>
+//                         <form onSubmit={handleStartLecture}>
+// <div className={commonStyles.filterControl}>
+//     <label>Название лекции</label>
+//     <input
+//         type="text"
+//         name="title"
+//         value={lectureData.title}
+//         onChange={handleLectureInputChange}
+//         className={commonStyles.filterSelect}
+//         required
+//     />
+// </div>
 
-//                         <div className={commonStyles.noteText}>
-//                             Используется AudioContext для лучшего качества записи
-//                         </div>
-//                     </div>
-//                 )}
+// <div className={commonStyles.filterControl}>
+//     <label>Имя лектора</label>
+//     <input
+//         type="text"
+//         name="lecturer"
+//         value={lectureData.lecturer}
+//         onChange={handleLectureInputChange}
+//         className={commonStyles.filterSelect}
+//         required
+//     />
+// </div>
 
-//                 {showLectureForm && (
-//                     <div className={commonStyles.infoCard}>
-//                         <h2 className={commonStyles.subHeader}>Создание новой лекции</h2>
-//                         <form onSubmit={handleCreateLecture}>
-//                             <div className={commonStyles.filterControl}>
-//                                 <label className={commonStyles.filterLabel}>Название лекции</label>
-//                                 <input
-//                                     type="text"
-//                                     name="title"
-//                                     value={lectureData.title}
-//                                     onChange={handleLectureInputChange}
-//                                     className={commonStyles.filterSelect}
-//                                     required
-//                                 />
-//                             </div>
+// <div className={commonStyles.filterControl}>
+//     <label>Время начала</label>
+//     <input
+//         type="datetime-local"
+//         name="startTime"
+//         value={lectureData.startTime}
+//         onChange={handleLectureInputChange}
+//         className={commonStyles.filterSelect}
+//     />
+// </div>
 
-//                             <div className={commonStyles.filterControl}>
-//                                 <label className={commonStyles.filterLabel}>Имя лектора</label>
-//                                 <input
-//                                     type="text"
-//                                     name="lecturer"
-//                                     value={lectureData.lecturer}
-//                                     onChange={handleLectureInputChange}
-//                                     className={commonStyles.filterSelect}
-//                                     required
-//                                 />
-//                             </div>
+// <div className={commonStyles.filterControl}>
+//     <label>Продолжительность (мин)</label>
+//     <input
+//         type="number"
+//         name="duration"
+//         value={lectureData.duration}
+//         onChange={handleLectureInputChange}
+//         className={commonStyles.filterSelect}
+//         required
+//     />
+// </div>
 
-//                             <div className={commonStyles.filterControl}>
-//                                 <label className={commonStyles.filterLabel}>Время начала лекции</label>
-//                                 <input
-//                                     type="datetime-local"
-//                                     name="startTime"
-//                                     value={lectureData.startTime}
-//                                     onChange={handleLectureInputChange}
-//                                     className={commonStyles.filterSelect}
-//                                     required
-//                                 />
-//                             </div>
+// <div className={commonStyles.filterControl}>
+//     <label>Место проведения</label>
+//     <input
+//         type="text"
+//         name="location"
+//         value={lectureData.location}
+//         onChange={handleLectureInputChange}
+//         className={commonStyles.filterSelect}
+//         required
+//     />
+// </div>
 
-//                             <div className={commonStyles.filterControl}>
-//                                 <label className={commonStyles.filterLabel}>Продолжительность (мин)</label>
-//                                 <input
-//                                     type="number"
-//                                     name="duration"
-//                                     value={lectureData.duration}
-//                                     onChange={handleLectureInputChange}
-//                                     className={commonStyles.filterSelect}
-//                                     required
-//                                 />
-//                             </div>
-
-//                             <div className={commonStyles.filterControl}>
-//                                 <label className={commonStyles.filterLabel}>Место проведения</label>
-//                                 <input
-//                                     type="text"
-//                                     name="location"
-//                                     value={lectureData.location}
-//                                     onChange={handleLectureInputChange}
-//                                     className={commonStyles.filterSelect}
-//                                     required
-//                                 />
-//                             </div>
-
-//                             <div className={commonStyles.buttonGroup}>
-//                                 <button
-//                                     type="submit"
-//                                     className={commonStyles.primaryButton}
-//                                 >
-//                                     Создать новую лекцию
-//                                 </button>
-//                                 <button
-//                                     type="button"
-//                                     onClick={() => setShowLectureForm(false)}
-//                                     className={commonStyles.secondaryButton}
-//                                 >
-//                                     Отмена
-//                                 </button>
-//                             </div>
+// <button
+//     type="submit"
+//     className={commonStyles.primaryButton}
+//     disabled={!lectureData.title || !lectureData.lecturer || !lectureData.startTime || !lectureData.duration || !lectureData.location}
+// >
+//     Начать лекцию
+// </button>
 //                         </form>
 //                     </div>
+//                 ) : (
+//                     <>
+//                         <div className={commonStyles.infoCard}>
+//                             <h2 className={commonStyles.subHeader}>
+//                                 {isPaused ? 'Лекция приостановлена' : 'Идет запись лекции'}
+//                             </h2>
+
+// <div className={commonStyles.statusItem}>
+//     <span>Название:</span>
+//     <span>{currentLecture.title}</span>
+// </div>
+// <div className={commonStyles.statusItem}>
+//     <span>Лектор:</span>
+//     <span>{currentLecture.lecturer}</span>
+// </div>
+// <div className={commonStyles.statusItem}>
+//     <span>Начало:</span>
+//     <span>{new Date(currentLecture.startTime).toLocaleString()}</span>
+// </div>
+// <div className={commonStyles.statusItem}>
+//     <span>Место:</span>
+//     <span>{currentLecture.location}</span>
+// </div>
+
+// <div className={commonStyles.buttonGroup} style={{ marginTop: '20px' }}>
+//     <button
+//         onClick={handleTogglePause}
+//         className={commonStyles.refreshButton}
+//     >
+//         {isPaused ? 'Продолжить лекцию' : 'Приостановить лекцию'}
+//     </button>
+//     <button
+//         onClick={handleStopLecture}
+//         className={commonStyles.secondaryButton}
+//     >
+//         Завершить лекцию
+//     </button>
+// </div>
+//                         </div>
+
+//                         <div className={commonStyles.infoCardLecture}>
+// <div className={commonStyles.listItemLecture}>
+//     <h2>Полный текст лекции</h2>
+//     <div className={commonStyles.LectureFullText}>
+//         {originalText || 'Текст лекции недоступен'}
+//     </div>
+// </div>
+
+// <div className={commonStyles.listItemLecture}>
+//     <h2>
+//         {language === 'en' ? 'Полный перевод (английский)' :
+//             language === 'fr' ? 'Полный перевод (французский)' :
+//                 'Полный перевод (китайский)'}
+//     </h2>
+//     <div className={commonStyles.LectureFullText}>
+//         {translatedText || 'Перевод недоступен'}
+//     </div>
+// </div>
+//                         </div>
+//                     </>
 //                 )}
-
-//                 {currentLecture && (
-//                     <div className={commonStyles.infoCard}>
-//                         <h2 className={commonStyles.subHeader}>Управление лекцией</h2>
-//                         <div className={commonStyles.buttonGroup}>
-//                             <button
-//                                 onClick={handleStartLecture}
-//                                 disabled={lectureStatus !== 'not_started' && lectureStatus !== 'paused'}
-//                                 className={`${commonStyles.primaryButton} ${(lectureStatus !== 'not_started' && lectureStatus !== 'paused') ? commonStyles.disabledButton : ''
-//                                     }`}
-//                             >
-//                                 Начать лекцию
-//                             </button>
-//                             <button
-//                                 onClick={handlePauseLecture}
-//                                 disabled={lectureStatus !== 'in_progress'}
-//                                 className={`${commonStyles.refreshButton} ${lectureStatus !== 'in_progress' ? commonStyles.disabledButton : ''
-//                                     }`}
-//                             >
-//                                 Приостановить лекцию
-//                             </button>
-//                             <button
-//                                 onClick={handleEndLecture}
-//                                 disabled={lectureStatus === 'ended'}
-//                                 className={`${commonStyles.secondaryButton} ${lectureStatus === 'ended' ? commonStyles.disabledButton : ''
-//                                     }`}
-//                             >
-//                                 Закончить лекцию
-//                             </button>
-//                         </div>
-
-//                         <div className={commonStyles.statusItem}>
-//                             <span>Статус лекции:</span>
-//                             <span className={
-//                                 lectureStatus === 'in_progress' ? commonStyles.statusActive :
-//                                     lectureStatus === 'paused' ? commonStyles.statusWarning :
-//                                         lectureStatus === 'ended' ? commonStyles.statusInactive :
-//                                             commonStyles.statusNeutral
-//                             }>
-//                                 {lectureStatus === 'in_progress' ? 'Лекция идет' :
-//                                     lectureStatus === 'paused' ? 'Лекция приостановлена' :
-//                                         lectureStatus === 'ended' ? 'Лекция завершена' : 'Лекция не начата'}
-//                             </span>
-//                         </div>
-//                     </div>
-//                 )}
-
-//                 <div className={commonStyles.infoCard}>
-//                     <h2 className={commonStyles.subHeader}>Результаты обработки</h2>
-//                     {isRecording ? (
-//                         <div className={commonStyles.statusItem}>
-//                             <span>18:55:31:</span>
-//                             <span>Улучшенная направленная завершена - используется AudioContext + PCM16</span>
-//                         </div>
-//                     ) : (
-//                         <div className={commonStyles.noteText}>
-//                             {currentLecture ? 'Управление лекцией' : 'Начните запись для просмотра результатов'}
-//                         </div>
-//                     )}
-//                 </div>
 //             </div>
 //         </div>
 //     );
@@ -492,13 +230,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import commonStyles from '../commonStyles.module.css';
-import { CogIcon } from '../../icons/CogIcon';
-import { CheckCircleIcon } from '../../icons/CheckIcon';
-import MusicIcon from '../../icons/MusicIcon';
-import FolderIcon from '../../icons/FolderIcon';
-import NotCheckIcon from '../../icons/NotCheckIcon';
 import Header from '../../components/Header/Header';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
+import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 
 type LectureData = {
     id: string;
@@ -510,15 +244,10 @@ type LectureData = {
     createdAt: string;
 };
 
-type LectureStatus = 'not_started' | 'in_progress' | 'paused' | 'ended';
-
 const RecorderPage = () => {
-    const [isRecording, setIsRecording] = useState<boolean>(false);
-    const [sampleRate, setSampleRate] = useState<number>(16000);
-    const [channels, setChannels] = useState<number>(1);
-    const [chunkSize, setChunkSize] = useState<number>(1024);
-    const [showLectureForm, setShowLectureForm] = useState<boolean>(false);
-    const [lectureData, setLectureData] = useState<Omit<LectureData, 'id' | 'createdAt'>>({
+    const [isRecording, setIsRecording] = useState(false);
+    const [isPaused, setIsPaused] = useState(false);
+    const [lectureData, setLectureData] = useState({
         title: '',
         lecturer: '',
         startTime: '',
@@ -526,181 +255,80 @@ const RecorderPage = () => {
         location: ''
     });
     const [currentLecture, setCurrentLecture] = useState<LectureData | null>(null);
-    const [lectureStatus, setLectureStatus] = useState<LectureStatus>('not_started');
-    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
-    const [modalAction, setModalAction] = useState<'stop' | 'pause' | null>(null);
+    const [originalText, setOriginalText] = useState('');
+    const [translatedText, setTranslatedText] = useState('');
+    const [language, setLanguage] = useState('en');
+    const [showStopModal, setShowStopModal] = useState(false);
+    const [showPauseModal, setShowPauseModal] = useState(false);
+    const userRole = getRoleFromStorage();
     const navigate = useNavigate();
-
-    const handleStartRecording = () => {
-        setIsRecording(true);
-        // Логика начала записи
-    };
-
-    const handleStopRecording = () => {
-        setModalAction('stop');
-        setShowConfirmModal(true);
-    };
-
-    const handlePauseRecording = () => {
-        setModalAction('pause');
-        setShowConfirmModal(true);
-    };
-
-    const confirmAction = () => {
-        if (modalAction === 'stop') {
-            setIsRecording(false);
-            // Логика остановки записи
-        } else if (modalAction === 'pause') {
-            // Логика приостановки записи
-        }
-        setShowConfirmModal(false);
-        setModalAction(null);
-    };
-
-    const cancelAction = () => {
-        setShowConfirmModal(false);
-        setModalAction(null);
-    };
-
-    const handleNewLectureClick = () => {
-        setShowLectureForm(true);
-    };
 
     const handleLectureInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setLectureData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setLectureData(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleCreateLecture = (e: React.FormEvent) => {
+    const handleStartLecture = (e: React.FormEvent) => {
         e.preventDefault();
-        const lectureId = `lecture-${Date.now()}`;
 
         const newLecture: LectureData = {
             ...lectureData,
-            id: lectureId,
+            id: `lecture-${Date.now()}`,
+            startTime: lectureData.startTime || new Date().toISOString(),
             createdAt: new Date().toISOString()
         };
 
         setCurrentLecture(newLecture);
-        setShowLectureForm(false);
-        setLectureStatus('not_started');
-        // Здесь можно добавить отправку данных на сервер
+        setIsRecording(true);
+        setIsPaused(false);
+        setOriginalText('Это пример текста лекции. Здесь будет отображаться расшифровка речи лектора в реальном времени.');
+        setTranslatedText('This is an example lecture text. Here will be displayed the real-time translation of the lecturer\'s speech.');
     };
 
-    const handleStartLecture = () => {
-        setLectureStatus('in_progress');
-        // Дополнительная логика для начала лекции
+    const confirmStopLecture = () => {
+        setIsRecording(false);
+        setIsPaused(false);
+        setCurrentLecture(null);
+        setShowStopModal(false);
+        navigate('/archive');
     };
 
-    const handlePauseLecture = () => {
-        setModalAction('pause');
-        setShowConfirmModal(true);
-    };
-
-    const handleEndLecture = () => {
-        setModalAction('stop');
-        setShowConfirmModal(true);
-    };
-
-    const confirmLectureAction = () => {
-        if (modalAction === 'stop') {
-            setLectureStatus('ended');
-            // Дополнительная логика для завершения лекции
-        } else if (modalAction === 'pause') {
-            setLectureStatus('paused');
-            // Дополнительная логика для паузы лекции
+    const handleTogglePause = () => {
+        if (isPaused) {
+            setIsPaused(false);
+            setShowPauseModal(false);
+        } else {
+            setShowPauseModal(true);
         }
-        setShowConfirmModal(false);
-        setModalAction(null);
+    };
+
+    const confirmPauseLecture = () => {
+        setIsPaused(true);
+        setShowPauseModal(false);
     };
 
     return (
         <div className={commonStyles.appContainer}>
-            {/* Модальное окно подтверждения */}
-            {showConfirmModal && (
-                <div className={commonStyles.modalOverlay}>
-                    <div className={commonStyles.modal}>
-                        <h3>Подтверждение</h3>
-                        <p>
-                            {modalAction === 'stop'
-                                ? 'Вы уверены, что хотите остановить запись?'
-                                : 'Вы уверены, что хотите приостановить запись?'}
-                        </p>
-                        <div className={commonStyles.buttonGroup}>
-                            <button
-                                onClick={modalAction === 'pause' && !currentLecture ? confirmAction : confirmLectureAction}
-                                className={commonStyles.primaryButton}
-                            >
-                                Да
-                            </button>
-                            <button
-                                onClick={cancelAction}
-                                className={commonStyles.secondaryButton}
-                            >
-                                Отмена
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Основное содержимое */}
             <div className={commonStyles.mainContent}>
                 <Header />
                 <Breadcrumbs
                     items={[
-                        { label: 'Главная', path: '/lector' },
-                        { label: 'Запись лекции', path: '/recorder' }
+                        { label: getHomeLabel(userRole), path: getHomePath(userRole) },
+                        { label: 'Запись лекции', path: '' }
                     ]}
                 />
+
                 <h1 className={commonStyles.sectionHeader}>
-                    {currentLecture ? `Лекция: ${currentLecture.title}` : 'Запись аудио'}
+                    {currentLecture ? `Лекция: ${currentLecture.title}` : 'Новая лекция'}
                 </h1>
 
-                {!currentLecture && !showLectureForm && (
+                {!currentLecture ? (
                     <div className={commonStyles.infoCard}>
-                        <div className={commonStyles.buttonGroup}>
-                            {!isRecording && (
-                                <button
-                                    onClick={handleNewLectureClick}
-                                    className={commonStyles.primaryButton}
-                                >
-                                    Запустить новую лекцию
-                                </button>
-                            )}
-                            {isRecording && (
-                                <>
-                                    <button
-                                        onClick={handlePauseRecording}
-                                        className={commonStyles.refreshButton}
-                                    >
-                                        Приостановить запись
-                                    </button>
-                                    <button
-                                        onClick={handleStopRecording}
-                                        className={commonStyles.secondaryButton}
-                                    >
-                                        Остановить запись
-                                    </button>
-                                </>
-                            )}
-                        </div>
-
-                        <div className={commonStyles.noteText}>
-                            Используется AudioContext для лучшего качества записи
-                        </div>
-                    </div>
-                )}
-
-                {showLectureForm && (
-                    <div className={commonStyles.infoCard}>
-                        <h2 className={commonStyles.subHeader}>Создание новой лекции</h2>
-                        <form onSubmit={handleCreateLecture}>
+                        <h2 className={commonStyles.subHeader}>Параметры лекции</h2>
+                        <form onSubmit={handleStartLecture}>
+                            {/* Форма ввода параметров лекции */}
                             <div className={commonStyles.filterControl}>
-                                <label className={commonStyles.filterLabel}>Название лекции</label>
+                                <label>Название лекции</label>
                                 <input
                                     type="text"
                                     name="title"
@@ -712,7 +340,7 @@ const RecorderPage = () => {
                             </div>
 
                             <div className={commonStyles.filterControl}>
-                                <label className={commonStyles.filterLabel}>Имя лектора</label>
+                                <label>Имя лектора</label>
                                 <input
                                     type="text"
                                     name="lecturer"
@@ -724,19 +352,18 @@ const RecorderPage = () => {
                             </div>
 
                             <div className={commonStyles.filterControl}>
-                                <label className={commonStyles.filterLabel}>Время начала лекции</label>
+                                <label>Время начала</label>
                                 <input
                                     type="datetime-local"
                                     name="startTime"
                                     value={lectureData.startTime}
                                     onChange={handleLectureInputChange}
                                     className={commonStyles.filterSelect}
-                                    required
                                 />
                             </div>
 
                             <div className={commonStyles.filterControl}>
-                                <label className={commonStyles.filterLabel}>Продолжительность (мин)</label>
+                                <label>Продолжительность (мин)</label>
                                 <input
                                     type="number"
                                     name="duration"
@@ -748,7 +375,7 @@ const RecorderPage = () => {
                             </div>
 
                             <div className={commonStyles.filterControl}>
-                                <label className={commonStyles.filterLabel}>Место проведения</label>
+                                <label>Место проведения</label>
                                 <input
                                     type="text"
                                     name="location"
@@ -759,84 +386,126 @@ const RecorderPage = () => {
                                 />
                             </div>
 
-                            <div className={commonStyles.buttonGroup}>
-                                <button
-                                    type="submit"
-                                    className={commonStyles.primaryButton}
-                                >
-                                    Создать новую лекцию
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setShowLectureForm(false)}
-                                    className={commonStyles.secondaryButton}
-                                >
-                                    Отмена
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                )}
-
-                {currentLecture && (
-                    <div className={commonStyles.infoCard}>
-                        <h2 className={commonStyles.subHeader}>Управление лекцией</h2>
-                        <div className={commonStyles.buttonGroup}>
                             <button
-                                onClick={handleStartLecture}
-                                disabled={lectureStatus !== 'not_started' && lectureStatus !== 'paused'}
-                                className={`${commonStyles.primaryButton} ${(lectureStatus !== 'not_started' && lectureStatus !== 'paused') ? commonStyles.disabledButton : ''
-                                    }`}
+                                type="submit"
+                                className={commonStyles.primaryButton}
+                                disabled={!lectureData.title || !lectureData.lecturer || !lectureData.startTime || !lectureData.duration || !lectureData.location}
                             >
                                 Начать лекцию
                             </button>
-                            <button
-                                onClick={handlePauseLecture}
-                                disabled={lectureStatus !== 'in_progress'}
-                                className={`${commonStyles.refreshButton} ${lectureStatus !== 'in_progress' ? commonStyles.disabledButton : ''
-                                    }`}
-                            >
-                                Приостановить лекцию
-                            </button>
-                            <button
-                                onClick={handleEndLecture}
-                                disabled={lectureStatus === 'ended'}
-                                className={`${commonStyles.secondaryButton} ${lectureStatus === 'ended' ? commonStyles.disabledButton : ''
-                                    }`}
-                            >
-                                Закончить лекцию
-                            </button>
+                        </form>
+                    </div>
+                ) : (
+                    <>
+                        <div className={commonStyles.infoCard}>
+                            <h2 className={commonStyles.subHeader}>
+                                {isPaused ? 'Лекция приостановлена' : 'Идет запись лекции'}
+                            </h2>
+
+                            {/* Информация о лекции */}
+                            <div className={commonStyles.statusItem}>
+                                <span>Название:</span>
+                                <span>{currentLecture.title}</span>
+                            </div>
+                            <div className={commonStyles.statusItem}>
+                                <span>Лектор:</span>
+                                <span>{currentLecture.lecturer}</span>
+                            </div>
+                            <div className={commonStyles.statusItem}>
+                                <span>Начало:</span>
+                                <span>{new Date(currentLecture.startTime).toLocaleString()}</span>
+                            </div>
+                            <div className={commonStyles.statusItem}>
+                                <span>Место:</span>
+                                <span>{currentLecture.location}</span>
+                            </div>
+
+                            <div className={commonStyles.buttonGroup} style={{ marginTop: '20px' }}>
+                                <button
+                                    onClick={handleTogglePause}
+                                    className={commonStyles.refreshButton}
+                                >
+                                    {isPaused ? 'Продолжить лекцию' : 'Приостановить лекцию'}
+                                </button>
+                                <button
+                                    onClick={() => setShowStopModal(true)}
+                                    className={commonStyles.secondaryButton}
+                                >
+                                    Завершить лекцию
+                                </button>
+                            </div>
                         </div>
 
-                        <div className={commonStyles.statusItem}>
-                            <span>Статус лекции:</span>
-                            <span className={
-                                lectureStatus === 'in_progress' ? commonStyles.statusActive :
-                                    lectureStatus === 'paused' ? commonStyles.statusWarning :
-                                        lectureStatus === 'ended' ? commonStyles.statusInactive :
-                                            commonStyles.statusNeutral
-                            }>
-                                {lectureStatus === 'in_progress' ? 'Лекция идет' :
-                                    lectureStatus === 'paused' ? 'Лекция приостановлена' :
-                                        lectureStatus === 'ended' ? 'Лекция завершена' : 'Лекция не начата'}
-                            </span>
+                        <div className={commonStyles.infoCardLecture}>
+                            {/* Блоки с текстом лекции и переводом */}
+                            <div className={commonStyles.listItemLecture}>
+                                <h2>Полный текст лекции</h2>
+                                <div className={commonStyles.LectureFullText}>
+                                    {originalText || 'Текст лекции недоступен'}
+                                </div>
+                            </div>
+
+                            <div className={commonStyles.listItemLecture}>
+                                <h2>
+                                    {language === 'en' ? 'Полный перевод (английский)' :
+                                        language === 'fr' ? 'Полный перевод (французский)' :
+                                            'Полный перевод (китайский)'}
+                                </h2>
+                                <div className={commonStyles.LectureFullText}>
+                                    {translatedText || 'Перевод недоступен'}
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Модальное окно подтверждения остановки лекции */}
+                {showStopModal && (
+                    <div className={commonStyles.modalOverlay}>
+                        <div className={commonStyles.modal}>
+                            <h3>Подтверждение</h3>
+                            <p>Вы уверены, что хотите завершить запись лекции?</p>
+                            <div className={commonStyles.modalButtons}>
+                                <button
+                                    onClick={() => setShowStopModal(false)}
+                                    className={commonStyles.cancelModalButton}
+                                >
+                                    Отмена
+                                </button>
+                                <button
+                                    onClick={confirmStopLecture}
+                                    className={commonStyles.okModalButton}
+                                >
+                                    Завершить
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
 
-                <div className={commonStyles.infoCard}>
-                    <h2 className={commonStyles.subHeader}>Результаты обработки</h2>
-                    {isRecording ? (
-                        <div className={commonStyles.statusItem}>
-                            <span>18:55:31:</span>
-                            <span>Улучшенная направленная завершена - используется AudioContext + PCM16</span>
+                {/* Модальное окно подтверждения приостановки лекции */}
+                {showPauseModal && (
+                    <div className={commonStyles.modalOverlay}>
+                        <div className={commonStyles.modal}>
+                            <h3>Подтверждение</h3>
+                            <p>Вы уверены, что хотите приостановить запись лекции?</p>
+                            <div className={commonStyles.modalButtons}>
+                                <button
+                                    onClick={() => setShowPauseModal(false)}
+                                    className={commonStyles.cancelModalButton}
+                                >
+                                    Отмена
+                                </button>
+                                <button
+                                    onClick={confirmPauseLecture}
+                                    className={commonStyles.okModalButton}
+                                >
+                                    Приостановить
+                                </button>
+                            </div>
                         </div>
-                    ) : (
-                        <div className={commonStyles.noteText}>
-                            {currentLecture ? 'Управление лекцией' : 'Начните запись для просмотра результатов'}
-                        </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         </div>
     );

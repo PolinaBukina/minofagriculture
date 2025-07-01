@@ -5,6 +5,7 @@ import { MonitorIcon } from '../../icons/MonitorIcon';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
+import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 
 type Lecture = {
     id: string;
@@ -17,6 +18,7 @@ type Lecture = {
 
 const ActiveLecturesPage = () => {
     const navigate = useNavigate();
+    const userRole = getRoleFromStorage();
     const [activeLectures, setActiveLectures] = useState<Lecture[]>([
         {
             id: 'live-1',
@@ -55,8 +57,14 @@ const ActiveLecturesPage = () => {
                 <Header />
                 <Breadcrumbs
                     items={[
-                        { label: 'Главная', path: () => navigate(-1) },
-                        { label: 'Активные лекции', path: '/active' }
+                        {
+                            label: getHomeLabel(userRole),
+                            path: getHomePath(userRole)
+                        },
+                        {
+                            label: 'Активные лекции',
+                            path: ''
+                        }
                     ]}
                 />
                 <h1 className={commonStyles.sectionHeader}>Активные лекции</h1>
@@ -90,7 +98,9 @@ const ActiveLecturesPage = () => {
                         <div className={commonStyles.noteText}>Нет активных лекций</div>
                     ) : (
                         activeLectures.map(lecture => (
-                            <div key={lecture.id} className={commonStyles.listItem}>
+                            <div key={lecture.id} className={commonStyles.listItem}
+                                onClick={() => handleViewLecture(lecture.id)}
+                            >
                                 <h3>{lecture.title}</h3>
                                 <div className={commonStyles.statusItem}>
                                     <span>Лектор:</span>
@@ -112,14 +122,14 @@ const ActiveLecturesPage = () => {
                                     </span>
                                 </div>
 
-                                <div className={commonStyles.buttonGroup} style={{ marginTop: '10px' }}>
+                                {/* <div className={commonStyles.buttonGroup} style={{ marginTop: '10px' }}>
                                     <button
                                         className={commonStyles.primaryButton}
                                         onClick={() => handleViewLecture(lecture.id)}
                                     >
                                         Перейти к лекции
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
                         ))
                     )}

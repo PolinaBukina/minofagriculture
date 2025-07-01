@@ -21,7 +21,7 @@
 // export default Header
 
 
-import React from 'react';
+import React, { useState } from 'react';
 import commonStyles from '../../pages/commonStyles.module.css';
 import logo from './logo.png';
 import { useNavigate } from 'react-router-dom';
@@ -38,6 +38,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onLogout, onSupport }) => {
+    const [language, setLanguage] = useState<string>('ru');
     const navigate = useNavigate();
 
     const handleLogout = (): void => {
@@ -63,6 +64,16 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onSupport }) => {
             </div>
             {/* Блок дополнительных кнопок */}
             <div className={commonStyles.headerActions}>
+                <select
+                    className={commonStyles.filterSelect}
+                    value={language}
+                    onChange={(e) => setLanguage(e.target.value)}
+                >
+                    <option value="ru">Русский</option>
+                    <option value="en">Английский</option>
+                    <option value="fr">Французский</option>
+                    <option value="zh">Китайский</option>
+                </select>
                 <button
                     className={commonStyles.actionButton}
                     onClick={handleSupport}

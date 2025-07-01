@@ -25,6 +25,7 @@
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 20px;
+    margin: 40px;
 }
 
 .logoSvg {
@@ -34,15 +35,20 @@
 }
 
 .logoTitle {
-    font-size: 24px;
+    font-size: 18px;
     font-weight: bold;
     color: #1f2937;
-    margin-bottom: 4px;
 }
 
 .logoSubtitle {
-    font-size: 18px;
+    font-size: 14px;
     color: #4b5563;
+    margin-bottom: 4px;
+}
+
+.logo {
+    height: 100px;
+    margin-right: 20px;
 }
 
 .formContainer {

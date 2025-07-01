@@ -10,6 +10,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import LectureViewer from "./pages/LectureViewer/LectureViewer";
 import ActiveLecturesPage from "./pages/ActiveLectures/ActiveLectures";
 import LectorPage from "./pages/LectorPage/LectorPage";
+import FullLecturePage from "./pages/FullLecturePage/FullLecturePage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/sessions" element={<SessionsPage />} />
         <Route path="/archive" element={<ArchivePage />} /> {/* Архив сессий */}
         <Route path="/archive/lecture/:id" element={<LectureViewer />} />
+        <Route path="/archive/lecture/:id/full-lecture" element={<FullLecturePage />} />
         <Route path="/active" element={<ActiveLecturesPage />} />
         <Route path="/active/lecture/:id" element={<LectureViewer />} />
         <Route path="/lector" element={<LectorPage />} />

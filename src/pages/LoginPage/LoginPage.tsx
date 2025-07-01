@@ -1,5 +1,6 @@
 import React, { useState, useRef, KeyboardEvent } from 'react';
 import styles from './styles.module.css';
+import logo from '../../components/Header/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 
@@ -96,12 +97,12 @@ const LoginPage = () => {
             <div className={styles.left}>
                 <div className={styles.logoWrapper}>
                     <div className={styles.logoSvg}>
-                        <svg width="90" height="105" viewBox="0 0 153 173" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            {/* SVG логотипа */}
-                        </svg>
+                        {/* <svg width="90" height="105" viewBox="0 0 153 173" fill="none" xmlns="http://www.w3.org/2000/svg"> */}
+                            <img src={logo} alt="логотип" className={styles.logo} />
+                        {/* </svg> */}
                     </div>
-                    <div className={styles.logoTitle}>KD-systems</div>
-                    <div className={styles.logoSubtitle}>Knowledge Development</div>
+                    <div className={styles.logoSubtitle}>ФЕДЕРАЛЬНОЕ ГОСУДАРСТВЕННОЕ БЮДЖЕТНОЕ ОБРАЗОВАТЕЛЬНОЕ УЧРЕЖДЕНИЕ ВЫСШЕГО ОБРАЗОВАНИЯ</div>
+                    <div className={styles.logoTitle}>РОССИЙСКИЙ ГОСУДАРСТВЕННЫЙ АГРАРНЫЙ УНИВЕРСИТЕТ - <br />МСХА ИМЕНИ К.А. ТИМИРЯЗЕВА</div>
                 </div>
             </div>
 
