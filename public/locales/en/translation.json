@@ -1,0 +1,370 @@
+{
+    "header": {
+        "federal_institution": "FEDERAL STATE BUDGETARY EDUCATIONAL INSTITUTION OF HIGHER EDUCATION",
+        "university_name": "RUSSIAN STATE AGRARIAN UNIVERSITY - <br />MSHA NAMED AFTER K.A. TIMIRYAZEV",
+        "support": "Support",
+        "logout": "Logout"
+    },
+    "roles": {
+        "student": {
+            "home": "Student Dashboard"
+        },
+        "lector": {
+            "home": "Lecturer Panel"
+        },
+        "admin": {
+            "home": "Admin Panel"
+        }
+    },
+    "lectures": {
+        "intro_to_react": "Introduction to React",
+        "advanced_typescript": "Advanced TypeScript"
+    },
+    "archive": {
+        "title": "Lecture Archive",
+        "filters": {
+            "title": "Filters",
+            "date": "Lecture Date",
+            "lecturer": "Lecturer Name",
+            "search": "Search by Title",
+            "found": "Found: {{count}} lectures",
+            "placeholder": {
+                "lecturer": "Enter lecturer name...",
+                "search": "Enter lecture title..."
+            }
+        },
+        "lecture": {
+            "title": "Title",
+            "lecturer": "Lecturer:",
+            "start": "Start:",
+            "end": "End:",
+            "duration": "Duration:",
+            "analytics": "Analytics"
+        },
+        "breadcrumbs": {
+            "archive": "Lecture Archive"
+        }
+    },
+    "languages": {
+        "english": "English",
+        "french": "French",
+        "chinese": "Chinese",
+        "translation": "translation"
+    },
+    "lecture_viewer": {
+        "title": "Lecture {{id}}",
+        "mock_lecturer": "Ivanov I.I.",
+        "mock_location": "Room 101",
+        "mock_content": {
+            "original": "This is the full lecture text in Russian. It contains the main information presented by lecturer {{id}}.\nThe second part includes additional materials and use cases of the discussed technologies.\nThe final part contains conclusions and recommendations for further study.",
+            "en": "This is the full lecture text in English. It contains the main information presented by lecturer {{id}}.\nThe second part includes additional materials and use cases of the discussed technologies.\nThe final part contains conclusions and recommendations for further study.",
+            "fr": "Ceci est le texte complet de la conférence en français. Il contient les principales informations présentées par le conférencier {{id}}.\nLa deuxième partie comprend des documents supplémentaires et des cas d'utilisation des technologies discutées.\nLa partie finale contient des conclusions et des recommandations pour une étude plus approfondie.",
+            "zh": "这是中文的完整讲座文本。它包含讲师{{id}}介绍的主要信息。\n第二部分包括所讨论技术的其他材料和用例。\n最后部分包含结论和对该主题进一步研究的建议。"
+        },
+        "details": "Lecture Details",
+        "lecturer": "Lecturer",
+        "start": "Start",
+        "end": "End",
+        "duration": "Duration",
+        "location": "Location",
+        "original_text": "Original Text",
+        "translated_text": "Translated Text ({{language}})",
+        "show_full": "Show Full Text",
+        "text_unavailable": "Lecture text unavailable",
+        "translation_unavailable": "Translation unavailable",
+        "breadcrumb": "Lecture {{id}}"
+    },
+    "language": {
+        "select": "Language Selection",
+        "english": "English",
+        "french": "French",
+        "chinese": "Chinese"
+    },
+    "speech": {
+        "synthesize": "Synthesize",
+        "not_supported": "Browser doesn't support speech synthesis"
+    },
+    "loading": "Loading lecture...",
+    "time": {
+        "duration": "{{hours}}h {{minutes}}m"
+    },
+    "lector": {
+        "title": "Lecture Translation Service (Role: LECTURER)",
+        "description": "Intelligent platform for real-time lecture translation to foreign languages using GPT technology. Translated lectures remain available for 1 month.",
+        "actions": {
+            "record": "Record lecture",
+            "archive": "Lecture archive",
+            "active": "Active lectures"
+        },
+        "instructions": {
+            "title": "💡 How to use (Lecturer Mode):",
+            "button": "Usage instructions",
+            "step1": "🎤 Click 'Start Recording' on the left",
+            "step2": "✅ Allow microphone access in the browser",
+            "step3": "🗣️ Speak - results will appear here",
+            "step4": "⏹️ Click 'Stop' to finish"
+        }
+    },
+    "common": {
+        "close": "Close",
+        "cancel": "Cancel",
+        "not_specified": "Not specified"
+    },
+    "recorder": {
+        "title": "New Lecture",
+        "breadcrumb": "Lecture Recording",
+        "description": "Create a new lecture that will be automatically translated into foreign languages",
+        "form": {
+            "title": "Lecture Title",
+            "title_placeholder": "Enter lecture title",
+            "lecturer": "Lecturer Name",
+            "lecturer_placeholder": "Enter lecturer name",
+            "start_time": "Start Time",
+            "duration": "Duration (minutes)",
+            "duration_placeholder": "Enter duration",
+            "location": "Location",
+            "location_placeholder": "Enter location",
+            "submit": "Next"
+        }
+    },
+    "recording": {
+        "title": "Lecture: {{title}}",
+        "breadcrumb": "Lecture Recording",
+        "preview": {
+            "header": "Ready to start lecture recording"
+        },
+        "lecture": {
+            "title": "Lecture Title",
+            "lecturer": "Lecturer Name",
+            "start": "Start Time",
+            "location": "Location"
+        },
+        "status": {
+            "preview": "Preview",
+            "recording": "Recording in progress",
+            "paused": "Lecture paused",
+            "finished": "Lecture finished"
+        },
+        "start_button": "Start Lecture",
+        "pause_button": "Pause Lecture",
+        "resume_button": "Resume Lecture",
+        "stop_button": "Stop Lecture",
+        "go_to_archive": "Go to Lecture Archive",
+        "original_text": "Original Text",
+        "translated_text": "Translated Text ({{language}})",
+        "show_full_text": "Show Full Text",
+        "text_unavailable": "Lecture text unavailable",
+        "translation_unavailable": "Translation unavailable",
+        "stop_confirmation": "Are you sure you want to stop the lecture recording?",
+        "pause_confirmation": "Are you sure you want to pause the lecture recording?",
+        "confirm_stop": "Stop",
+        "confirm_pause": "Pause",
+        "example_text": {
+            "original": "This is an example lecture text...",
+            "translated": "Это пример текста лекции..."
+        }
+    },
+    "confirmation": {
+        "title": "Confirmation"
+    },
+    "active_lectures": {
+        "title": "Active Lectures",
+        "subtitle": "Current lectures",
+        "empty": "No active lectures"
+    },
+    "lecture": {
+        "lecturer": "Lecturer",
+        "start_time": "Start time",
+        "participants": "Participants",
+        "participants_count": "{{count}}",
+        "status": {
+            "label": "Status",
+            "live": "Live",
+            "recording": "Recording",
+            "paused": "Paused"
+        },
+        "view_aria": "View lecture '{{title}}'",
+        "intro_to_react": "Introduction to React",
+        "advanced_typescript": "Advanced TypeScript",
+        "lecturer_ivanov": "Ivanov I.I.",
+        "lecturer_petrov": "Petrov P.P."
+    },
+    "student": {
+        "title": "Lecture Translation Service (role: STUDENT)",
+        "description": "Intelligent platform for synchronous translation of lectures into foreign languages using GPT technology.\n\nTranslated lectures are stored for 1 month.",
+        "instructions": {
+            "title": "💡 Usage instructions",
+            "button": "Usage instructions",
+            "archive": "🎤 Clicking the \"Lecture Archive\" button takes you to the page with all available lectures",
+            "active": "✅ Clicking the \"Active Lectures\" button takes you to the page with all currently ongoing lectures"
+        },
+        "links": {
+            "archive": "Lecture Archive",
+            "active": "Active Lectures"
+        }
+    },
+    "admin": {
+        "current_session": {
+            "title": "Current session",
+            "id_will_appear": "ID will appear after recording starts"
+        },
+        "status": "Status",
+        "recording_active": "Recording in progress",
+        "no_active_recording": "No active recording",
+        "audio_recording": {
+            "title": "Audio recording",
+            "tasks": {
+                "capture_audio": "Capture audio (WITHOUT DELAYS)",
+                "then_to_recording": "Then to recording",
+                "start_recording": "Start recording",
+                "stop_recording": "Stop recording"
+            },
+            "tech_info": {
+                "line1": "AudioContext + delay protection",
+                "line2": "(sending every 0.2s + forced cleanup every 10s)"
+            },
+            "logs": {
+                "line1": "16:28:14. Improved innovative WITHOUT DELAYS completed",
+                "line2": "16:28:14. Sending every 0.2s + forced cleanup every 10s",
+                "line3": "16:28:14. Target frequency: 16000Hz, format: PCM10"
+            }
+        },
+        "quick_access": {
+            "title": "Quick access",
+            "archive": "Lecture archive",
+            "monitoring": "Monitoring",
+            "management": "Management"
+        }
+    },
+    "monitoring": {
+        "title": "Real-time monitoring",
+        "settings": {
+            "title": "Monitoring settings"
+        },
+        "server": {
+            "title": "Server",
+            "address": "Address",
+            "available": "Server available",
+            "api_keys": "API keys",
+            "active_sessions": "Active sessions"
+        },
+        "status": "Status",
+        "performance": {
+            "title": "Performance",
+            "messages": "Messages"
+        },
+        "session_selection": {
+            "title": "Session selection",
+            "active_sessions": "Active sessions",
+            "recent_completed": "Recently completed",
+            "no_active": "No active sessions",
+            "no_completed": "No completed sessions"
+        },
+        "sessions": {
+            "biology_lecture": "Biology lecture",
+            "chemistry_seminar": "Chemistry seminar",
+            "intro_lecture": "Introductory lecture",
+            "physics_practice": "Physics practice"
+        },
+        "mode": {
+            "title": "Mode",
+            "minutes": "min",
+            "optimized": "Optimized for long sessions"
+        },
+        "audio_processing": {
+            "title": "Audio processing event tracking"
+        },
+        "buttons": {
+            "start": "Start monitoring",
+            "stop": "Stop monitoring"
+        },
+        "status_monitoring": "Monitoring events in progress...",
+        "status_not_monitoring": "Start monitoring to view real-time events",
+        "optimized_monitoring": {
+            "title": "Optimized monitoring",
+            "lite_mode": "Lite mode for long lectures"
+        },
+        "features": {
+            "lite": {
+                "update_interval": "Update every 3 seconds (resource saving)",
+                "message_limit": "Maximum 30 messages in memory",
+                "clear_history": "Quick history clear button",
+                "simple_interface": "Simplified interface",
+                "remove_duplicates": "Duplicate message removal"
+            }
+        },
+        "usage": {
+            "title": "How to use",
+            "select_session": "Select a session in the side panel",
+            "start_monitoring": "Click \"Start monitoring\"",
+            "clear_history_periodically": "Clear history periodically during long lectures",
+            "monitor_performance": "Monitor performance"
+        }
+    },
+    "sessions": {
+        "title": "Session Management",
+        "settings": {
+            "title": "Settings"
+        },
+        "server": {
+            "title": "Server",
+            "available": "Server available",
+            "api_keys": "API keys",
+            "active_sessions": "Active sessions"
+        },
+        "status": "Status",
+        "statuses": {
+            "completed": "Completed",
+            "active": "Active"
+        },
+        "filters": {
+            "title": "Filters",
+            "session_status": "Session status",
+            "session_count": "Session count",
+            "all": "All",
+            "active": "Active",
+            "completed": "Completed"
+        },
+        "buttons": {
+            "refresh": "Refresh data",
+            "details": "Details",
+            "monitoring": "Monitoring"
+        },
+        "stats": {
+            "found": "Sessions found",
+            "active": "Active"
+        },
+        "session_list": {
+            "title": "List of all sessions"
+        },
+        "details": {
+            "id": "ID",
+            "start": "Start",
+            "end": "End",
+            "status": "Status",
+            "audio": "Audio",
+            "duration": "Duration",
+            "participants": "Participants",
+            "quality": "Recording quality",
+            "issues": "Issues"
+        },
+        "session1": {
+            "name": "Session 1:1750336806489_hy..."
+        },
+        "session2": {
+            "name": "Session 2:175033683986_x4..."
+        },
+        "audio_format": "16000Hz, 1 channel(s)",
+        "duration_1h38m": "1 hour 38 minutes",
+        "duration_45m": "45 minutes",
+        "quality": {
+            "high": "High",
+            "medium": "Medium"
+        },
+        "issues": {
+            "none": "None",
+            "minor": "Minor interference"
+        },
+        "refreshing_data": "Refreshing data..."
+    }
+}

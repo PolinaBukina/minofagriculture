@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CheckCircleIcon } from '../../icons/CheckIcon';
 import { CogIcon } from '../../icons/CogIcon';
 import SearchIcon from '../../icons/SearchIcon';
@@ -6,6 +7,7 @@ import commonStyles from '../commonStyles.module.css';
 import Header from '../../components/Header/Header';
 
 const SessionsPage = () => {
+    const { t } = useTranslation();
     const [activeFilter, setActiveFilter] = useState('all');
     const [sessionCount, setSessionCount] = useState(10);
     const [expandedSessions, setExpandedSessions] = useState<Record<string, boolean>>({});
@@ -13,32 +15,32 @@ const SessionsPage = () => {
     const sessions = [
         {
             id: '1750336806489_hynr98a8v',
-            name: 'Сессия 1:1750336806489_hy...',
+            name: t('sessions.session1.name'),
             start: '2025-06-19 15:40:06',
             end: '2025-06-19 17:18:44',
             status: 'completed',
-            audio: '16000Hz, 1 канал(ов)',
+            audio: t('sessions.audio_format'),
             monitoringId: '1750336806489_hynr98a8v',
             details: {
-                duration: '1 час 38 минут',
+                duration: t('sessions.duration_1h38m'),
                 participants: 2,
-                recordingQuality: 'Высокое',
-                issues: 'Нет'
+                recordingQuality: t('sessions.quality.high'),
+                issues: t('sessions.issues.none')
             }
         },
         {
             id: '175033683986_x4',
-            name: 'Сессия 2:175033683986_x4...',
+            name: t('sessions.session2.name'),
             start: '2025-06-19 14:30:00',
             end: '2025-06-19 15:15:30',
             status: 'completed',
-            audio: '16000Hz, 1 канал(ов)',
+            audio: t('sessions.audio_format'),
             monitoringId: '175033683986_x4',
             details: {
-                duration: '45 минут',
+                duration: t('sessions.duration_45m'),
                 participants: 3,
-                recordingQuality: 'Среднее',
-                issues: 'Незначительные помехи'
+                recordingQuality: t('sessions.quality.medium'),
+                issues: t('sessions.issues.minor')
             }
         }
     ];
@@ -51,25 +53,24 @@ const SessionsPage = () => {
     };
 
     const handleRefreshData = () => {
-        // Логика обновления данных
-        console.log('Обновление данных...');
+        console.log(t('sessions.refreshing_data'));
     };
 
     return (
         <div className={commonStyles.appContainer}>
             <div className={commonStyles.sidePanel}>
                 <div className={commonStyles.infoCard}>
-                    {/* <h2 className={commonStyles.sectionHeader}><CogIcon /> Настройки</h2> */}
-
                     <h2 className={commonStyles.subHeader}>
                         <CogIcon />
-                        Настройки
+                        {t('sessions.settings.title')}
                     </h2>
-                    <div className={commonStyles.subHeader}> Сервер</div>
+                    <div className={commonStyles.subHeader}>{t('sessions.server.title')}</div>
                     <div className={commonStyles.serverAddress}>51.250.115.73:8000</div>
                     <div className={commonStyles.statusItem}>
-                        <span>Статус:</span>
-                        <span className={commonStyles.statusActive}><CheckCircleIcon /> Сервер доступен</span>
+                        <span>{t('sessions.status')}:</span>
+                        <span className={commonStyles.statusActive}>
+                            <CheckCircleIcon /> {t('sessions.server.available')}
+                        </span>
                     </div>
 
                     <div className={commonStyles.statusItem}>
@@ -78,12 +79,12 @@ const SessionsPage = () => {
                     </div>
 
                     <div className={commonStyles.statusItem}>
-                        <span>API ключи:</span>
+                        <span>{t('sessions.server.api_keys')}:</span>
                         <span className={commonStyles.statusActive}><CheckCircleIcon /></span>
                     </div>
 
                     <div className={commonStyles.statusItem}>
-                        <span>Активные сессии:</span>
+                        <span>{t('sessions.server.active_sessions')}:</span>
                         <span>0</span>
                     </div>
 
@@ -94,23 +95,25 @@ const SessionsPage = () => {
                 </div>
 
                 <div className={commonStyles.infoCard}>
-                    <h2 className={commonStyles.subHeader}><SearchIcon /> Фильтры</h2>
+                    <h2 className={commonStyles.subHeader}>
+                        <SearchIcon /> {t('sessions.filters.title')}
+                    </h2>
 
                     <div className={commonStyles.filterControl}>
-                        <label className={commonStyles.filterLabel}>Статус сессий</label>
+                        <label className={commonStyles.filterLabel}>{t('sessions.filters.session_status')}</label>
                         <select
                             className={commonStyles.filterSelect}
                             value={activeFilter}
                             onChange={(e) => setActiveFilter(e.target.value)}
                         >
-                            <option value="all">Все</option>
-                            <option value="active">Активные</option>
-                            <option value="completed">Завершенные</option>
+                            <option value="all">{t('sessions.filters.all')}</option>
+                            <option value="active">{t('sessions.filters.active')}</option>
+                            <option value="completed">{t('sessions.filters.completed')}</option>
                         </select>
                     </div>
 
                     <div className={commonStyles.filterControl}>
-                        <label className={commonStyles.filterLabel}>Количество сессий</label>
+                        <label className={commonStyles.filterLabel}>{t('sessions.filters.session_count')}</label>
                         <select
                             className={commonStyles.filterSelect}
                             value={sessionCount}
@@ -128,32 +131,32 @@ const SessionsPage = () => {
                         onClick={handleRefreshData}
                         style={{ width: '100%', marginTop: '15px' }}
                     >
-                        Обновить данные
+                        {t('sessions.buttons.refresh')}
                     </button>
                 </div>
             </div>
 
             <div className={commonStyles.mainContent}>
                 <Header />
-                <h1 className={commonStyles.sectionHeader}>Управление сессиями</h1>
+                <h1 className={commonStyles.sectionHeader}>{t('sessions.title')}</h1>
 
                 <div className={commonStyles.infoCard}>
                     <div className={commonStyles.statsGrid}>
                         <div className={commonStyles.statBox}>
                             <div className={commonStyles.statValue}>{sessions.length}</div>
-                            <div className={commonStyles.statLabel}>Найдено сессии</div>
+                            <div className={commonStyles.statLabel}>{t('sessions.stats.found')}</div>
                         </div>
                         <div className={commonStyles.statBox}>
                             <div className={commonStyles.statValue}>
                                 {sessions.filter(s => s.status === 'active').length}
                             </div>
-                            <div className={commonStyles.statLabel}>Активные</div>
+                            <div className={commonStyles.statLabel}>{t('sessions.stats.active')}</div>
                         </div>
                     </div>
                 </div>
 
                 <div className={commonStyles.infoCard}>
-                    <h2 className={commonStyles.subHeader}>Список всех сессий</h2>
+                    <h2 className={commonStyles.subHeader}>{t('sessions.session_list.title')}</h2>
 
                     {sessions.map(session => (
                         <div key={session.id} className={commonStyles.sessionCard}>
@@ -171,51 +174,51 @@ const SessionsPage = () => {
                                 <>
                                     <div className={commonStyles.sessionBasicInfo}>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>ID:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.id')}:</span>
                                             <span className={commonStyles.detailValue}>{session.id}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Начало:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.start')}:</span>
                                             <span className={commonStyles.detailValue}>{session.start}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Конец:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.end')}:</span>
                                             <span className={commonStyles.detailValue}>{session.end}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Статус:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.status')}:</span>
                                             <span className={`${session.status === 'completed' ? commonStyles.statusCompleted : commonStyles.statusActive}`}>
-                                                {session.status}
+                                                {t(`sessions.statuses.${session.status}`)}
                                             </span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Аудио:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.audio')}:</span>
                                             <span className={commonStyles.detailValue}>{session.audio}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Длительность:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.duration')}:</span>
                                             <span className={commonStyles.detailValue}>{session.details.duration}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Участники:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.participants')}:</span>
                                             <span className={commonStyles.detailValue}>{session.details.participants}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Качество записи:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.quality')}:</span>
                                             <span className={commonStyles.detailValue}>{session.details.recordingQuality}</span>
                                         </div>
                                         <div className={commonStyles.detailRow}>
-                                            <span className={commonStyles.detailLabel}>Проблемы:</span>
+                                            <span className={commonStyles.detailLabel}>{t('sessions.details.issues')}:</span>
                                             <span className={commonStyles.detailValue}>{session.details.issues}</span>
                                         </div>
                                     </div>
 
                                     <div className={commonStyles.sessionActions}>
                                         <button className={commonStyles.secondaryButton}>
-                                            Подробности
+                                            {t('sessions.buttons.details')}
                                         </button>
                                         <button className={commonStyles.secondaryButton}>
-                                            Мониторинг
+                                            {t('sessions.buttons.monitoring')}
                                         </button>
                                         <div className={commonStyles.monitoringId}>
                                             {session.monitoringId}

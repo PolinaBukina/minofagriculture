@@ -1,17 +1,15 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import commonStyles from '../commonStyles.module.css';
-import MusicIcon from '../../icons/MusicIcon';
-import FolderIcon from '../../icons/FolderIcon';
-import { CheckCircleIcon } from '../../icons/CheckIcon';
-import SearchIcon from '../../icons/SearchIcon';
-import Header from '../../components/Header/Header';
-import { LectureIcon } from '../../icons/LectureIcon';
 import { useNavigate } from 'react-router-dom';
+import { LectureIcon } from '../../icons/LectureIcon';
 import { MonitorIcon } from '../../icons/MonitorIcon';
 import CloseIcon from '../../icons/CloseIcon';
 import { CogIcon } from '../../icons/CogIcon';
+import Header from '../../components/Header/Header';
 
 const StudentPage = () => {
+    const { t } = useTranslation();
     const [isListening, setIsListening] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
@@ -41,10 +39,10 @@ const StudentPage = () => {
                         <button className={commonStyles.closeButton} onClick={toggleModal}>
                             <CloseIcon />
                         </button>
-                        <h2>💡 Инструкция по использованию</h2>
+                        <h2>{t('student.instructions.title')}</h2>
                         <ul className={commonStyles.instructionList}>
-                            <li>🎤 При нажатии на кнопку "архив лекций" вы попадаете на страницу со всеми доступными лекциями</li>
-                            <li>✅ При нажатии на кнопку "активные лекции" вы попадаете на страницу со всеми идущими сейчас лекциями</li>
+                            <li>{t('student.instructions.archive')}</li>
+                            <li>{t('student.instructions.active')}</li>
                         </ul>
                     </div>
                 </div>
@@ -53,29 +51,28 @@ const StudentPage = () => {
             {/* Основное содержимое */}
             <div className={commonStyles.mainContent}>
                 <Header />
-                <h1 className={commonStyles.sectionHeader}>Сервис по переводу лекций (роль: СТУДЕНТ)</h1>
+                <h1 className={commonStyles.sectionHeader}>{t('student.title')}</h1>
                 <div className={commonStyles.quickAccess}>
                     <div className={commonStyles.description}>
                         <p className={commonStyles.sectionParagraph}>
-                            Интеллектуальная платформа для синхронного перевода лекций на иностранные языки с использованием технологии GPT. <br /><br />
-                            Сохраняем доступными переведенные лекции в течение 1 месяца. <br />
+                            {t('student.description')}
                         </p>
                         <button
                             className={commonStyles.quickLink1}
-                            onClick={toggleModal} // Изменено на toggleModal
+                            onClick={toggleModal}
                         >
                             <CogIcon />
-                            <span>Инструкция по использованию</span>
+                            <span>{t('student.instructions.button')}</span>
                         </button>
                     </div>
                     <div className={commonStyles.quickLinks}>
                         <button className={commonStyles.quickLink} onClick={() => navigate(`/archive`)}>
                             <LectureIcon />
-                            <span>Архив лекций</span>
+                            <span>{t('student.links.archive')}</span>
                         </button>
                         <button className={commonStyles.quickLink} onClick={() => navigate(`/active`)}>
                             <MonitorIcon />
-                            <span>Активные лекции</span>
+                            <span>{t('student.links.active')}</span>
                         </button>
                     </div>
                 </div>

@@ -1,0 +1,357 @@
+{
+    "header": {
+        "federal_institution": "ÉTABLISSEMENT FÉDÉRAL D'ENSEIGNEMENT SUPÉRIEUR BUDGÉTISÉ PAR L'ÉTAT",
+        "university_name": "UNIVERSITÉ AGRICOLE D'ÉTAT DE RUSSIE - <br />MSHA NOMÉE D'APRÈS K.A. TIMIRIAZEV",
+        "support": "Support",
+        "logout": "Déconnexion"
+    },
+    "breadcrumbs": {
+        "home": "Accueil",
+        "active_lectures": "Conférences actives"
+    },
+    "lectures": {
+        "intro_to_react": "Introduction à React",
+        "advanced_typescript": "TypeScript avancé"
+    },
+    "archive": {
+        "title": "Archive des conférences",
+        "filters": {
+            "title": "Filtres",
+            "date": "Date de la conférence",
+            "lecturer": "Nom du conférencier",
+            "search": "Recherche par titre",
+            "found": "Trouvé : {{count}} conférences",
+            "placeholder": {
+                "lecturer": "Entrez le nom du conférencier...",
+                "search": "Entrez le titre de la conférence..."
+            }
+        },
+        "lecture": {
+            "title": "Titre",
+            "lecturer": "Conférencier :",
+            "start": "Début :",
+            "end": "Fin :",
+            "duration": "Durée :",
+            "analytics": "Analyse"
+        },
+        "breadcrumbs": {
+            "archive": "Archive des conférences"
+        }
+    },
+    "lecture_viewer": {
+        "title": "Conférence {{id}}",
+        "mock_lecturer": "Ivanov I.I.",
+        "mock_location": "Salle 101",
+        "mock_content": {
+            "original": "Это полный текст лекции на русском языке. Здесь содержится основная информация, которую представил лектор {{id}}.\nВторая часть лекции включает дополнительные материалы и примеры использования рассматриваемых технологий.\nЗаключительная часть содержит выводы и рекомендации для дальнейшего изучения темы.",
+            "en": "This is the full lecture text in English. It contains the main information presented by lecturer {{id}}.\nThe second part includes additional materials and use cases of the discussed technologies.\nThe final part contains conclusions and recommendations for further study.",
+            "fr": "Ceci est le texte complet de la conférence en français. Il contient les principales informations présentées par le conférencier {{id}}.\nLa deuxième partie comprend des documents supplémentaires et des cas d'utilisation des technologies discutées.\nLa partie finale contient des conclusions et des recommandations pour une étude plus approfondie.",
+            "zh": "这是中文的完整讲座文本。它包含讲师{{id}}介绍的主要信息。\n第二部分包括所讨论技术的其他材料和用例。\n最后部分包含结论和对该主题进一步研究的建议。"
+        },
+        "details": "Détails de la conférence",
+        "lecturer": "Conférencier",
+        "start": "Début",
+        "end": "Fin",
+        "duration": "Durée",
+        "location": "Lieu",
+        "original_text": "Texte original",
+        "translated_text": "Texte traduit ({{language}})",
+        "show_full": "Afficher le texte complet",
+        "text_unavailable": "Le texte de la conférence n'est pas disponible",
+        "translation_unavailable": "Traduction non disponible",
+        "breadcrumb": "Conférence {{id}}"
+    },
+    "language": {
+        "select": "Sélection de la langue",
+        "english": "Anglais",
+        "french": "Français",
+        "chinese": "Chinois"
+    },
+    "speech": {
+        "synthesize": "Synthétiser",
+        "not_supported": "Le navigateur ne prend pas en charge la synthèse vocale"
+    },
+    "loading": "Chargement de la conférence...",
+    "time": {
+        "duration": "{{hours}}h {{minutes}}m"
+    },
+    "lector": {
+        "title": "Service de traduction de conférences (rôle : ENSEIGNANT)",
+        "description": "Plateforme intelligente pour la traduction simultanée de conférences en langues étrangères utilisant la technologie GPT. Les conférences traduites sont conservées accessibles pendant 1 mois.",
+        "actions": {
+            "record": "Enregistrer une conférence",
+            "archive": "Archive des conférences",
+            "active": "Conférences actives"
+        },
+        "instructions": {
+            "title": "💡 Comment utiliser (Mode enseignant) :",
+            "button": "Instructions d'utilisation",
+            "step1": "🎤 Cliquez sur 'Commencer l'enregistrement' à gauche",
+            "step2": "✅ Autorisez l'accès au microphone dans le navigateur",
+            "step3": "🗣️ Parlez - les résultats apparaîtront ici",
+            "step4": "⏹️ Cliquez sur 'Arrêter' pour terminer"
+        }
+    },
+    "common": {
+        "close": "Fermer",
+        "cancel": "Annuler",
+        "not_specified": "Non spécifié"
+    },
+    "recorder": {
+        "title": "Nouvelle conférence",
+        "breadcrumb": "Enregistrement de conférence",
+        "description": "Création d'une nouvelle conférence qui sera automatiquement traduite en langues étrangères",
+        "form": {
+            "title": "Titre de la conférence",
+            "title_placeholder": "Entrez le titre de la conférence",
+            "lecturer": "Nom du conférencier",
+            "lecturer_placeholder": "Entrez le nom du conférencier",
+            "start_time": "Heure de début",
+            "duration": "Durée (min)",
+            "duration_placeholder": "Entrez la durée",
+            "location": "Lieu",
+            "location_placeholder": "Entrez le lieu",
+            "submit": "Suivant"
+        }
+    },
+    "recording": {
+        "title": "Conférence : {{title}}",
+        "breadcrumb": "Enregistrement de conférence",
+        "preview": {
+            "header": "Prêt à commencer l'enregistrement de la conférence"
+        },
+        "lecture": {
+            "title": "Titre de la conférence",
+            "lecturer": "Nom du conférencier",
+            "start": "Heure de début",
+            "location": "Lieu"
+        },
+        "status": {
+            "preview": "Aperçu",
+            "recording": "Enregistrement en cours",
+            "paused": "Conférence en pause",
+            "finished": "Conférence terminée"
+        },
+        "start_button": "Commencer la conférence",
+        "pause_button": "Mettre en pause la conférence",
+        "resume_button": "Reprendre la conférence",
+        "stop_button": "Terminer la conférence",
+        "go_to_archive": "Aller à l'archive des conférences",
+        "original_text": "Texte original",
+        "translated_text": "Texte traduit ({{language}})",
+        "show_full_text": "Afficher le texte complet",
+        "text_unavailable": "Le texte de la conférence n'est pas disponible",
+        "translation_unavailable": "Traduction non disponible",
+        "stop_confirmation": "Êtes-vous sûr de vouloir terminer l'enregistrement de la conférence ?",
+        "pause_confirmation": "Êtes-vous sûr de vouloir mettre en pause l'enregistrement de la conférence ?",
+        "confirm_stop": "Terminer",
+        "confirm_pause": "Mettre en pause",
+        "example_text": {
+            "original": "Ceci est un exemple de texte de conférence...",
+            "translated": "This is an example lecture text..."
+        }
+    },
+    "confirmation": {
+        "title": "Confirmation"
+    },
+    "active_lectures": {
+        "title": "Conférences actives",
+        "subtitle": "Diffusions en cours",
+        "empty": "Aucune conférence active"
+    },
+    "lecture": {
+        "lecturer": "Conférencier",
+        "start_time": "Début",
+        "participants": "Participants",
+        "participants_count": "{{count}}",
+        "status": {
+            "label": "Statut",
+            "live": "En direct",
+            "recording": "Enregistrement en cours",
+            "paused": "En pause"
+        },
+        "view_aria": "Aller à la conférence '{{title}}'",
+        "intro_to_react": "Introduction à React",
+        "advanced_typescript": "TypeScript avancé",
+        "lecturer_ivanov": "Ivanov I.I.",
+        "lecturer_petrov": "Petrov P.P."
+    },
+    "student": {
+        "title": "Service de traduction de conférences (rôle : ÉTUDIANT)",
+        "description": "Plateforme intelligente pour la traduction simultanée de conférences en langues étrangères utilisant la technologie GPT.\n\nLes conférences traduites sont conservées accessibles pendant 1 mois.",
+        "instructions": {
+            "title": "💡 Instructions d'utilisation",
+            "button": "Instructions d'utilisation",
+            "archive": "🎤 En cliquant sur le bouton \"archive des conférences\", vous accédez à la page avec toutes les conférences disponibles",
+            "active": "✅ En cliquant sur le bouton \"conférences actives\", vous accédez à la page avec toutes les conférences en cours"
+        },
+        "links": {
+            "archive": "Archive des conférences",
+            "active": "Conférences actives"
+        }
+    },
+    "admin": {
+        "current_session": {
+            "title": "Session en cours",
+            "id_will_appear": "L'ID apparaîtra après le début de l'enregistrement"
+        },
+        "status": "Statut",
+        "recording_active": "Enregistrement en cours",
+        "no_active_recording": "Aucun enregistrement actif",
+        "audio_recording": {
+            "title": "Enregistrement audio",
+            "tasks": {
+                "capture_audio": "Capturer l'audio (SANS RETARD)",
+                "then_to_recording": "Puis à l'enregistrement",
+                "start_recording": "Commencer l'enregistrement",
+                "stop_recording": "Arrêter l'enregistrement"
+            },
+            "tech_info": {
+                "line1": "AudioContext + protection contre les retards",
+                "line2": "(envoi toutes les 0,2s + nettoyage forcé toutes les 10s)"
+            },
+            "logs": {
+                "line1": "16:28:14. Innovation améliorée SANS RETARD terminée",
+                "line2": "16:28:14. Envoi toutes les 0,2s + nettoyage forcé toutes les 10s",
+                "line3": "16:28:14. Fréquence cible : 16000Hz, format : PCM10"
+            }
+        },
+        "quick_access": {
+            "title": "Accès rapide",
+            "archive": "Archive des conférences",
+            "monitoring": "Surveillance",
+            "management": "Gestion"
+        }
+    },
+    "monitoring": {
+        "title": "Surveillance en temps réel",
+        "settings": {
+            "title": "Paramètres de surveillance"
+        },
+        "server": {
+            "title": "Serveur",
+            "address": "Adresse",
+            "available": "Serveur disponible",
+            "api_keys": "Clés API",
+            "active_sessions": "Sessions actives"
+        },
+        "status": "Statut",
+        "performance": {
+            "title": "Performance",
+            "messages": "Messages"
+        },
+        "session_selection": {
+            "title": "Sélection de session",
+            "active_sessions": "Sessions actives",
+            "recent_completed": "Dernières sessions terminées",
+            "no_active": "Aucune session active",
+            "no_completed": "Aucune session terminée"
+        },
+        "sessions": {
+            "biology_lecture": "Conférence de biologie",
+            "chemistry_seminar": "Séminaire de chimie",
+            "intro_lecture": "Conférence d'introduction",
+            "physics_practice": "Pratique de physique"
+        },
+        "mode": {
+            "title": "Mode",
+            "minutes": "min",
+            "optimized": "Optimisé pour les longues sessions"
+        },
+        "audio_processing": {
+            "title": "Suivi des événements de traitement audio"
+        },
+        "buttons": {
+            "start": "Commencer la surveillance",
+            "stop": "Arrêter la surveillance"
+        },
+        "status_monitoring": "Surveillance des événements en cours...",
+        "status_not_monitoring": "Commencez la surveillance pour voir les événements en temps réel",
+        "optimized_monitoring": {
+            "title": "Surveillance optimisée",
+            "lite_mode": "Mode Lite pour les longues conférences"
+        },
+        "features": {
+            "lite": {
+                "update_interval": "Mise à jour toutes les 3 secondes (économie de ressources)",
+                "message_limit": "Maximum 30 messages en mémoire",
+                "clear_history": "Bouton de nettoyage rapide de l'historique",
+                "simple_interface": "Interface simplifiée",
+                "remove_duplicates": "Suppression des messages en double"
+            }
+        },
+        "usage": {
+            "title": "Comment utiliser",
+            "select_session": "Sélectionnez une session dans la barre latérale",
+            "start_monitoring": "Cliquez sur \"Commencer la surveillance\"",
+            "clear_history_periodically": "Pour les longues conférences, nettoyez périodiquement l'historique",
+            "monitor_performance": "Surveillez les performances"
+        }
+    },
+    "sessions": {
+        "title": "Gestion des sessions",
+        "settings": {
+            "title": "Paramètres"
+        },
+        "server": {
+            "title": "Serveur",
+            "available": "Serveur disponible",
+            "api_keys": "Clés API",
+            "active_sessions": "Sessions actives"
+        },
+        "status": "Statut",
+        "statuses": {
+            "completed": "Terminé",
+            "active": "Actif"
+        },
+        "filters": {
+            "title": "Filtres",
+            "session_status": "Statut des sessions",
+            "session_count": "Nombre de sessions",
+            "all": "Tous",
+            "active": "Actives",
+            "completed": "Terminées"
+        },
+        "buttons": {
+            "refresh": "Actualiser les données",
+            "details": "Détails",
+            "monitoring": "Surveillance"
+        },
+        "stats": {
+            "found": "Sessions trouvées",
+            "active": "Actives"
+        },
+        "session_list": {
+            "title": "Liste de toutes les sessions"
+        },
+        "details": {
+            "id": "ID",
+            "start": "Début",
+            "end": "Fin",
+            "status": "Statut",
+            "audio": "Audio",
+            "duration": "Durée",
+            "participants": "Participants",
+            "quality": "Qualité de l'enregistrement",
+            "issues": "Problèmes"
+        },
+        "session1": {
+            "name": "Session 1:1750336806489_hy..."
+        },
+        "session2": {
+            "name": "Session 2:175033683986_x4..."
+        },
+        "audio_format": "16000Hz, 1 canal(aux)",
+        "duration_1h38m": "1 heure 38 minutes",
+        "duration_45m": "45 minutes",
+        "quality": {
+            "high": "Élevée",
+            "medium": "Moyenne"
+        },
+        "issues": {
+            "none": "Aucun",
+            "minor": "Interférences mineures"
+        },
+        "refreshing_data": "Actualisation des données..."
+    }
+}

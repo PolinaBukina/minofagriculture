@@ -1,5 +1,6 @@
 // src/types/Lecture.ts
 type Lecture = {
+    startTime: any;
     id: string;
     title: string;
     start: string;

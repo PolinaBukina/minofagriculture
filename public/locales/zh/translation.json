@@ -1,0 +1,357 @@
+{
+    "header": {
+        "federal_institution": "联邦国家预算高等教育机构",
+        "university_name": "俄罗斯国立农业大学 - <br />以K.A.季米里亚泽夫命名的莫斯科农业科学院",
+        "support": "支持",
+        "logout": "退出"
+    },
+    "breadcrumbs": {
+        "home": "主页",
+        "active_lectures": "活跃讲座"
+    },
+    "lectures": {
+        "intro_to_react": "React入门",
+        "advanced_typescript": "高级TypeScript"
+    },
+    "archive": {
+        "title": "讲座存档",
+        "filters": {
+            "title": "筛选",
+            "date": "讲座日期",
+            "lecturer": "讲师姓名",
+            "search": "按标题搜索",
+            "found": "找到：{{count}}个讲座",
+            "placeholder": {
+                "lecturer": "输入讲师姓名...",
+                "search": "输入讲座标题..."
+            }
+        },
+        "lecture": {
+            "title": "标题",
+            "lecturer": "讲师：",
+            "start": "开始：",
+            "end": "结束：",
+            "duration": "时长：",
+            "analytics": "分析"
+        },
+        "breadcrumbs": {
+            "archive": "讲座存档"
+        }
+    },
+    "lecture_viewer": {
+        "title": "讲座 {{id}}",
+        "mock_lecturer": "伊万诺夫 I.I.",
+        "mock_location": "101教室",
+        "mock_content": {
+            "original": "Это полный текст лекции на русском языке. Здесь содержится основная информация, которую представил лектор {{id}}.\nВторая часть лекции включает дополнительные материалы и примеры использования рассматриваемых технологий.\nЗаключительная часть содержит выводы и рекомендации для дальнейшего изучения темы.",
+            "en": "This is the full lecture text in English. It contains the main information presented by lecturer {{id}}.\nThe second part includes additional materials and use cases of the discussed technologies.\nThe final part contains conclusions and recommendations for further study.",
+            "fr": "Ceci est le texte complet de la conférence en français. Il contient les principales informations présentées par le conférencier {{id}}.\nLa deuxième partie comprend des documents supplémentaires et des cas d'utilisation des technologies discutées.\nLa partie finale contient des conclusions et des recommandations pour une étude plus approfondie.",
+            "zh": "这是中文的完整讲座文本。它包含讲师{{id}}介绍的主要信息。\n第二部分包括所讨论技术的其他材料和用例。\n最后部分包含结论和对该主题进一步研究的建议。"
+        },
+        "details": "讲座详情",
+        "lecturer": "讲师",
+        "start": "开始",
+        "end": "结束",
+        "duration": "时长",
+        "location": "地点",
+        "original_text": "原文",
+        "translated_text": "翻译文本 ({{language}})",
+        "show_full": "显示全文",
+        "text_unavailable": "讲座文本不可用",
+        "translation_unavailable": "翻译不可用",
+        "breadcrumb": "讲座 {{id}}"
+    },
+    "language": {
+        "select": "语言选择",
+        "english": "英语",
+        "french": "法语",
+        "chinese": "中文"
+    },
+    "speech": {
+        "synthesize": "语音合成",
+        "not_supported": "浏览器不支持语音合成"
+    },
+    "loading": "正在加载讲座...",
+    "time": {
+        "duration": "{{hours}}小时 {{minutes}}分钟"
+    },
+    "lector": {
+        "title": "讲座翻译服务（角色：讲师）",
+        "description": "使用GPT技术的智能平台，用于将讲座实时翻译成外语。翻译后的讲座将保留1个月。",
+        "actions": {
+            "record": "录制讲座",
+            "archive": "讲座存档",
+            "active": "活跃讲座"
+        },
+        "instructions": {
+            "title": "💡 使用方法（讲师模式）：",
+            "button": "使用说明",
+            "step1": "🎤 点击左侧的“开始录制”",
+            "step2": "✅ 在浏览器中允许麦克风访问",
+            "step3": "🗣️ 讲话 - 结果将显示在这里",
+            "step4": "⏹️ 点击“停止”结束"
+        }
+    },
+    "common": {
+        "close": "关闭",
+        "cancel": "取消",
+        "not_specified": "未指定"
+    },
+    "recorder": {
+        "title": "新讲座",
+        "breadcrumb": "讲座录制",
+        "description": "创建新讲座，将自动翻译成外语",
+        "form": {
+            "title": "讲座标题",
+            "title_placeholder": "输入讲座标题",
+            "lecturer": "讲师姓名",
+            "lecturer_placeholder": "输入讲师姓名",
+            "start_time": "开始时间",
+            "duration": "时长（分钟）",
+            "duration_placeholder": "输入时长",
+            "location": "地点",
+            "location_placeholder": "输入地点",
+            "submit": "下一步"
+        }
+    },
+    "recording": {
+        "title": "讲座：{{title}}",
+        "breadcrumb": "讲座录制",
+        "preview": {
+            "header": "准备开始录制讲座"
+        },
+        "lecture": {
+            "title": "讲座标题",
+            "lecturer": "讲师姓名",
+            "start": "开始时间",
+            "location": "地点"
+        },
+        "status": {
+            "preview": "预览",
+            "recording": "正在录制",
+            "paused": "讲座已暂停",
+            "finished": "讲座已完成"
+        },
+        "start_button": "开始讲座",
+        "pause_button": "暂停讲座",
+        "resume_button": "继续讲座",
+        "stop_button": "结束讲座",
+        "go_to_archive": "前往讲座存档",
+        "original_text": "原文",
+        "translated_text": "翻译文本 ({{language}})",
+        "show_full_text": "显示全文",
+        "text_unavailable": "讲座文本不可用",
+        "translation_unavailable": "翻译不可用",
+        "stop_confirmation": "确定要结束讲座录制吗？",
+        "pause_confirmation": "确定要暂停讲座录制吗？",
+        "confirm_stop": "结束",
+        "confirm_pause": "暂停",
+        "example_text": {
+            "original": "这是讲座文本示例...",
+            "translated": "This is an example lecture text..."
+        }
+    },
+    "confirmation": {
+        "title": "确认"
+    },
+    "active_lectures": {
+        "title": "活跃讲座",
+        "subtitle": "当前直播",
+        "empty": "没有活跃讲座"
+    },
+    "lecture": {
+        "lecturer": "讲师",
+        "start_time": "开始",
+        "participants": "参与者",
+        "participants_count": "{{count}}",
+        "status": {
+            "label": "状态",
+            "live": "直播中",
+            "recording": "正在录制",
+            "paused": "已暂停"
+        },
+        "view_aria": "前往讲座'{{title}}'",
+        "intro_to_react": "React入门",
+        "advanced_typescript": "高级TypeScript",
+        "lecturer_ivanov": "伊万诺夫 I.I.",
+        "lecturer_petrov": "彼得罗夫 P.P."
+    },
+    "student": {
+        "title": "讲座翻译服务（角色：学生）",
+        "description": "使用GPT技术的智能平台，用于将讲座实时翻译成外语。\n\n翻译后的讲座将保留1个月。",
+        "instructions": {
+            "title": "💡 使用说明",
+            "button": "使用说明",
+            "archive": "🎤 点击“讲座存档”按钮，进入包含所有可用讲座的页面",
+            "active": "✅ 点击“活跃讲座”按钮，进入包含当前进行中讲座的页面"
+        },
+        "links": {
+            "archive": "讲座存档",
+            "active": "活跃讲座"
+        }
+    },
+    "admin": {
+        "current_session": {
+            "title": "当前会话",
+            "id_will_appear": "ID将在开始录制后显示"
+        },
+        "status": "状态",
+        "recording_active": "正在录制",
+        "no_active_recording": "没有活跃录制",
+        "audio_recording": {
+            "title": "音频录制",
+            "tasks": {
+                "capture_audio": "捕获音频（无延迟）",
+                "then_to_recording": "然后开始录制",
+                "start_recording": "开始录制",
+                "stop_recording": "停止录制"
+            },
+            "tech_info": {
+                "line1": "AudioContext + 防延迟",
+                "line2": "（每0.2秒发送 + 每10秒强制清理）"
+            },
+            "logs": {
+                "line1": "16:28:14. 改进的无延迟创新已完成",
+                "line2": "16:28:14. 每0.2秒发送 + 每10秒强制清理",
+                "line3": "16:28:14. 目标频率：16000Hz，格式：PCM10"
+            }
+        },
+        "quick_access": {
+            "title": "快速访问",
+            "archive": "讲座存档",
+            "monitoring": "监控",
+            "management": "管理"
+        }
+    },
+    "monitoring": {
+        "title": "实时监控",
+        "settings": {
+            "title": "监控设置"
+        },
+        "server": {
+            "title": "服务器",
+            "address": "地址",
+            "available": "服务器可用",
+            "api_keys": "API密钥",
+            "active_sessions": "活跃会话"
+        },
+        "status": "状态",
+        "performance": {
+            "title": "性能",
+            "messages": "消息"
+        },
+        "session_selection": {
+            "title": "会话选择",
+            "active_sessions": "活跃会话",
+            "recent_completed": "最近完成",
+            "no_active": "没有活跃会话",
+            "no_completed": "没有完成会话"
+        },
+        "sessions": {
+            "biology_lecture": "生物学讲座",
+            "chemistry_seminar": "化学研讨会",
+            "intro_lecture": "入门讲座",
+            "physics_practice": "物理实践"
+        },
+        "mode": {
+            "title": "模式",
+            "minutes": "分钟",
+            "optimized": "优化为长时间会话"
+        },
+        "audio_processing": {
+            "title": "音频处理事件跟踪"
+        },
+        "buttons": {
+            "start": "开始监控",
+            "stop": "停止监控"
+        },
+        "status_monitoring": "正在监控事件...",
+        "status_not_monitoring": "开始监控以实时查看事件",
+        "optimized_monitoring": {
+            "title": "优化监控",
+            "lite_mode": "长时间讲座的轻量模式"
+        },
+        "features": {
+            "lite": {
+                "update_interval": "每3秒更新（节省资源）",
+                "message_limit": "内存中最多30条消息",
+                "clear_history": "快速清除历史按钮",
+                "simple_interface": "简化界面",
+                "remove_duplicates": "删除重复消息"
+            }
+        },
+        "usage": {
+            "title": "使用方法",
+            "select_session": "在侧边栏中选择会话",
+            "start_monitoring": "点击“开始监控”",
+            "clear_history_periodically": "长时间讲座定期清除历史",
+            "monitor_performance": "监控性能"
+        }
+    },
+    "sessions": {
+        "title": "会话管理",
+        "settings": {
+            "title": "设置"
+        },
+        "server": {
+            "title": "服务器",
+            "available": "服务器可用",
+            "api_keys": "API密钥",
+            "active_sessions": "活跃会话"
+        },
+        "status": "状态",
+        "statuses": {
+            "completed": "已完成",
+            "active": "活跃"
+        },
+        "filters": {
+            "title": "筛选",
+            "session_status": "会话状态",
+            "session_count": "会话数量",
+            "all": "全部",
+            "active": "活跃",
+            "completed": "已完成"
+        },
+        "buttons": {
+            "refresh": "刷新数据",
+            "details": "详情",
+            "monitoring": "监控"
+        },
+        "stats": {
+            "found": "找到的会话",
+            "active": "活跃"
+        },
+        "session_list": {
+            "title": "所有会话列表"
+        },
+        "details": {
+            "id": "ID",
+            "start": "开始",
+            "end": "结束",
+            "status": "状态",
+            "audio": "音频",
+            "duration": "时长",
+            "participants": "参与者",
+            "quality": "录制质量",
+            "issues": "问题"
+        },
+        "session1": {
+            "name": "会话 1:1750336806489_hy..."
+        },
+        "session2": {
+            "name": "会话 2:175033683986_x4..."
+        },
+        "audio_format": "16000Hz, 1声道",
+        "duration_1h38m": "1小时38分钟",
+        "duration_45m": "45分钟",
+        "quality": {
+            "high": "高",
+            "medium": "中"
+        },
+        "issues": {
+            "none": "无",
+            "minor": "轻微干扰"
+        },
+        "refreshing_data": "正在刷新数据..."
+    }
+}

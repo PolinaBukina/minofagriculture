@@ -1,93 +1,104 @@
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import commonStyles from '../commonStyles.module.css';
 import Header from '../../components/Header/Header';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
-import MusicIcon from '../../icons/MusicIcon';
 import Lecture from '../../types/Lecture';
 import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 
 const LectureViewer = () => {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const userRole = getRoleFromStorage();
     const location = useLocation();
     const navigate = useNavigate();
+
     const [language, setLanguage] = useState<string>('en');
-    const [showFullText, setShowFullText] = useState<boolean>(true);
     const [lecture, setLecture] = useState<Lecture | null>(null);
     const [fromArchive, setFromArchive] = useState<boolean>(false);
 
-    // Определяем, откуда пришел пользователь
+    // Load lecture data
     useEffect(() => {
-        // Проверяем state навигации
-        if (location.state?.fromArchive) {
-            setFromArchive(true);
-        }
-        // Или анализируем текущий путь
-        else if (location.pathname.includes('/archive')) {
-            setFromArchive(true);
-        }
-    }, [location]);
-
-    // Загрузка данных лекции
-    useEffect(() => {
-        // Mock данные
         const mockLecture: Lecture = {
             id: id || '1',
             title: `Лекция ${id}`,
             start: '2025-06-19 15:40:06',
             end: '2025-06-19 17:18:44',
-            duration: '1ч 39м',
-            lecturer: 'Иванов И.И.',
-            location: 'Аудитория 101',
+            duration: t('time.duration', { hours: 1, minutes: 39 }),
+            lecturer: t('lecture_viewer.mock_lecturer'),
+            location: t('lecture_viewer.mock_location'),
             content: {
-                original: `Это полный текст лекции на русском языке. Здесь содержится основная информация, которую представил лектор ${id}.
-        Вторая часть лекции включает в себя дополнительные материалы и примеры использования рассматриваемых технологий.
-        Заключительная часть содержит выводы и рекомендации для дальнейшего изучения темы.`,
+                original: t('lecture_viewer.mock_content.original', { id }),
                 translations: {
-                    en: `This is the full lecture text in English. It contains the main information presented by lecturer ${id}.
-        The second part of the lecture includes additional materials and use cases of the discussed technologies.
-        The final part contains conclusions and recommendations for further study of the topic.`,
-                    fr: `Ceci est le texte complet de la conférence en français. Il contient les principales informations présentées par le conférencier ${id}.
-        La deuxième partie de la conférence comprend des documents supplémentaires et des cas d'utilisation des technologies discutées.
-        La partie finale contient des conclusions et des recommandations pour une étude plus approfondie du sujet.`,
-                    zh: `这是中文的完整讲座文本。它包含讲师${id}介绍的主要信息。
-        讲座的第二部分包括所讨论技术的其他材料和用例。
-        最后部分包含结论和对该主题进一步研究的建议。`
+                    en: t('lecture_viewer.mock_content.en', { id }),
+                    fr: t('lecture_viewer.mock_content.fr', { id }),
+                    zh: t('lecture_viewer.mock_content.zh', { id })
                 }
-            }
+            },
+            startTime: undefined
         };
         setLecture(mockLecture);
-    }, [id]);
+    }, [id, t]);
 
-    // Определяем, откуда пришел пользователь
+    // Determine navigation source
     useEffect(() => {
         if (location.state?.fromArchive || location.pathname.includes('/archive')) {
             setFromArchive(true);
         }
     }, [location]);
 
-    // Функция для формирования хлебных крошек
     const getBreadcrumbs = () => {
-        const baseItems = [
-            {
-                label: getHomeLabel(userRole),
-                path: getHomePath(userRole)
-            }
-        ];
+        const baseItems = [{
+            label: getHomeLabel(userRole),
+            path: getHomePath(userRole),
+            translationKey: `roles.${userRole}.home`
+        }];
 
         if (fromArchive) {
             return [
                 ...baseItems,
-                { label: 'Архив лекций', path: '/archive' },
-                { label: `Лекция ${id}`, path: `/archive/lecture/${id}` }
+                {
+                    label: t('archive.title'),
+                    path: '/archive',
+                    translationKey: 'archive.title'
+                },
+                {
+                    label: t('lecture_viewer.breadcrumb', { id }),
+                    path: `/archive/lecture/${id}`,
+                    translationKey: 'lecture_viewer.breadcrumb'
+                }
             ];
         } else {
             return [
                 ...baseItems,
-                { label: 'Активные лекции', path: '/active' },
-                { label: `Лекция ${id}`, path: `/active/lecture/${id}` }
+                {
+                    label: t('active_lectures.title'),
+                    path: '/active',
+                    translationKey: 'active_lectures.title'
+                },
+                {
+                    label: t('lecture_viewer.breadcrumb', { id }),
+                    path: `/active/lecture/${id}`,
+                    translationKey: 'lecture_viewer.breadcrumb'
+                }
             ];
+        }
+    };
+
+    const speakText = (text: string, lang: string) => {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = {
+                'en': 'en-US',
+                'fr': 'fr-FR',
+                'zh': 'zh-CN',
+                'ru': 'ru-RU'
+            }[lang] || 'en-US';
+
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert(t('speech.not_supported'));
         }
     };
 
@@ -96,36 +107,10 @@ const LectureViewer = () => {
             <div className={commonStyles.appContainer}>
                 <div className={commonStyles.mainContentLecture}>
                     <Header />
-                    <h1 className={commonStyles.sectionHeader}>Загрузка лекции...</h1>
+                    <h1 className={commonStyles.sectionHeader}>{t('loading')}</h1>
                 </div>
             </div>
         );
-    }
-
-    // Функция для синтеза речи
-    const speakText = (text: string, lang: string) => {
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(text);
-
-            // Устанавливаем язык в зависимости от выбранного
-            switch (lang) {
-                case 'en':
-                    utterance.lang = 'en-US';
-                    break;
-                case 'fr':
-                    utterance.lang = 'fr-FR';
-                    break;
-                case 'zh':
-                    utterance.lang = 'zh-CN';
-                    break;
-                default:
-                    utterance.lang = 'ru-RU';
-            }
-
-            window.speechSynthesis.speak(utterance);
-        } else {
-            alert('Браузер не поддерживает синтез речи');
-        }
     }
 
     return (
@@ -137,119 +122,111 @@ const LectureViewer = () => {
 
                 <div className={commonStyles.infoCardLecture}>
                     <div className={commonStyles.listItemLecture}>
-                        <h2>Детали лекции</h2>
+                        <h2>{t('lecture_viewer.details')}</h2>
                         {lecture.lecturer && (
                             <div className={commonStyles.statusItem}>
-                                <span>Лектор:</span>
+                                <span>{t('lecture_viewer.lecturer')}:</span>
                                 <span>{lecture.lecturer}</span>
                             </div>
                         )}
                         <div className={commonStyles.statusItem}>
-                            <span>Начало:</span>
+                            <span>{t('lecture_viewer.start')}:</span>
                             <span>{lecture.start}</span>
                         </div>
                         <div className={commonStyles.statusItem}>
-                            <span>Окончание:</span>
+                            <span>{t('lecture_viewer.end')}:</span>
                             <span>{lecture.end}</span>
                         </div>
                         <div className={commonStyles.statusItem}>
-                            <span>Длительность:</span>
+                            <span>{t('lecture_viewer.duration')}:</span>
                             <span>{lecture.duration}</span>
                         </div>
                         {lecture.location && (
                             <div className={commonStyles.statusItem}>
-                                <span>Место:</span>
+                                <span>{t('lecture_viewer.location')}:</span>
                                 <span>{lecture.location}</span>
                             </div>
                         )}
                     </div>
+
                     <div className={commonStyles.listItemLecture}>
-                        <h2>Выбор языка</h2>
+                        <h2>{t('language.select')}</h2>
                         <select
                             className={commonStyles.filterSelect}
                             value={language}
                             onChange={(e) => setLanguage(e.target.value)}
                         >
-                            <option value="en">Английский</option>
-                            <option value="fr">Французский</option>
-                            <option value="zh">Китайский</option>
+                            <option value="en">{t('language.english')}</option>
+                            <option value="fr">{t('language.french')}</option>
+                            <option value="zh">{t('language.chinese')}</option>
                         </select>
                     </div>
                 </div>
+
                 <div className={commonStyles.infoCardLecture}>
                     <div className={commonStyles.listItemLecture}>
                         <div className={commonStyles.textHeaderContainer}>
-                            <h2>Исходный текст</h2>
+                            <h2>{t('lecture_viewer.original_text')}</h2>
                         </div>
                         <div className={commonStyles.ItemLecture}>
                             <div className={commonStyles.ItemLectureButtons}>
                                 <button
                                     className={commonStyles.textButton}
+                                    onClick={() => lecture.content?.original && speakText(lecture.content.original, 'ru')}
+                                    title={t('speech.synthesize')}
+                                >
+                                    {t('speech.synthesize')}
+                                </button>
+                                <button
+                                    className={commonStyles.textButton}
                                     onClick={() => navigate(`/archive/lecture/${id}/full-lecture`, {
                                         state: {
                                             originalText: lecture.content?.original,
-                                            translatedText: lecture.content?.translations[language],
-                                            language: language
+                                            translatedText: lecture.content?.translations[language as keyof typeof lecture.content.translations],
+                                            language,
+                                            lecture,
+                                            fromArchive
                                         }
                                     })}
                                 >
-                                    Показать полный текст
+                                    {t('lecture_viewer.show_full')}
                                 </button>
-                                {showFullText && (
-                                    <button
-                                        className={commonStyles.textButton}
-                                        onClick={() => lecture.content?.original && speakText(lecture.content.original, 'ru')}
-                                        title="Озвучить текст"
-                                    >
-                                        Озвучить
-                                    </button>
-                                )}
                             </div>
-                            {showFullText && (
-                                <div className={commonStyles.LectureFullText}>
-                                    {lecture.content?.original?.substring(0, 500) + '...' || 'Текст лекции недоступен'}
-                                </div>
-                            )}
+                            <div className={commonStyles.LectureFullText}>
+                                {lecture.content?.original?.substring(0, 500) + '...' || t('lecture_viewer.text_unavailable')}
+                            </div>
                         </div>
                     </div>
+
                     <div className={commonStyles.listItemLecture}>
-                        <h2>{language === 'en' ? 'Translated text (ENG)' :
-                            language === 'fr' ? 'Texte traduit (français)' :
-                                '翻译文本（中文）'}</h2>
+                        <h2>{t('lecture_viewer.translated_text', { language: t(`language.${language}`) })}</h2>
                         <div className={commonStyles.ItemLecture}>
-                            {showFullText && (
-                                <div className={commonStyles.LectureFullText}>
-                                    {lecture.content?.translations[language] || 'Перевод недоступен'}
-                                </div>
-                            )}
+                            <div className={commonStyles.LectureFullText}>
+                                {lecture.content?.translations[language as keyof typeof lecture.content.translations]?.substring(0, 500) + '...' || t('lecture_viewer.translation_unavailable')}
+                            </div>
                             <div className={commonStyles.ItemLectureButtons}>
                                 <button
                                     className={commonStyles.textButton}
-                                    onClick={() => navigate(`/archive/lecture/${id}/full-lecture`, {
+                                    onClick={() => navigate(`/archive/lecture/${lecture.id}/full-lecture`, {
                                         state: {
                                             originalText: lecture.content?.original,
-                                            translatedText: lecture.content?.translations[language],
-                                            language: language
+                                            translatedText: lecture.content?.translations[language as keyof typeof lecture.content.translations],
+                                            language,
+                                            lecture,
+                                            fromArchive
                                         }
                                     })}
                                 >
-                                    {language === 'en' ? 'Show full text' :
-                                        language === 'fr' ? 'Afficher le texte complet' :
-                                            '显示全文'}
+                                    {t('lecture_viewer.show_full')}
                                 </button>
-                                {showFullText && (
-                                    <button
-                                        className={commonStyles.textButton}
-                                        onClick={() => lecture.content?.translations[language] &&
-                                            speakText(lecture.content.translations[language], language)}
-                                        title="Озвучить перевод"
-                                    >
-                                        {/* Озвучить */}
-                                        {language === 'en' ? 'Listen' :
-                                            language === 'fr' ? 'Écouter' :
-                                                '朗读'}
-                                    </button>
-                                )}
+                                <button
+                                    className={commonStyles.textButton}
+                                    onClick={() => lecture.content?.translations[language as keyof typeof lecture.content.translations] &&
+                                        speakText(lecture.content.translations[language as keyof typeof lecture.content.translations], language)}
+                                    title={t('speech.synthesize')}
+                                >
+                                    {t('speech.synthesize')}
+                                </button>
                             </div>
                         </div>
                     </div>
