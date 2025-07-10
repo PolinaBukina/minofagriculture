@@ -45,7 +45,7 @@ const RecorderPage = () => {
     };
 
     const isFormValid = lectureData.title && lectureData.lecturer &&
-        lectureData.startTime && lectureData.location;
+        lectureData.startTime && lectureData.duration && lectureData.location;
 
     return (
         <div className={commonStyles.appContainer}>
@@ -113,6 +113,20 @@ const RecorderPage = () => {
                         </div>
 
                         <div className={commonStyles.filterControl}>
+                            <label>{t('recorder.form.duration')}</label>
+                            <input
+                                type="number"
+                                name="duration"
+                                min="1"
+                                value={lectureData.duration}
+                                onChange={handleLectureInputChange}
+                                className={commonStyles.filterSelect}
+                                required
+                                placeholder={t('recorder.form.duration_placeholder')}
+                            />
+                        </div>
+
+                        <div className={commonStyles.filterControl}>
                             <label>{t('recorder.form.location')}</label>
                             <input
                                 type="text"
@@ -139,4 +153,4 @@ const RecorderPage = () => {
     );
 };
 
-export default RecorderPage
+export default RecorderPage;

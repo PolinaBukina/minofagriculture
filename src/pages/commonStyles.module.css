@@ -911,7 +911,38 @@
 }
 
 .LectureFullText {
-    width: 75%
+    width: 75%;
+    height: 250px;
+    overflow-y: auto;
+    /* Добавляет вертикальную прокрутку при необходимости */
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    /* Сохраняет переносы строк и форматирование */
+    word-wrap: break-word;
+    /* Переносит длинные слова */
+    font-family: inherit;
+    margin: 10px 0;
+}
+
+.LectureFullText::-webkit-scrollbar {
+    width: 8px;
+}
+
+.LectureFullText::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.LectureFullText::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.LectureFullText::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 .textButton {
@@ -1202,4 +1233,39 @@
 .instructionList li {
     margin-bottom: 1rem;
     font-size: 1.1rem;
+}
+
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    width: 100%;
+    gap: 20px;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid rgba(0, 0, 0, 0.1);
+    border-top: 6px solid #3498db;
+    animation: spin 1s linear infinite;
+}
+
+.loaderText {
+    color: #555;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

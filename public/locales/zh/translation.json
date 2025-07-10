@@ -36,7 +36,10 @@
         },
         "breadcrumbs": {
             "archive": "讲座存档"
-        }
+        },
+        "loading_lectures": "加载讲座",
+        "no_lectures_found": "没有找到讲座",
+        "retry": "重试"
     },
     "lecture_viewer": {
         "title": "讲座 {{id}}",
@@ -54,18 +57,29 @@
         "end": "结束",
         "duration": "时长",
         "location": "地点",
+        "status": "状态",
         "original_text": "原文",
         "translated_text": "翻译文本 ({{language}})",
         "show_full": "显示全文",
         "text_unavailable": "讲座文本不可用",
         "translation_unavailable": "翻译不可用",
-        "breadcrumb": "讲座 {{id}}"
+        "breadcrumb": "讲座 {{id}}",
+        "full_text_breadcrumb": "讲座全文"
     },
     "language": {
         "select": "语言选择",
         "english": "英语",
+        "en": "Translated text (English)",
         "french": "法语",
-        "chinese": "中文"
+        "fr": "Texte traduit (Français)",
+        "chinese": "中文",
+        "zh": "翻译文本（中文）"
+    },
+    "export": "导出讲座 (Dǎochū jiǎngzuò)",
+    "refresh": "更新数据 (Gēngxīn shùjù)",
+    "refresh_ws": {
+        "ok": "WebSocket 已连接 (WebSocket yǐ liánjiē)",
+        "err": "重新连接 WebSocket (Chóngxīn liánjiē WebSocket)"
     },
     "speech": {
         "synthesize": "语音合成",
@@ -107,8 +121,6 @@
             "lecturer": "讲师姓名",
             "lecturer_placeholder": "输入讲师姓名",
             "start_time": "开始时间",
-            "duration": "时长（分钟）",
-            "duration_placeholder": "输入时长",
             "location": "地点",
             "location_placeholder": "输入地点",
             "submit": "下一步"
@@ -171,10 +183,8 @@
             "paused": "已暂停"
         },
         "view_aria": "前往讲座'{{title}}'",
-        "intro_to_react": "React入门",
-        "advanced_typescript": "高级TypeScript",
-        "lecturer_ivanov": "伊万诺夫 I.I.",
-        "lecturer_petrov": "彼得罗夫 P.P."
+        "full_text": "讲座全文",
+        "full_translation": "讲座完整翻译"
     },
     "student": {
         "title": "讲座翻译服务（角色：学生）",

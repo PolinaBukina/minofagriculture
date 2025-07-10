@@ -36,7 +36,10 @@
         },
         "breadcrumbs": {
             "archive": "Archive des conférences"
-        }
+        },
+        "loading_lectures": "Chargement des cours",
+        "no_lectures_found": "Aucune conférence trouvée",
+        "retry": "Réessayer"
     },
     "lecture_viewer": {
         "title": "Conférence {{id}}",
@@ -54,18 +57,29 @@
         "end": "Fin",
         "duration": "Durée",
         "location": "Lieu",
+        "status": "Statut",
         "original_text": "Texte original",
         "translated_text": "Texte traduit ({{language}})",
         "show_full": "Afficher le texte complet",
         "text_unavailable": "Le texte de la conférence n'est pas disponible",
         "translation_unavailable": "Traduction non disponible",
-        "breadcrumb": "Conférence {{id}}"
+        "breadcrumb": "Conférence {{id}}",
+        "full_text_breadcrumb": "Texte intégral de la conférence"
     },
     "language": {
         "select": "Sélection de la langue",
         "english": "Anglais",
+        "en": "Translated text (English)",
         "french": "Français",
-        "chinese": "Chinois"
+        "fr": "Texte traduit (Français)",
+        "chinese": "Chinois",
+        "zh": "翻译文本（中文）"
+    },
+    "export": "Exporter la conférence",
+    "refresh": "Mettre à jour les données",
+    "refresh_ws": {
+        "ok": "WebSocket connecté ",
+        "err": "Reconnecter WebSocket"
     },
     "speech": {
         "synthesize": "Synthétiser",
@@ -107,8 +121,6 @@
             "lecturer": "Nom du conférencier",
             "lecturer_placeholder": "Entrez le nom du conférencier",
             "start_time": "Heure de début",
-            "duration": "Durée (min)",
-            "duration_placeholder": "Entrez la durée",
             "location": "Lieu",
             "location_placeholder": "Entrez le lieu",
             "submit": "Suivant"
@@ -171,10 +183,8 @@
             "paused": "En pause"
         },
         "view_aria": "Aller à la conférence '{{title}}'",
-        "intro_to_react": "Introduction à React",
-        "advanced_typescript": "TypeScript avancé",
-        "lecturer_ivanov": "Ivanov I.I.",
-        "lecturer_petrov": "Petrov P.P."
+        "full_text": "Texte intégral de la conférence",
+        "full_translation": "Traduction complète de la conférence"
     },
     "student": {
         "title": "Service de traduction de conférences (rôle : ÉTUDIANT)",

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import SearchIcon from '../../icons/SearchIcon';
 import commonStyles from '../commonStyles.module.css';
 import Header from '../../components/Header/Header';
@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 type Lecture = {
+    originalStart: any;
     id: string;
     title: string;
     start: string;
@@ -15,6 +17,20 @@ type Lecture = {
     duration: string;
     lecturer?: string;
     location?: string;
+};
+
+type ApiSession = {
+    _id: string;
+    session_id: string;
+    start_time: string;
+    end_time?: string;
+    status: string;
+    audio_config: {
+        sample_rate: number;
+        channels: number;
+        format: string;
+    };
+    server_id: string;
 };
 
 const ArchivePage = () => {
@@ -28,36 +44,121 @@ const ArchivePage = () => {
     const [dateFilter, setDateFilter] = useState('');
     const [lecturerFilter, setLecturerFilter] = useState('');
     const [keywordFilter, setKeywordFilter] = useState('');
+    const [lectures, setLectures] = useState<Lecture[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
 
-    // Моковые данные
-    const [lectures] = useState<Lecture[]>([
-        {
-            id: '1',
-            title: 'Лекция по математическому анализу',
-            start: '2025-06-19 15:40:06',
-            end: '2025-06-19 17:18:44',
-            duration: '1ч 39м',
-            lecturer: 'Иванов И.И.'
-        },
-        {
-            id: '2',
-            title: 'Лекция по физике',
-            start: '2025-06-19 15:40:06',
-            end: '2025-06-19 17:18:44',
-            duration: '1ч 39м',
-            lecturer: 'Петров И.И.'
-        }
-    ]);
+    useEffect(() => {
+        const fetchSessions = async () => {
+            try {
+                const response = await axios.get('https://audio.minofagriculture.ru/sessions');
+                console.log(response)
+                const sessions: ApiSession[] = response.data.sessions;
+
+                const transformedLectures = sessions.map(session => {
+                    const startDate = new Date(session.start_time);
+                    const endDate = session.end_time ? new Date(session.end_time) : null;
+
+                    // Calculate duration if end time exists
+                    let duration = '';
+                    if (endDate) {
+                        const diffMs = endDate.getTime() - startDate.getTime();
+                        const diffMins = Math.round(diffMs / 60000);
+                        const hours = Math.floor(diffMins / 60);
+                        const mins = diffMins % 60;
+                        duration = `${hours}ч ${mins}м`;
+                    }
+
+                    return {
+                        id: session.session_id,
+                        title: `Лекция ${session.session_id.slice(0, 6)}`,
+                        start: startDate.toLocaleString('ru-RU'),
+                        end: endDate ? endDate.toLocaleString('ru-RU') : '',
+                        duration,
+                        lecturer: 'Лектор не указан',
+                        // Сохраняем оригинальную дату для фильтрации
+                        originalStart: startDate,
+                        originalEnd: endDate
+                    };
+                });
+
+                setLectures(transformedLectures);
+                setIsLoading(false);
+            } catch (err) {
+                setError('Не удалось загрузить данные лекций');
+                setIsLoading(false);
+                console.error('Error fetching sessions:', err);
+            }
+        };
+
+        fetchSessions();
+    }, []);
 
     // Фильтрация лекций
+    // const filteredLectures = useMemo(() => {
+    //     return lectures.filter(lecture => {
+    //         const matchesDate = dateFilter
+    //             ? new Date(lecture.start).toISOString().split('T')[0] === dateFilter
+    //             : true;
+
+    // const matchesLecturer = lecturerFilter
+    //     ? (lecture.lecturer || '').toLowerCase().includes(lecturerFilter.toLowerCase())
+    //     : true;
+
+    // const matchesTitle = searchQuery
+    //     ? lecture.title.toLowerCase().includes(searchQuery.toLowerCase())
+    //     : true;
+
+    // const matchesKeywords = keywordFilter
+    //     ? `${lecture.title} ${lecture.lecturer || ''}`
+    //         .toLowerCase()
+    //         .includes(keywordFilter.toLowerCase())
+    //     : true;
+
+    //         return matchesDate && matchesLecturer && matchesTitle && matchesKeywords;
+    //     });
+    // }, [lectures, dateFilter, lecturerFilter, searchQuery, keywordFilter]);
+
+    // const filteredLectures = useMemo(() => {
+    //     return lectures.filter(lecture => {
+    //         // Альтернативный вариант фильтрации по дате
+    //         const lectureDate = new Date(lecture.start);
+    //         const filterDate = dateFilter ? new Date(dateFilter) : null;
+
+    //         const matchesDate = filterDate
+    //             ? lectureDate.getFullYear() === filterDate.getFullYear() &&
+    //             lectureDate.getMonth() === filterDate.getMonth() &&
+    //             lectureDate.getDate() === filterDate.getDate()
+    //             : true;
+
+    //         const matchesLecturer = lecturerFilter
+    //             ? (lecture.lecturer || '').toLowerCase().includes(lecturerFilter.toLowerCase())
+    //             : true;
+
+    //         const matchesTitle = searchQuery
+    //             ? lecture.title.toLowerCase().includes(searchQuery.toLowerCase())
+    //             : true;
+
+    //         const matchesKeywords = keywordFilter
+    //             ? `${lecture.title} ${lecture.lecturer || ''}`
+    //                 .toLowerCase()
+    //                 .includes(keywordFilter.toLowerCase())
+    //             : true;
+
+    //         return matchesDate && matchesLecturer && matchesTitle && matchesKeywords;
+
+    //     });
+    // }, [lectures, dateFilter, lecturerFilter, searchQuery, keywordFilter]);
+
     const filteredLectures = useMemo(() => {
         return lectures.filter(lecture => {
+            // Фильтрация по дате
             const matchesDate = dateFilter
-                ? lecture.start.split(' ')[0] === dateFilter
+                ? lecture.originalStart.toISOString().split('T')[0] === dateFilter
                 : true;
 
             const matchesLecturer = lecturerFilter
-                ? lecture.lecturer?.toLowerCase().includes(lecturerFilter.toLowerCase())
+                ? (lecture.lecturer || '').toLowerCase().includes(lecturerFilter.toLowerCase())
                 : true;
 
             const matchesTitle = searchQuery
@@ -124,7 +225,9 @@ const ArchivePage = () => {
                     </div>
 
                     <div className={commonStyles.filterStats}>
-                        {t('archive.filters.found', { count: filteredLectures.length })}
+                        {isLoading ? t('archive.loading') :
+                            error ? t('archive.error') :
+                                t('archive.filters.found', { count: filteredLectures.length })}
                     </div>
                 </div>
             </div>
@@ -152,49 +255,91 @@ const ArchivePage = () => {
                         {t('archive.title')}
                     </h2>
 
-                    {filteredLectures.slice(0, recordsToShow).map(lecture => (
-                        <div
-                            key={lecture.id}
-                            className={commonStyles.listItem}
-                            onClick={(e) => {
-                                if (!(e.target as HTMLElement).closest(`.${commonStyles.secondaryButton}`)) {
-                                    navigate(`/archive/lecture/${lecture.id}`);
-                                }
-                            }}
-                        >
-                            <h3>{lecture.title}</h3>
-                            {lecture.lecturer && (
-                                <div className={commonStyles.statusItem}>
-                                    <span>{t('archive.lecture.lecturer')}</span>
-                                    <span>{lecture.lecturer}</span>
-                                </div>
-                            )}
-                            <div className={commonStyles.statusItem}>
-                                <span>{t('archive.lecture.start')}</span>
-                                <span>{lecture.start}</span>
-                            </div>
-                            <div className={commonStyles.statusItem}>
-                                <span>{t('archive.lecture.end')}</span>
-                                <span>{lecture.end}</span>
-                            </div>
-                            <div className={commonStyles.statusItem}>
-                                <span>{t('archive.lecture.duration')}</span>
-                                <span>{lecture.duration}</span>
-                            </div>
-
-                            <div className={commonStyles.buttonGroup} style={{ marginTop: '10px' }}>
-                                <button
-                                    className={commonStyles.secondaryButton}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        // Логика для кнопки "Аналитика"
-                                    }}
-                                >
-                                    {t('archive.lecture.analytics')}
-                                </button>
-                            </div>
+                    {isLoading ? (
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '300px',
+                            width: '100%',
+                            gap: '20px'
+                        }}>
+                            <div style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                border: '6px solid rgba(0, 0, 0, 0.1)',
+                                borderTop: '6px solid #3498db',
+                                animation: 'spin 1s linear infinite'
+                            }}></div>
+                            <p style={{
+                                color: '#555',
+                                fontSize: '1.2rem',
+                                fontWeight: '500'
+                            }}>{t('archive.loading_lectures')}</p>
                         </div>
-                    ))}
+
+                    ) : error ? (
+                        <div className={commonStyles.errorState}>
+                            <p>{error}</p>
+                            <button
+                                className={commonStyles.primaryButton}
+                                onClick={() => window.location.reload()}
+                            >
+                                {t('archive.retry')}
+                            </button>
+                        </div>
+                    ) : filteredLectures.length > 0 ? (
+                        filteredLectures.slice(0, recordsToShow).map(lecture => (
+                            <div
+                                key={lecture.id}
+                                className={commonStyles.listItem}
+                                onClick={(e) => {
+                                    if (!(e.target as HTMLElement).closest(`.${commonStyles.secondaryButton}`)) {
+                                        navigate(`/archive/lecture/${lecture.id}`);
+                                    }
+                                }}
+                            >
+                                <h3>{lecture.title}</h3>
+                                {lecture.lecturer && (
+                                    <div className={commonStyles.statusItem}>
+                                        <span>{t('archive.lecture.lecturer')}</span>
+                                        <span>{lecture.lecturer}</span>
+                                    </div>
+                                )}
+                                <div className={commonStyles.statusItem}>
+                                    <span>{t('archive.lecture.start')}</span>
+                                    <span>{lecture.start}</span>
+                                </div>
+                                <div className={commonStyles.statusItem}>
+                                    <span>{t('archive.lecture.end')}</span>
+                                    <span>{lecture.end || 'Не завершена'}</span>
+                                </div>
+                                {lecture.duration && (
+                                    <div className={commonStyles.statusItem}>
+                                        <span>{t('archive.lecture.duration')}</span>
+                                        <span>{lecture.duration}</span>
+                                    </div>
+                                )}
+                                <div className={commonStyles.buttonGroup} style={{ marginTop: '10px' }}>
+                                    <button
+                                        className={commonStyles.secondaryButton}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            // Логика для кнопки "Аналитика"
+                                        }}
+                                    >
+                                        {t('archive.lecture.analytics')}
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <div className={commonStyles.emptyState}>
+                            <p>{t('archive.no_lectures_found')}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

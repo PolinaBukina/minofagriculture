@@ -121,9 +121,9 @@ const FullLecturePage = () => {
 
         const endItem = [
             {
-                label: t('lecture.full_text_breadcrumb', { id }),
+                label: t('lecture_viewer.full_text_breadcrumb', { id }),
                 path: '',
-                translationKey: 'lecture.full_text_breadcrumb'
+                translationKey: 'lecture_viewer.full_text_breadcrumb'
             }
         ];
 
@@ -200,7 +200,7 @@ const FullLecturePage = () => {
                     <div className={commonStyles.listItemLecture}>
                         <h2>{t('lecture.full_text')}</h2>
                         <div className={commonStyles.LectureFullText}>
-                            {originalText || t('lecture.text_unavailable')}
+                            {originalText || t('lecture_viewer.text_unavailable')}
                         </div>
                     </div>
 

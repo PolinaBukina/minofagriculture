@@ -43,7 +43,10 @@
         },
         "breadcrumbs": {
             "archive": "Lecture Archive"
-        }
+        },
+        "loading_lectures": "Loading lectures",
+        "no_lectures_found": "No lectures found",
+        "retry": "Retry"
     },
     "languages": {
         "english": "English",
@@ -67,18 +70,29 @@
         "end": "End",
         "duration": "Duration",
         "location": "Location",
+        "status": "Status",
         "original_text": "Original Text",
         "translated_text": "Translated Text ({{language}})",
         "show_full": "Show Full Text",
         "text_unavailable": "Lecture text unavailable",
         "translation_unavailable": "Translation unavailable",
-        "breadcrumb": "Lecture {{id}}"
+        "breadcrumb": "Lecture {{id}}",
+        "full_text_breadcrumb": "Full text of the lecture"
     },
     "language": {
         "select": "Language Selection",
         "english": "English",
+        "en": "Translated text (English)",
         "french": "French",
-        "chinese": "Chinese"
+        "fr": "Texte traduit (Français)",
+        "chinese": "Chinese",
+        "zh": "翻译文本（中文）"
+    },
+    "export": "Export lecture",
+    "refresh": "Update data",
+    "refresh_ws": {
+        "ok": "WebSocket connected",
+        "err": "Reconnect WebSocket"
     },
     "speech": {
         "synthesize": "Synthesize",
@@ -120,8 +134,6 @@
             "lecturer": "Lecturer Name",
             "lecturer_placeholder": "Enter lecturer name",
             "start_time": "Start Time",
-            "duration": "Duration (minutes)",
-            "duration_placeholder": "Enter duration",
             "location": "Location",
             "location_placeholder": "Enter location",
             "submit": "Next"
@@ -184,10 +196,8 @@
             "paused": "Paused"
         },
         "view_aria": "View lecture '{{title}}'",
-        "intro_to_react": "Introduction to React",
-        "advanced_typescript": "Advanced TypeScript",
-        "lecturer_ivanov": "Ivanov I.I.",
-        "lecturer_petrov": "Petrov P.P."
+        "full_text": "Full lecture text",
+        "full_translation": "Full lecture translation"
     },
     "student": {
         "title": "Lecture Translation Service (role: STUDENT)",

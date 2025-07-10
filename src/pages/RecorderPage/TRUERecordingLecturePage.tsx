@@ -1,4 +1,4 @@
-// import { useState, useEffect, useRef, useCallback } from 'react';
+// import { useState } from 'react';
 // import { useTranslation } from 'react-i18next';
 // import { useLocation, useNavigate } from 'react-router-dom';
 // import commonStyles from '../commonStyles.module.css';
@@ -6,20 +6,6 @@
 // import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 // import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
 // import LectureData from '../../types/Lecture';
-// import { AudioWebSocket } from '../../services/api';
-// import { Mic, MicOff, Copy, Play, Square } from 'lucide-react';
-
-// type WebSocketMessage = {
-//     type: 'transcription' | 'processed' | 'translated' | 'error' | 'status';
-//     message?: string;
-//     status?: string;
-//     timestamp?: number;
-//     confidence?: number;
-//     text?: string;
-//     original_text?: string;
-//     processed_text?: string;
-//     translation?: string;
-// };
 
 // const RecordingLecturePage = () => {
 //     const { t } = useTranslation();
@@ -40,230 +26,19 @@
 //     const navigate = useNavigate();
 //     const [isPreviewMode, setIsPreviewMode] = useState(isPreview);
 
-//     // Audio recording states
-//     const [isConnected, setIsConnected] = useState(false);
-//     const [sessionId, setSessionId] = useState('');
-//     const [status, setStatus] = useState(t('recording.status.ready'));
-//     const [error, setError] = useState('');
-//     const [transcriptions, setTranscriptions] = useState<any[]>([]);
-
-//     // Refs for audio
-//     const audioContextRef = useRef<AudioContext | null>(null);
-//     const mediaStreamRef = useRef<MediaStream | null>(null);
-//     const processorRef = useRef<ScriptProcessorNode | null>(null);
-//     const audioBufferRef = useRef<Int16Array[]>([]);
-//     const flushIntervalRef = useRef<NodeJS.Timeout | null>(null);
-//     const webSocketRef = useRef<AudioWebSocket | null>(null);
-//     const isRecordingRef = useRef(false);
-
-//     const generateSessionId = useCallback((): string => {
-//         return Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-//     }, []);
-
-//     const float32ToPCM16 = useCallback((float32Array: Float32Array): Int16Array => {
-//         const pcm16 = new Int16Array(float32Array.length);
-//         for (let i = 0; i < float32Array.length; i++) {
-//             const sample = Math.max(-1, Math.min(1, float32Array[i]));
-//             pcm16[i] = Math.round(sample * 0x7FFF);
-//         }
-//         return pcm16;
-//     }, []);
-
-//     const sendPCMData = useCallback((pcmData: Int16Array) => {
-//         if (webSocketRef.current && webSocketRef.current.isConnected) {
-//             const arrayBuffer = pcmData.buffer.slice(pcmData.byteOffset, pcmData.byteOffset + pcmData.byteLength);
-//             const uint8Array = new Uint8Array(arrayBuffer);
-//             const base64Data = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
-//             webSocketRef.current.sendAudioChunk(base64Data);
-//         }
-//     }, []);
-
-//     const forceFlushBuffer = useCallback(() => {
-//         if (isRecordingRef.current && audioBufferRef.current.length > 0) {
-//             const totalLength = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-//             const combinedPCM = new Int16Array(totalLength);
-
-//             let offset = 0;
-//             for (const chunk of audioBufferRef.current) {
-//                 combinedPCM.set(chunk, offset);
-//                 offset += chunk.length;
-//             }
-
-//             sendPCMData(combinedPCM);
-//             audioBufferRef.current = [];
-//         }
-//     }, [sendPCMData]);
-
-//     const handleWebSocketMessage = useCallback((data: WebSocketMessage) => {
-//         console.log('WebSocket message:', data);
-
-//         if (data.type === 'transcription' && data.text && data.timestamp) {
-//             setTranscriptions(prev => [...prev.slice(-9), {
-//                 text: data.text as string,
-//                 confidence: data.confidence || 0,
-//                 timestamp: data.timestamp as number
-//             }]);
-//             setOriginalText(prev => prev + ' ' + data.text);
-//         } else if (data.type === 'processed' && data.processed_text) {
-//             setOriginalText(prev => prev + ' ' + data.processed_text);
-//         } else if (data.type === 'translated' && data.translation) {
-//             setTranslatedText(prev => prev + ' ' + data.translation);
-//         } else if (data.type === 'error' && data.message) {
-//             setError(data.message);
-//         } else if (data.type === 'status' && (data.status || data.message)) {
-//             setStatus(data.status || data.message || '');
-//         }
-//     }, []);
-
-//     const startRecording = useCallback(async () => {
-//         try {
-//             setError('');
-//             setStatus(t('recording.status.requesting_mic'));
-
-//             const newSessionId = generateSessionId();
-//             setSessionId(newSessionId);
-
-//             const stream = await navigator.mediaDevices.getUserMedia({
-//                 audio: {
-//                     sampleRate: 16000,
-//                     channelCount: 1,
-//                     echoCancellation: false,
-//                     noiseSuppression: false,
-//                     autoGainControl: false
-//                 }
-//             });
-
-//             mediaStreamRef.current = stream;
-//             setStatus(t('recording.status.connecting_ws'));
-
-//             const ws = new AudioWebSocket();
-//             webSocketRef.current = ws;
-
-//             ws.onMessage('transcription', handleWebSocketMessage);
-//             ws.onMessage('processed', handleWebSocketMessage);
-//             ws.onMessage('translated', handleWebSocketMessage);
-//             ws.onMessage('error', handleWebSocketMessage);
-//             ws.onMessage('status', handleWebSocketMessage);
-
-//             await ws.connect(newSessionId);
-//             setIsConnected(true);
-//             setStatus(t('recording.status.ws_connected'));
-
-//             const audioContext = new (window.AudioContext || window.webkitAudioContext)({
-//                 sampleRate: 16000
-//             });
-//             audioContextRef.current = audioContext;
-
-//             const source = audioContext.createMediaStreamSource(stream);
-//             const processor = audioContext.createScriptProcessor(4096, 1, 1);
-//             processorRef.current = processor;
-
-//             processor.onaudioprocess = (audioProcessingEvent: AudioProcessingEvent) => {
-//                 if (!isRecordingRef.current) return;
-
-//                 const inputBuffer = audioProcessingEvent.inputBuffer;
-//                 const inputData = inputBuffer.getChannelData(0);
-//                 const pcmData = float32ToPCM16(inputData);
-//                 audioBufferRef.current.push(pcmData);
-
-//                 const totalSamples = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-//                 const durationSeconds = totalSamples / 16000;
-
-//                 if (durationSeconds >= 0.2) {
-//                     const totalLength = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-//                     const combinedPCM = new Int16Array(totalLength);
-
-//                     let offset = 0;
-//                     for (const chunk of audioBufferRef.current) {
-//                         combinedPCM.set(chunk, offset);
-//                         offset += chunk.length;
-//                     }
-
-//                     sendPCMData(combinedPCM);
-//                     audioBufferRef.current = [];
-//                 }
-//             };
-
-//             source.connect(processor);
-//             processor.connect(audioContext.destination);
-//             flushIntervalRef.current = setInterval(forceFlushBuffer, 10000);
-
-//             setIsRecording(true);
-//             isRecordingRef.current = true;
-//             setStatus(t('recording.status.recording'));
-//             setIsPreviewMode(false);
-
-//         } catch (err) {
-//             console.error('Recording error:', err);
-//             setError(t('recording.errors.mic_access', { error: err instanceof Error ? err.message : String(err) }));
-//             setStatus(t('recording.errors.recording_failed'));
-
-//             if (err instanceof Error) {
-//                 if (err.name === 'NotAllowedError') {
-//                     setError(t('recording.errors.mic_permission'));
-//                 } else if (err.name === 'NotFoundError') {
-//                     setError(t('recording.errors.mic_not_found'));
-//                 }
-//             }
-//         }
-//     }, [t, generateSessionId, handleWebSocketMessage, float32ToPCM16, sendPCMData, forceFlushBuffer]);
-
-//     const stopRecording = useCallback(() => {
-//         setIsRecording(false);
-//         isRecordingRef.current = false;
-
-//         if (flushIntervalRef.current) {
-//             clearInterval(flushIntervalRef.current);
-//             flushIntervalRef.current = null;
-//         }
-
-//         if (audioBufferRef.current.length > 0) {
-//             forceFlushBuffer();
-//         }
-
-//         if (processorRef.current) {
-//             processorRef.current.disconnect();
-//             processorRef.current = null;
-//         }
-
-//         if (audioContextRef.current) {
-//             audioContextRef.current.close();
-//             audioContextRef.current = null;
-//         }
-
-//         if (mediaStreamRef.current) {
-//             mediaStreamRef.current.getTracks().forEach(track => track.stop());
-//             mediaStreamRef.current = null;
-//         }
-
-//         if (webSocketRef.current) {
-//             webSocketRef.current.disconnect();
-//             webSocketRef.current = null;
-//         }
-
-//         setIsConnected(false);
-//         setStatus(t('recording.status.stopped'));
-//     }, [t, forceFlushBuffer]);
-
-//     useEffect(() => {
-//         return () => {
-//             if (isRecording) {
-//                 stopRecording();
-//             }
-//         };
-//     }, [isRecording, stopRecording]);
-
 //     if (!state?.lecture) {
 //         navigate('/recorder', { replace: true });
 //         return null;
 //     }
 
 //     const handleStartLecture = () => {
-//         startRecording();
+//         setIsPreviewMode(false);
+//         setIsRecording(true);
+//         setOriginalText(t('recording.example_text.original'));
+//         setTranslatedText(t('recording.example_text.translated'));
 //     };
 
 //     const confirmStopLecture = () => {
-//         stopRecording();
 //         setIsFinished(true);
 //         setIsRecording(false);
 //         setIsPaused(false);
@@ -274,8 +49,6 @@
 //         if (isPaused) {
 //             setIsPaused(false);
 //             setShowPauseModal(false);
-//             isRecordingRef.current = true;
-//             setStatus(t('recording.status.recording'));
 //         } else {
 //             setShowPauseModal(true);
 //         }
@@ -284,8 +57,6 @@
 //     const confirmPauseLecture = () => {
 //         setIsPaused(true);
 //         setShowPauseModal(false);
-//         isRecordingRef.current = false;
-//         setStatus(t('recording.status.paused'));
 //     };
 
 //     const speakText = (text: string, lang: string) => {
@@ -552,275 +323,269 @@
 
 // export default RecordingLecturePage;
 
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Mic, Square, Settings } from 'lucide-react';
 import commonStyles from '../commonStyles.module.css';
 import Header from '../../components/Header/Header';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/roleHelpers';
-import { AudioWebSocket } from '../../services/api';
+import LectureData from '../../types/Lecture';
 
-type LectureData = {
-    id: string;
-    title: string;
-    lecturer: string;
-    startTime: string;
-    duration: string;
-    location: string;
-    createdAt: string;
-    lecture_title?: string;
-    lecturer_name?: string;
-    exact_location?: string;
-};
+interface SessionStats {
+    chunksRecorded: number;
+    dataTransmitted: number;
+    transcriptionReceived: number;
+    processingReceived: number;
+    translationReceived: number;
+}
 
-type WebSocketMessage = {
-    type: 'transcription' | 'processed' | 'translated' | 'error' | 'status';
-    message?: string;
-    status?: string;
-    timestamp?: number;
-    confidence?: number;
+interface ResultItem {
     text?: string;
-    original_text?: string;
     processed_text?: string;
-    translation?: string;
-};
+    translated_text?: string;
+    timestamp?: string;
+    _timestamp?: string;
+}
+
+interface Results {
+    transcription: ResultItem[];
+    processing: ResultItem[];
+    translation: ResultItem[];
+}
+
+interface RecordingSettings {
+    sampleRate: number;
+    bufferSize: number;
+    channels: number;
+    format: string;
+}
+
+class AudioWebSocket {
+    onOpen(callback: () => void) { }
+    onClose(callback: () => void) { }
+    onError(callback: (error: Error) => void) { }
+    onMessage(type: string, callback: (data: any) => void) { }
+    sendAudioChunk(chunk: number[]) { }
+    sendSessionStart() { }
+    sendSessionEnd() { }
+    async connect() { }
+    disconnect() { }
+}
 
 const RecordingLecturePage = () => {
     const { t } = useTranslation();
     const { state } = useLocation();
-    const { lecture: initialLecture, isPreview = true } = state as {
-        lecture: LectureData;
-        isPreview?: boolean
-    };
+    const { lecture: initialLecture, isPreview = true } = state as { lecture: LectureData; isPreview?: boolean };
+    const navigate = useNavigate();
+    const userRole = getRoleFromStorage();
 
-    const [lecture, setLecture] = useState<LectureData>({
-        ...initialLecture,
-        lecture_title: initialLecture.lecture_title || initialLecture.title,
-        lecturer_name: initialLecture.lecturer_name || initialLecture.lecturer,
-        exact_location: initialLecture.exact_location || initialLecture.location
-    });
-
+    // Состояние компонента
+    const [lecture, setLecture] = useState<LectureData>(initialLecture);
     const [isRecording, setIsRecording] = useState(!isPreview);
     const [isPaused, setIsPaused] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
-    const [originalText, setOriginalText] = useState('');
-    const [translatedText, setTranslatedText] = useState('');
-    const [language, setLanguage] = useState('en');
     const [showStopModal, setShowStopModal] = useState(false);
     const [showPauseModal, setShowPauseModal] = useState(false);
     const [showFullText, setShowFullText] = useState(true);
-    const userRole = getRoleFromStorage();
-    const navigate = useNavigate();
     const [isPreviewMode, setIsPreviewMode] = useState(isPreview);
+    const [recordingTime, setRecordingTime] = useState<number>(0);
+    const [error, setError] = useState<string | null>(null);
+    const [originalText, setOriginalText] = useState('');
+    const [translatedText, setTranslatedText] = useState('');
+    const [language, setLanguage] = useState('en');
 
-    // Audio recording states
-    const [isConnected, setIsConnected] = useState(false);
-    const [sessionId, setSessionId] = useState('');
-    const [status, setStatus] = useState(t('recording.status.ready'));
-    const [error, setError] = useState('');
-    const [transcriptions, setTranscriptions] = useState<any[]>([]);
-
-    // Refs for audio
+    // Refs
     const audioContextRef = useRef<AudioContext | null>(null);
-    const mediaStreamRef = useRef<MediaStream | null>(null);
     const processorRef = useRef<ScriptProcessorNode | null>(null);
-    const audioBufferRef = useRef<Int16Array[]>([]);
-    const flushIntervalRef = useRef<NodeJS.Timeout | null>(null);
+    const streamRef = useRef<MediaStream | null>(null);
     const webSocketRef = useRef<AudioWebSocket | null>(null);
-    const isRecordingRef = useRef(false);
+    const audioBufferRef = useRef<number[][]>([]);
+    const isRecordingRef = useRef<boolean>(false);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    const generateSessionId = useCallback((): string => {
-        return Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    }, []);
+    // Настройки записи
+    const [recordingSettings] = useState<RecordingSettings>({
+        sampleRate: 16000,
+        bufferSize: 4096,
+        channels: 1,
+        format: 'pcm16'
+    });
 
-    const float32ToPCM16 = useCallback((float32Array: Float32Array): Int16Array => {
-        const pcm16 = new Int16Array(float32Array.length);
+    // if (!state?.lecture) {
+    //     navigate('/recorder', { replace: true });
+    //     return null;
+    // }
+
+    // Генерация ID сессии
+    const generateSessionId = (): string => {
+        return `${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+    };
+
+    // Конвертация Float32 в PCM16
+    const float32ToPCM16 = (float32Array: Float32Array): number[] => {
+        const pcm16Array = new Int16Array(float32Array.length);
         for (let i = 0; i < float32Array.length; i++) {
             const sample = Math.max(-1, Math.min(1, float32Array[i]));
-            pcm16[i] = Math.round(sample * 0x7FFF);
+            pcm16Array[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
         }
-        return pcm16;
+        return Array.from(pcm16Array);
+    };
+
+    // Отправка PCM данных (вынесен на верхний уровень)
+    const sendPCMData = useCallback(() => {
+        if (audioBufferRef.current.length === 0 || !webSocketRef.current) return;
+
+        const currentBuffer = [...audioBufferRef.current];
+        audioBufferRef.current = [];
+
+        currentBuffer.forEach((pcmChunk) => {
+            webSocketRef.current?.sendAudioChunk(pcmChunk);
+        });
     }, []);
 
-    const sendPCMData = useCallback((pcmData: Int16Array) => {
-        if (webSocketRef.current && webSocketRef.current.isConnected) {
-            const arrayBuffer = pcmData.buffer.slice(pcmData.byteOffset, pcmData.byteOffset + pcmData.byteLength);
-            const uint8Array = new Uint8Array(arrayBuffer);
-            const base64Data = btoa(String.fromCharCode.apply(null, Array.from(uint8Array)));
-            webSocketRef.current.sendAudioChunk(base64Data);
-        }
-    }, []);
-
-    const forceFlushBuffer = useCallback(() => {
-        if (isRecordingRef.current && audioBufferRef.current.length > 0) {
-            const totalLength = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-            const combinedPCM = new Int16Array(totalLength);
-
-            let offset = 0;
-            for (const chunk of audioBufferRef.current) {
-                combinedPCM.set(chunk, offset);
-                offset += chunk.length;
-            }
-
-            sendPCMData(combinedPCM);
-            audioBufferRef.current = [];
-        }
-    }, [sendPCMData]);
-
-    const handleWebSocketMessage = useCallback((data: WebSocketMessage) => {
-        console.log('WebSocket message:', data);
-
-        if (data.type === 'transcription' && data.text && data.timestamp) {
-            setTranscriptions(prev => [...prev.slice(-9), {
-                text: data.text as string,
-                confidence: data.confidence || 0,
-                timestamp: data.timestamp as number
-            }]);
-            setOriginalText(prev => prev + ' ' + data.text);
-        } else if (data.type === 'processed' && data.processed_text) {
-            setOriginalText(prev => prev + ' ' + data.processed_text);
-        } else if (data.type === 'translated' && data.translation) {
-            setTranslatedText(prev => prev + ' ' + data.translation);
-        } else if (data.type === 'error' && data.message) {
-            setError(data.message);
-        } else if (data.type === 'status' && (data.status || data.message)) {
-            setStatus(data.status || data.message || '');
-        }
-    }, []);
-
-    const startRecording = useCallback(async () => {
+    // Подключение WebSocket
+    const connectWebSocket = async (): Promise<AudioWebSocket> => {
         try {
-            setError('');
-            setStatus(t('recording.status.requesting_mic'));
-
-            const newSessionId = generateSessionId();
-            setSessionId(newSessionId);
-
-            const stream = await navigator.mediaDevices.getUserMedia({
-                audio: {
-                    sampleRate: 16000,
-                    channelCount: 1,
-                    echoCancellation: false,
-                    noiseSuppression: false,
-                    autoGainControl: false
-                }
-            });
-
-            mediaStreamRef.current = stream;
-            setStatus(t('recording.status.connecting_ws'));
-
+            setError(null);
             const ws = new AudioWebSocket();
             webSocketRef.current = ws;
 
-            ws.onMessage('transcription', handleWebSocketMessage);
-            ws.onMessage('processed', handleWebSocketMessage);
-            ws.onMessage('translated', handleWebSocketMessage);
-            ws.onMessage('error', handleWebSocketMessage);
-            ws.onMessage('status', handleWebSocketMessage);
+            ws.onOpen(() => {
+                console.log('✅ Audio WebSocket connected');
+                ws.sendSessionStart();
+            });
 
-            await ws.connect(newSessionId);
-            setIsConnected(true);
-            setStatus(t('recording.status.ws_connected'));
+            ws.onClose(() => {
+                console.log('❌ Audio WebSocket disconnected');
+            });
 
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)({
-                sampleRate: 16000
+            ws.onError((error: Error) => {
+                console.error('WebSocket error:', error);
+                setError(t('recorder.ws_error'));
+            });
+
+            ws.onMessage('transcription', (data: ResultItem) => {
+                if (data.text) {
+                    setOriginalText(prev => prev + ' ' + data.text);
+                }
+            });
+
+            ws.onMessage('translation', (data: ResultItem) => {
+                if (data.translated_text) {
+                    setTranslatedText(prev => prev + ' ' + data.translated_text);
+                }
+            });
+
+            await ws.connect();
+            return ws;
+        } catch (error: any) {
+            console.error('Ошибка подключения WebSocket:', error);
+            setError(t('recorder.ws_connect_error'));
+            throw error;
+        }
+    };
+
+    // Начало записи
+    const startRecording = async (): Promise<void> => {
+        try {
+            setError(null);
+            await connectWebSocket();
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: {
+                    sampleRate: recordingSettings.sampleRate,
+                    channelCount: recordingSettings.channels,
+                    echoCancellation: true,
+                    noiseSuppression: true,
+                    autoGainControl: true
+                }
+            });
+            streamRef.current = stream;
+
+            const audioContext = new AudioContext({
+                sampleRate: recordingSettings.sampleRate
             });
             audioContextRef.current = audioContext;
 
             const source = audioContext.createMediaStreamSource(stream);
-            const processor = audioContext.createScriptProcessor(4096, 1, 1);
+            const processor = audioContext.createScriptProcessor(recordingSettings.bufferSize, 1, 1);
             processorRef.current = processor;
 
             processor.onaudioprocess = (audioProcessingEvent: AudioProcessingEvent) => {
-                if (!isRecordingRef.current) return;
-
+                if (!isRecordingRef.current || isPaused) return;
                 const inputBuffer = audioProcessingEvent.inputBuffer;
                 const inputData = inputBuffer.getChannelData(0);
                 const pcmData = float32ToPCM16(inputData);
                 audioBufferRef.current.push(pcmData);
-
-                const totalSamples = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-                const durationSeconds = totalSamples / 16000;
-
-                if (durationSeconds >= 0.2) {
-                    const totalLength = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
-                    const combinedPCM = new Int16Array(totalLength);
-
-                    let offset = 0;
-                    for (const chunk of audioBufferRef.current) {
-                        combinedPCM.set(chunk, offset);
-                        offset += chunk.length;
-                    }
-
-                    sendPCMData(combinedPCM);
-                    audioBufferRef.current = [];
-                }
             };
 
             source.connect(processor);
             processor.connect(audioContext.destination);
-            flushIntervalRef.current = setInterval(forceFlushBuffer, 10000);
 
             setIsRecording(true);
             isRecordingRef.current = true;
-            setStatus(t('recording.status.recording'));
-            setIsPreviewMode(false);
 
-        } catch (err) {
-            console.error('Recording error:', err);
-            setError(t('recording.errors.mic_access', { error: err instanceof Error ? err.message : String(err) }));
-            setStatus(t('recording.errors.recording_failed'));
+            // Запуск таймера
+            timerRef.current = setInterval(() => {
+                setRecordingTime(prev => prev + 1);
+                sendPCMData();
+            }, 1000);
 
-            if (err instanceof Error) {
-                if (err.name === 'NotAllowedError') {
-                    setError(t('recording.errors.mic_permission'));
-                } else if (err.name === 'NotFoundError') {
-                    setError(t('recording.errors.mic_not_found'));
-                }
+        } catch (error: any) {
+            console.error('Ошибка начала записи:', error);
+            setError(t('recorder.start_error', { error: error.message }));
+        }
+    };
+
+    // Остановка записи
+    const stopRecording = async (): Promise<void> => {
+        try {
+            setIsRecording(false);
+            isRecordingRef.current = false;
+
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
             }
+
+            sendPCMData();
+
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+                streamRef.current = null;
+            }
+
+            if (audioContextRef.current) {
+                await audioContextRef.current.close();
+                audioContextRef.current = null;
+            }
+
+            if (processorRef.current) {
+                processorRef.current.disconnect();
+                processorRef.current = null;
+            }
+
+            if (webSocketRef.current) {
+                webSocketRef.current.sendSessionEnd();
+                webSocketRef.current.disconnect();
+                webSocketRef.current = null;
+            }
+
+        } catch (error: any) {
+            console.error('Ошибка остановки записи:', error);
+            setError(t('recorder.stop_error', { error: error.message }));
         }
-    }, [t, generateSessionId, handleWebSocketMessage, float32ToPCM16, sendPCMData, forceFlushBuffer]);
-
-    const stopRecording = useCallback(() => {
-        setIsRecording(false);
-        isRecordingRef.current = false;
-
-        if (flushIntervalRef.current) {
-            clearInterval(flushIntervalRef.current);
-            flushIntervalRef.current = null;
-        }
-
-        if (audioBufferRef.current.length > 0) {
-            forceFlushBuffer();
-        }
-
-        if (processorRef.current) {
-            processorRef.current.disconnect();
-            processorRef.current = null;
-        }
-
-        if (audioContextRef.current) {
-            audioContextRef.current.close();
-            audioContextRef.current = null;
-        }
-
-        if (mediaStreamRef.current) {
-            mediaStreamRef.current.getTracks().forEach(track => track.stop());
-            mediaStreamRef.current = null;
-        }
-
-        if (webSocketRef.current) {
-            webSocketRef.current.disconnect();
-            webSocketRef.current = null;
-        }
-
-        setIsConnected(false);
-        setStatus(t('recording.status.stopped'));
-    }, [t, forceFlushBuffer]);
+    };
 
     const handleStartLecture = () => {
+        setIsPreviewMode(false);
+        setIsRecording(true);
         startRecording();
+        setOriginalText(t('recording.example_text.original'));
+        setTranslatedText(t('recording.example_text.translated'));
     };
 
     const confirmStopLecture = () => {
@@ -836,7 +601,6 @@ const RecordingLecturePage = () => {
             setIsPaused(false);
             setShowPauseModal(false);
             isRecordingRef.current = true;
-            setStatus(t('recording.status.recording'));
         } else {
             setShowPauseModal(true);
         }
@@ -844,9 +608,8 @@ const RecordingLecturePage = () => {
 
     const confirmPauseLecture = () => {
         setIsPaused(true);
-        setShowPauseModal(false);
         isRecordingRef.current = false;
-        setStatus(t('recording.status.paused'));
+        setShowPauseModal(false);
     };
 
     const speakText = (text: string, lang: string) => {
@@ -889,14 +652,26 @@ const RecordingLecturePage = () => {
         }
     ];
 
+    // Форматирование времени
+    const formatTime = (seconds: number): string => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    };
+
+    // Эффект для очистки (вынесен на верхний уровень)
     useEffect(() => {
         return () => {
-            if (isRecording) {
+            if (isRecordingRef.current) {
                 stopRecording();
             }
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
         };
-    }, [isRecording, stopRecording]);
+    }, [stopRecording]);
 
+    // Проверка наличия лекции в состоянии
     if (!state?.lecture) {
         navigate('/recorder', { replace: true });
         return null;
@@ -909,7 +684,7 @@ const RecordingLecturePage = () => {
                 <Breadcrumbs items={getBreadcrumbs()} />
 
                 <h1 className={commonStyles.sectionHeader}>
-                    {t('recording.title', { title: lecture.lecture_title || lecture.title })}
+                    {t('recording.title', { title: lecture.title })}
                 </h1>
 
                 {isPreviewMode ? (
@@ -919,11 +694,11 @@ const RecordingLecturePage = () => {
                         </h2>
                         <div className={commonStyles.statusItem}>
                             <span>{t('recording.lecture.title')}:</span>
-                            <span>{lecture.lecture_title || lecture.title}</span>
+                            <span>{lecture.title}</span>
                         </div>
                         <div className={commonStyles.statusItem}>
                             <span>{t('recording.lecture.lecturer')}:</span>
-                            <span>{lecture.lecturer_name || lecture.lecturer}</span>
+                            <span>{lecture.lecturer}</span>
                         </div>
                         <div className={commonStyles.statusItem}>
                             <span>{t('recording.lecture.start')}:</span>
@@ -931,7 +706,7 @@ const RecordingLecturePage = () => {
                         </div>
                         <div className={commonStyles.statusItem}>
                             <span>{t('recording.lecture.location')}:</span>
-                            <span>{lecture.exact_location || lecture.location}</span>
+                            <span>{lecture.location}</span>
                         </div>
 
                         <div style={{ marginTop: '30px', textAlign: 'center' }}>
@@ -952,11 +727,11 @@ const RecordingLecturePage = () => {
                             </h2>
                             <div className={commonStyles.statusItem}>
                                 <span>{t('recording.lecture.title')}:</span>
-                                <span>{lecture.lecture_title || lecture.title}</span>
+                                <span>{lecture.title}</span>
                             </div>
                             <div className={commonStyles.statusItem}>
                                 <span>{t('recording.lecture.lecturer')}:</span>
-                                <span>{lecture.lecturer_name || lecture.lecturer}</span>
+                                <span>{lecture.lecturer}</span>
                             </div>
                             <div className={commonStyles.statusItem}>
                                 <span>{t('recording.lecture.start')}:</span>
@@ -964,7 +739,7 @@ const RecordingLecturePage = () => {
                             </div>
                             <div className={commonStyles.statusItem}>
                                 <span>{t('recording.lecture.location')}:</span>
-                                <span>{lecture.exact_location || lecture.location}</span>
+                                <span>{lecture.location}</span>
                             </div>
                             <div className={commonStyles.buttonGroup} style={{ marginTop: '20px' }}>
                                 {!isFinished ? (
@@ -1117,6 +892,12 @@ const RecordingLecturePage = () => {
                                 </button>
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {error && (
+                    <div className={commonStyles.errorMessage}>
+                        ⚠️ {error}
                     </div>
                 )}
             </div>

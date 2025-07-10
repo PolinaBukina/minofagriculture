@@ -36,7 +36,10 @@
         },
         "breadcrumbs": {
             "archive": "Архив лекций"
-        }
+        },
+        "loading_lectures": "Загрузка лекций",
+        "no_lectures_found": "Лекций не найдено",
+        "retry": "Повторить попытку"
     },
     "lecture_viewer": {
         "title": "Лекция {{id}}",
@@ -54,18 +57,29 @@
         "end": "Окончание",
         "duration": "Длительность",
         "location": "Место",
+        "status": "Статус",
         "original_text": "Исходный текст",
-        "translated_text": "Переведенный текст ({{language}})",
+        "translated_text": "{{language}}",
         "show_full": "Показать полный текст",
         "text_unavailable": "Текст лекции недоступен",
         "translation_unavailable": "Перевод недоступен",
-        "breadcrumb": "Лекция {{id}}"
+        "breadcrumb": "Лекция {{id}}",
+        "full_text_breadcrumb": "Полный текст лекции"
     },
     "language": {
         "select": "Выбор языка",
         "english": "Английский",
+        "en": "Translated text (English)",
         "french": "Французский",
-        "chinese": "Китайский"
+        "fr": "Texte traduit (Français)",
+        "chinese": "Китайский",
+        "zh": "翻译文本（中文）"
+    },
+    "export": "Экспорт лекции",
+    "refresh": "Обновить данные",
+    "refresh_ws": {
+        "ok": "WebSocket подключен",
+        "err": "Переподключить WebSocket"
     },
     "speech": {
         "synthesize": "Озвучить",
@@ -107,8 +121,6 @@
             "lecturer": "Имя лектора",
             "lecturer_placeholder": "Введите имя лектора",
             "start_time": "Время начала",
-            "duration": "Продолжительность (мин)",
-            "duration_placeholder": "Введите продолжительность",
             "location": "Место проведения",
             "location_placeholder": "Введите место проведения",
             "submit": "Далее"
@@ -171,10 +183,8 @@
             "paused": "Приостановлено"
         },
         "view_aria": "Перейти к лекции '{{title}}'",
-        "intro_to_react": "Введение в React",
-        "advanced_typescript": "Продвинутый TypeScript",
-        "lecturer_ivanov": "Иванов И.И.",
-        "lecturer_petrov": "Петров П.П."
+        "full_text": "Полный текст лекции",
+        "full_translation": "Полный перевод лекции"
     },
     "student": {
         "title": "Сервис по переводу лекций (роль: СТУДЕНТ)",
