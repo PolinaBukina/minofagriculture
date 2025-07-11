@@ -30,27 +30,24 @@
             "title": "Название",
             "lecturer": "Лектор:",
             "start": "Начало:",
+            "location": "Место проведения",
             "end": "Окончание:",
             "duration": "Длительность:",
-            "analytics": "Аналитика"
+            "analytics": "Аналитика",
+            "status": "Статус",
+            "completed": "Завершена",
+            "active": "Активна"
         },
         "breadcrumbs": {
             "archive": "Архив лекций"
         },
         "loading_lectures": "Загрузка лекций",
         "no_lectures_found": "Лекций не найдено",
-        "retry": "Повторить попытку"
+        "retry": "Повторить попытку",
+        "show_more": "Показать больше"
     },
     "lecture_viewer": {
         "title": "Лекция {{id}}",
-        "mock_lecturer": "Иванов И.И.",
-        "mock_location": "Аудитория 101",
-        "mock_content": {
-            "original": "Это полный текст лекции на русском языке. Здесь содержится основная информация, которую представил лектор {{id}}.\nВторая часть лекции включает дополнительные материалы и примеры использования рассматриваемых технологий.\nЗаключительная часть содержит выводы и рекомендации для дальнейшего изучения темы.",
-            "en": "This is the full lecture text in English. It contains the main information presented by lecturer {{id}}.\nThe second part includes additional materials and use cases of the discussed technologies.\nThe final part contains conclusions and recommendations for further study.",
-            "fr": "Ceci est le texte complet de la conférence en français. Il contient les principales informations présentées par le conférencier {{id}}.\nLa deuxième partie comprend des documents supplémentaires et des cas d'utilisation des technologies discutées.\nLa partie finale contient des conclusions et des recommandations pour une étude plus approfondie.",
-            "zh": "这是中文的完整讲座文本。它包含讲师{{id}}介绍的主要信息。\n第二部分包括所讨论技术的其他材料和用例。\n最后部分包含结论和对该主题进一步研究的建议。"
-        },
         "details": "Детали лекции",
         "lecturer": "Лектор",
         "start": "Начало",
@@ -64,7 +61,8 @@
         "text_unavailable": "Текст лекции недоступен",
         "translation_unavailable": "Перевод недоступен",
         "breadcrumb": "Лекция {{id}}",
-        "full_text_breadcrumb": "Полный текст лекции"
+        "full_text_breadcrumb": "Полный текст лекции",
+        "back_breadcrumb": "Лекция {{id}}"
     },
     "language": {
         "select": "Выбор языка",
@@ -121,6 +119,8 @@
             "lecturer": "Имя лектора",
             "lecturer_placeholder": "Введите имя лектора",
             "start_time": "Время начала",
+            "duration": "Продолжительность (мин)",
+            "duration_placeholder": "Введите продолжительность",
             "location": "Место проведения",
             "location_placeholder": "Введите место проведения",
             "submit": "Далее"

@@ -32,14 +32,18 @@
             "start": "开始：",
             "end": "结束：",
             "duration": "时长：",
-            "analytics": "分析"
+            "analytics": "分析",
+            "status": "状态",
+            "completed": "已完成",
+            "active": "活动"
         },
         "breadcrumbs": {
             "archive": "讲座存档"
         },
         "loading_lectures": "加载讲座",
         "no_lectures_found": "没有找到讲座",
-        "retry": "重试"
+        "retry": "重试",
+        "show_more": "显示更多"
     },
     "lecture_viewer": {
         "title": "讲座 {{id}}",
@@ -64,7 +68,8 @@
         "text_unavailable": "讲座文本不可用",
         "translation_unavailable": "翻译不可用",
         "breadcrumb": "讲座 {{id}}",
-        "full_text_breadcrumb": "讲座全文"
+        "full_text_breadcrumb": "讲座全文",
+        "back_breadcrumb": "讲座 {{id}}"
     },
     "language": {
         "select": "语言选择",
@@ -121,6 +126,8 @@
             "lecturer": "讲师姓名",
             "lecturer_placeholder": "输入讲师姓名",
             "start_time": "开始时间",
+            "duration": "时长（分钟）",
+            "duration_placeholder": "输入时长",
             "location": "地点",
             "location_placeholder": "输入地点",
             "submit": "下一步"

@@ -39,14 +39,18 @@
             "start": "Start:",
             "end": "End:",
             "duration": "Duration:",
-            "analytics": "Analytics"
+            "analytics": "Analytics",
+            "status": "Status",
+            "completed": "Completed",
+            "active": "Active"
         },
         "breadcrumbs": {
             "archive": "Lecture Archive"
         },
         "loading_lectures": "Loading lectures",
         "no_lectures_found": "No lectures found",
-        "retry": "Retry"
+        "retry": "Retry",
+        "show_more": "Show more"
     },
     "languages": {
         "english": "English",
@@ -77,7 +81,8 @@
         "text_unavailable": "Lecture text unavailable",
         "translation_unavailable": "Translation unavailable",
         "breadcrumb": "Lecture {{id}}",
-        "full_text_breadcrumb": "Full text of the lecture"
+        "full_text_breadcrumb": "Full text of the lecture",
+        "back_breadcrumb": "Lecture {{id}}"
     },
     "language": {
         "select": "Language Selection",
@@ -134,6 +139,8 @@
             "lecturer": "Lecturer Name",
             "lecturer_placeholder": "Enter lecturer name",
             "start_time": "Start Time",
+            "duration": "Duration (minutes)",
+            "duration_placeholder": "Enter duration",
             "location": "Location",
             "location_placeholder": "Enter location",
             "submit": "Next"
@@ -149,7 +156,8 @@
             "title": "Lecture Title",
             "lecturer": "Lecturer Name",
             "start": "Start Time",
-            "location": "Location"
+            "location": "Location",
+            "duration": "Duration"
         },
         "status": {
             "preview": "Preview",

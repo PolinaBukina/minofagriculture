@@ -32,14 +32,18 @@
             "start": "Début :",
             "end": "Fin :",
             "duration": "Durée :",
-            "analytics": "Analyse"
+            "analytics": "Analyse",
+            "status": "Statut",
+            "completed": "Terminé",
+            "active": "Actif"
         },
         "breadcrumbs": {
             "archive": "Archive des conférences"
         },
         "loading_lectures": "Chargement des cours",
         "no_lectures_found": "Aucune conférence trouvée",
-        "retry": "Réessayer"
+        "retry": "Réessayer",
+        "show_more": "Afficher plus"
     },
     "lecture_viewer": {
         "title": "Conférence {{id}}",
@@ -64,7 +68,8 @@
         "text_unavailable": "Le texte de la conférence n'est pas disponible",
         "translation_unavailable": "Traduction non disponible",
         "breadcrumb": "Conférence {{id}}",
-        "full_text_breadcrumb": "Texte intégral de la conférence"
+        "full_text_breadcrumb": "Texte intégral de la conférence",
+        "back_breadcrumb": "Conférence {{id}}"
     },
     "language": {
         "select": "Sélection de la langue",
@@ -121,6 +126,8 @@
             "lecturer": "Nom du conférencier",
             "lecturer_placeholder": "Entrez le nom du conférencier",
             "start_time": "Heure de début",
+            "duration": "Durée (min)",
+            "duration_placeholder": "Entrez la durée",
             "location": "Lieu",
             "location_placeholder": "Entrez le lieu",
             "submit": "Suivant"

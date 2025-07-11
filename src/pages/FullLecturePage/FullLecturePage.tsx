@@ -136,9 +136,9 @@ const FullLecturePage = () => {
                     translationKey: 'archive.title'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id }),
-                    path: `/archive/lecture/${id}`,
-                    translationKey: 'lecture.breadcrumb'
+                    label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
+                        path: `/archive/lecture/${id}`,
+                        translationKey: 'lecture_viewer.back_breadcrumb'
                 },
                 ...endItem
             ];
@@ -152,13 +152,13 @@ const FullLecturePage = () => {
                     translationKey: 'recording.title'
                 },
                 {
-                    label: t('recording.session_breadcrumb', { id }),
+                    label: t('recording.session_breadcrumb', { id: id?.slice(0, 8) }),
                     path: '/lector/recorder/recording',
                     state: { lecture: location.state.lecture },
                     translationKey: 'recording.session_breadcrumb'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id }),
+                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
                     path: '',
                     translationKey: 'lecture.breadcrumb'
                 }
@@ -172,7 +172,7 @@ const FullLecturePage = () => {
                     translationKey: 'active_lectures.title'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id }),
+                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
                     path: `/active/lecture/${id}`,
                     translationKey: 'lecture.breadcrumb'
                 },

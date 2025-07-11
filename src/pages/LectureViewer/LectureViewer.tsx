@@ -296,107 +296,6 @@ const LectureViewer = () => {
         }
     }, [isLiveMode, connectWebSocket]);
 
-    // Загрузка данных лекции
-    // const loadLectureData = async () => {
-    //     if (!id) {
-    //         setError('ID лекции не указан');
-    //         setIsLoading(false);
-    //         return;
-    //     }
-
-    //     try {
-    //         setError('');
-    //         setIsLoading(true);
-
-    //         console.log(`📖 Загружаем данные лекции: ${id}`);
-    //         const sessionInfo = await apiService.getSession(id);
-    //         if (!sessionInfo) {
-    //             setError('Сессия не найдена');
-    //             setIsLoading(false);
-    //             return;
-    //         }
-
-    //         console.log('📊 Информация о сессии:', sessionInfo);
-    //         setSessionData(sessionInfo);
-
-    //         let allOriginalText = '';
-    //         const translations = { en: '', fr: '', zh: '' };
-
-    //         // Обработка текстов
-    //         if (sessionInfo.processed_texts?.length) {
-    //             const texts = sessionInfo.processed_texts.filter(text => text.trim());
-    //             allOriginalText = texts.join(' ');
-
-    //             if (isLiveMode) {
-    //                 setProcessedTexts(texts);
-    //             }
-    //         }
-
-    //         // Обработка переводов
-    //         if (sessionInfo.translations?.length) {
-    //             translations.en = sessionInfo.translations.join(' ');
-    //         }
-
-    //         // setOriginalText(allOriginalText);
-    //         // setTranslatedTexts(translations);
-
-    //         setOriginalText(allOriginalText);
-    //         setTranslatedTexts(translations);
-    //         // Обновляем также lecture.content
-    //         setLecture(prev => prev ? {
-    //             ...prev,
-    //             content: {
-    //                 original: allOriginalText,
-    //                 translations: translations
-    //             }
-    //         } : null);
-
-    //         // Формирование объекта лекции
-    //         const lectureData: Lecture = {
-    //             id: id,
-    //             title: sessionInfo.title || `Лекция ${id.slice(0, 8)}`,
-    //             start: sessionInfo.start_time,
-    //             end: sessionInfo.end_time || 'Неизвестно',
-    //             duration: sessionInfo.start_time && sessionInfo.end_time
-    //                 ? calculateDuration(sessionInfo.start_time, sessionInfo.end_time)
-    //                 : 'Неизвестно',
-    //             lecturer: sessionInfo.lecturer || 'Неизвестный лектор',
-    //             location: sessionInfo.title || 'Не указано',
-    //             status: sessionInfo.status,
-    //             content: {
-    //                 original: allOriginalText,
-    //                 translations: translations
-    //             }
-    //         };
-
-    //         setLecture(lectureData);
-    //         console.log('✅ Лекция загружена успешно');
-
-    //         // Обработка случая, когда нет текста
-    //         if (!allOriginalText) {
-    //             const infoText = `Сессия ${id} (${sessionInfo.status})
-
-    // Статус: ${sessionInfo.status === 'active' ? '🔴 Активная' : sessionInfo.status === 'completed' ? '✅ Завершена' : '❓ Неизвестный'}
-    // Начало: ${formatTime(sessionInfo.start_time)}
-    // ${sessionInfo.audio_duration ? `Длительность: ${Math.round(sessionInfo.audio_duration / 60)} минут` : ''}
-    // ${sessionInfo.participants ? `Участников: ${sessionInfo.participants}` : ''}`;
-
-    //             setOriginalText(infoText);
-    //         }
-
-    //     } catch (err) {
-    //         console.error('❌ Ошибка загрузки лекции:', err);
-    //         const errorMessage = err instanceof Error ? err.message : 'Неизвестная ошибка';
-    //         setError(`Ошибка загрузки лекции: ${errorMessage}`);
-
-    //         // if (!isLiveMode) {
-    //         //     createMockLecture();
-    //         // }
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
-
     const loadLectureData = async () => {
         if (!id) {
             setError('ID лекции не указан');
@@ -422,13 +321,17 @@ const LectureViewer = () => {
             const originalText = sessionInfo.transcripts?.join(' ') || '';
             console.log('📝 Оригинальный текст:', originalText);
 
-            // Обрабатываем переводы
+            // 🔧 ИСПРАВЛЕНО: Используем новые поля translations_multi
             const translations = {
-                en: sessionInfo.translations?.join(' ') || '',
-                fr: '', // Нет данных в API
-                zh: ''  // Нет данных в API
+                en: sessionInfo.translations_multi?.en?.join(' ') || sessionInfo.translations?.join(' ') || '',
+                fr: sessionInfo.translations_multi?.fr?.join(' ') || '', // 🆕 Теперь будет получать данные!
+                zh: sessionInfo.translations_multi?.zh?.join(' ') || ''  // 🆕 Теперь будет получать данные!
             };
-            console.log('🌍 Переводы:', translations);
+
+            console.log('🌍 Все переводы загружены:', translations);
+            console.log(`🇺🇸 Английский: ${translations.en.length} символов`);
+            console.log(`🇫🇷 Французский: ${translations.fr.length} символов`);
+            console.log(`🇨🇳 Китайский: ${translations.zh.length} символов`);
 
             // Формируем объект лекции
             const lectureData = {
@@ -442,13 +345,13 @@ const LectureViewer = () => {
                 status: sessionInfo.status || 'unknown',
                 content: {
                     original: originalText,
-                    translations: translations
+                    translations: translations // 🆕 Теперь содержит все языки
                 }
             };
 
             setLecture(lectureData);
             setOriginalText(originalText);
-            setTranslatedTexts(translations);
+            setTranslatedTexts(translations); // 🆕 Устанавливаем все переводы
             setSessionData(sessionInfo);
 
             console.log('✅ Лекция успешно загружена:', lectureData);
@@ -456,42 +359,10 @@ const LectureViewer = () => {
         } catch (err) {
             console.error('❌ Ошибка загрузки лекции:', err);
             setError(`Ошибка загрузки`);
-
-            // Fallback для демонстрации
-            // if (!isLiveMode) {
-            //     createMockLecture();
-            // }
         } finally {
             setIsLoading(false);
         }
     };
-
-
-    // Создание mock данных
-    // const createMockLecture = () => {
-    //     const mockLecture: Lecture = {
-    //         id: id || '1',
-    //         title: `Лекция ${id?.slice(0, 8) || '1'}`,
-    //         start: '2025-06-19 15:40:06',
-    //         end: '2025-06-19 17:18:44',
-    //         duration: '1ч 39м',
-    //         lecturer: 'Иванов И.И.',
-    //         location: 'Аудитория 101',
-    //         status: 'completed',
-    //         content: {
-    //             original: `Это демонстрационный текст лекции на русском языке для ID ${id}.
-    //     В реальной системе здесь будет отображаться транскрипция лекции, полученная через API.`,
-    //             translations: {
-    //                 en: `This is a demonstration lecture text in English for ID ${id}.`,
-    //                 fr: `Ceci est un texte de conférence de démonstration en français pour l'ID ${id}.`,
-    //                 zh: `这是ID ${id}的中文演示讲座文本。`
-    //             }
-    //         }
-    //     };
-    //     setLecture(mockLecture);
-    //     setOriginalText(mockLecture.content.original);
-    //     setTranslatedTexts(mockLecture.content.translations);
-    // };
 
     // Расчет длительности
     const calculateDuration = (startTime?: string, endTime?: string): string => {
@@ -551,14 +422,30 @@ const LectureViewer = () => {
         if (fromArchive) {
             return [
                 ...baseItems,
-                { label: 'Архив лекций', path: '/archive' },
-                { label: `Лекция ${id?.slice(0, 8)}`, path: `/archive/lecture/${id}` }
+                {
+                    label: t('archive.title'),
+                    path: '/archive',
+                    translationKey: 'archive.title'
+                },
+                {
+                    label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
+                    path: `/archive/lecture/${id}`,
+                    translationKey: 'lecture_viewer.back_breadcrumb'
+                }
             ];
         } else {
             return [
                 ...baseItems,
-                { label: 'Активные лекции', path: '/active' },
-                { label: `Лекция ${id?.slice(0, 8)}`, path: `/active/lecture/${id}` }
+                {
+                    label: t('active_lectures.title'),
+                    path: '/active',
+                    translationKey: 'active_lectures.title'
+                },
+                {
+                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
+                    path: `/active/lecture/${id}`,
+                    translationKey: 'lecture.breadcrumb'
+                }
             ];
         }
     };

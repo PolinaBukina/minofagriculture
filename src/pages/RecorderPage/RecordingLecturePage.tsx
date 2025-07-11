@@ -719,7 +719,27 @@ const RecordingLecturePage = () => {
             ws.onMessage('error', handleWebSocketMessage);
             ws.onMessage('status', handleWebSocketMessage);
 
-            await ws.connect(newSessionId);
+            // Добавляем обработчики для переводов на разные языки
+            ws.onMessage('translated_english', (data) => {
+                setTranslatedText(prev => prev + ' ' + (data.translation || ''));
+            });
+
+            ws.onMessage('translated_chinese', (data) => {
+                // Можно сохранять в отдельное состояние или комбинировать
+                console.log('Chinese translation:', data.translation);
+            });
+
+            ws.onMessage('translated_french', (data) => {
+                // Можно сохранять в отдельное состояние или комбинировать
+                console.log('French translation:', data.translation);
+            });
+
+            // await ws.connect(newSessionId);
+            await ws.connect(newSessionId, {
+                title: lecture.title,
+                lecturer: lecture.lecturer_name || lecture.lecturer,
+                location: lecture.exact_location || lecture.location
+            });
             setIsConnected(true);
             setStatus(t('recording.status.ws_connected'));
 
