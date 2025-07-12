@@ -27,15 +27,18 @@
             }
         },
         "lecture": {
-            "title": "标题",
+            "title": "标题:",
             "lecturer": "讲师：",
             "start": "开始：",
+            "location": "位置：",
             "end": "结束：",
             "duration": "时长：",
             "analytics": "分析",
-            "status": "状态",
+            "status": "状态:",
             "completed": "已完成",
-            "active": "活动"
+            "active": "活动",
+            "not_finished": "-",
+            "not_available": "-"
         },
         "breadcrumbs": {
             "archive": "讲座存档"
@@ -69,7 +72,10 @@
         "translation_unavailable": "翻译不可用",
         "breadcrumb": "讲座 {{id}}",
         "full_text_breadcrumb": "讲座全文",
-        "back_breadcrumb": "讲座 {{id}}"
+        "back_breadcrumb": "讲座 {{id}}",
+        "loading": "正在加载讲座",
+        "loading_lecture": "正在加载讲座数据",
+        "preparing_live": "准备首次接收数据..."
     },
     "language": {
         "select": "语言选择",
@@ -168,15 +174,12 @@
         "example_text": {
             "original": "这是讲座文本示例...",
             "translated": "This is an example lecture text..."
-        }
+        },
+        "starting_lecture": "准备录制",
+        "starting_message": "请等待几秒钟，正在连接服务器..."
     },
     "confirmation": {
         "title": "确认"
-    },
-    "active_lectures": {
-        "title": "活跃讲座",
-        "subtitle": "当前直播",
-        "empty": "没有活跃讲座"
     },
     "lecture": {
         "lecturer": "讲师",
@@ -370,5 +373,33 @@
             "minor": "轻微干扰"
         },
         "refreshing_data": "正在刷新数据..."
+    },
+    "active_lectures": {
+        "title": "活跃讲座",
+        "subtitle": "当前直播",
+        "loading": "正在加载活跃讲座...",
+        "load_error": "加载活跃讲座时出错",
+        "ws_disconnected": "已断开连接",
+        "ws_connected": "已连接至监控",
+        "ws_error": "WebSocket错误",
+        "ws_connection_error": "监控连接错误",
+        "default_title": "讲座",
+        "unknown_lecturer": "未知讲师",
+        "unknown_time": "未知",
+        "active_count": "活跃讲座：{{count}}",
+        "no_lectures": "没有活跃讲座",
+        "no_lectures_hint": "活跃讲座将自动显示在此处",
+        "lecturer": "讲师",
+        "start_time": "开始时间",
+        "participants": "参与者",
+        "session_id": "会话ID",
+        "status_live": "直播中",
+        "status_recording": "正在录制",
+        "status_paused": "已暂停",
+        "info_title": "信息",
+        "info_point1": "列表每30秒自动更新一次",
+        "info_point2": "WebSocket连接提供实时监控",
+        "info_point3": "点击讲座可连接至直播",
+        "info_point4": "状态\"🔴 LIVE\"表示活跃的直播"
     }
 }

@@ -613,6 +613,7 @@ const RecordingLecturePage = () => {
     const userRole = getRoleFromStorage();
     const navigate = useNavigate();
     const [isPreviewMode, setIsPreviewMode] = useState(isPreview);
+    const [showStartModal, setShowStartModal] = useState(false);
 
     // Audio recording states
     const [isConnected, setIsConnected] = useState(false);
@@ -677,7 +678,7 @@ const RecordingLecturePage = () => {
                 confidence: data.confidence || 0,
                 timestamp: data.timestamp as number
             }]);
-            setOriginalText(prev => prev + ' ' + data.text);
+            // setOriginalText(prev => prev + ' ' + data.text);
         } else if (data.type === 'processed' && data.processed_text) {
             setOriginalText(prev => prev + ' ' + data.processed_text);
         } else if (data.type === 'translated' && data.translation) {
@@ -839,8 +840,16 @@ const RecordingLecturePage = () => {
         setStatus(t('recording.status.stopped'));
     }, [t, forceFlushBuffer]);
 
+    // const handleStartLecture = () => {
+    //     startRecording();
+    // };
+
     const handleStartLecture = () => {
-        startRecording();
+        setShowStartModal(true);
+        setTimeout(() => {
+            startRecording();
+            setShowStartModal(false);
+        }, 3000); // Перенаправление через 3 секунды
     };
 
     const confirmStopLecture = () => {
@@ -1135,6 +1144,22 @@ const RecordingLecturePage = () => {
                                 >
                                     {t('recording.confirm_pause')}
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showStartModal && (
+                    <div className={commonStyles.modalOverlay}>
+                        <div className={commonStyles.modal}>
+                            <h3>{t('recording.starting_lecture')}</h3>
+                            <p>{t('recording.starting_message')}</p>
+                            <div style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                marginTop: '20px'
+                            }}>
+                                <div className={commonStyles.loader}></div>
                             </div>
                         </div>
                     </div>

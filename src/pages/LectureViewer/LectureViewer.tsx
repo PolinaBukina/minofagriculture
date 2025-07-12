@@ -130,17 +130,89 @@ const LectureViewer = () => {
     }, [location]);
 
     // WebSocket подключение для реального времени
+    // const connectWebSocket = useCallback(async () => {
+    //     if (!isLiveMode || !id) return;
+
+    //     try {
+    //         console.log(`Подключение WebSocket для лекции: ${id}`);
+
+    //         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    //         const host = 'audio.minofagriculture.ru'; // или ваш правильный домен
+    //         // const wsUrl = `${protocol}//${host}/ws/monitor`;
+    //         const wsUrl = `wss://audio.minofagriculture.ru/ws/monitor`;
+
+    //         console.log(`📡 WebSocket URL: ${wsUrl}`);
+
+    //         const ws = new WebSocket(wsUrl);
+    //         wsRef.current = ws;
+
+    //         ws.onopen = () => {
+    //             console.log('✅ WebSocket подключен для мониторинга');
+    //             setWsConnected(true);
+    //             setError('');
+
+    //             const subscribeMessage = {
+    //                 type: 'subscribe',
+    //                 session_id: id,
+    //                 listener_id: `viewer_${Date.now()}`,
+    //                 role: 'viewer'
+    //             };
+
+    //             ws.send(JSON.stringify(subscribeMessage));
+    //             console.log(`📡 Подписались на сессию: ${id}`);
+    //         };
+
+    //         ws.onmessage = (event) => {
+    //             try {
+    //                 const data = JSON.parse(event.data) as WebSocketMessage;
+    //                 console.log('📨 Получено WebSocket сообщение:', data.type, data);
+    //                 handleWebSocketMessage(data);
+    //             } catch (error) {
+    //                 console.error('❌ Ошибка парсинга WebSocket сообщения:', error);
+    //             }
+    //         };
+
+    //         ws.onclose = (event) => {
+    //             console.log(`🔌 WebSocket закрыт: код ${event.code}, причина: ${event.reason}`);
+    //             setWsConnected(false);
+
+    //             if (isLiveMode && !reconnectTimeoutRef.current) {
+    //                 console.log(' Планирование переподключения через 3 секунды...');
+    //                 reconnectTimeoutRef.current = setTimeout(() => {
+    //                     reconnectTimeoutRef.current = null;
+    //                     console.log(' Попытка переподключения...');
+    //                     connectWebSocket();
+    //                 }, 3000);
+    //             }
+    //         };
+
+    //         ws.onerror = (error) => {
+    //             console.error('❌ Ошибка WebSocket:', error);
+    //             setWsConnected(false);
+    //             setError('Ошибка WebSocket подключения');
+    //         };
+
+    //     } catch (error) {
+    //         console.error('❌ Ошибка создания WebSocket:', error);
+    //         setError(`Ошибка WebSocket: ${(error as Error).message}`);
+    //     }
+    // }, [id, isLiveMode]);
+
     const connectWebSocket = useCallback(async () => {
         if (!isLiveMode || !id) return;
 
         try {
             console.log(`Подключение WebSocket для лекции: ${id}`);
 
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const host = window.location.host;
-            const wsUrl = `${protocol}//${host}/ws/monitor`;
+            // Используем фиксированный URL для WebSocket
+            const wsUrl = `wss://audio.minofagriculture.ru/ws/monitor`;
 
             console.log(`📡 WebSocket URL: ${wsUrl}`);
+
+            // Закрываем предыдущее соединение, если оно есть
+            if (wsRef.current) {
+                wsRef.current.close();
+            }
 
             const ws = new WebSocket(wsUrl);
             wsRef.current = ws;
@@ -189,11 +261,27 @@ const LectureViewer = () => {
                 console.error('❌ Ошибка WebSocket:', error);
                 setWsConnected(false);
                 setError('Ошибка WebSocket подключения');
+
+                // Попытка переподключения при ошибке
+                if (isLiveMode && !reconnectTimeoutRef.current) {
+                    reconnectTimeoutRef.current = setTimeout(() => {
+                        reconnectTimeoutRef.current = null;
+                        connectWebSocket();
+                    }, 3000);
+                }
             };
 
         } catch (error) {
             console.error('❌ Ошибка создания WebSocket:', error);
             setError(`Ошибка WebSocket: ${(error as Error).message}`);
+
+            // Попытка переподключения при ошибке
+            if (isLiveMode && !reconnectTimeoutRef.current) {
+                reconnectTimeoutRef.current = setTimeout(() => {
+                    reconnectTimeoutRef.current = null;
+                    connectWebSocket();
+                }, 3000);
+            }
         }
     }, [id, isLiveMode]);
 
@@ -442,9 +530,9 @@ const LectureViewer = () => {
                     translationKey: 'active_lectures.title'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
+                    label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
                     path: `/active/lecture/${id}`,
-                    translationKey: 'lecture.breadcrumb'
+                    translationKey: 'lecture_viewer.back_breadcrumb'
                 }
             ];
         }
@@ -542,16 +630,42 @@ const LectureViewer = () => {
                 <div className={commonStyles.mainContentLecture}>
                     <Header />
                     <Breadcrumbs items={getBreadcrumbs()} />
-                    <h1 className={commonStyles.sectionHeader}>Загрузка лекции...</h1>
+                    <h1 className={commonStyles.sectionHeader}>{t('lecture_viewer.loading')}</h1>
                     <div className={commonStyles.infoCardLecture}>
-                        <div className={commonStyles.noteText}>
-                            Загружаем данные лекции {id?.slice(0, 8)}...
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '300px',
+                            width: '100%',
+                            gap: '20px'
+                        }}>
+                            <div style={{
+                                width: '60px',
+                                height: '60px',
+                                borderRadius: '50%',
+                                border: '6px solid rgba(0, 0, 0, 0.1)',
+                                borderTop: '6px solid #3498db',
+                                animation: 'spin 1s linear infinite'
+                            }}></div>
+                            <p style={{
+                                color: '#555',
+                                fontSize: '1.2rem',
+                                fontWeight: '500'
+                            }}>
+                                {t('lecture_viewer.loading_lecture')} {id?.slice(0, 8)}...
+                            </p>
+                            {isLiveMode && (
+                                <div style={{
+                                    marginTop: '12px',
+                                    color: '#0369a1',
+                                    textAlign: 'center'
+                                }}>
+                                    {t('lecture_viewer.preparing_live')}
+                                </div>
+                            )}
                         </div>
-                        {isLiveMode && (
-                            <div style={{ marginTop: '12px', color: '#0369a1' }}>
-                                Подготовка к получению данных в реальном времени...
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
@@ -881,7 +995,7 @@ const LectureViewer = () => {
                 </div>
 
                 {/* 🆕 ДОБАВЛЕНО: Live лента сообщений (как в listener.py) */}
-                {isLiveMode && liveMessages.length > 0 && (
+                {/* {isLiveMode && liveMessages.length > 0 && (
                     <div className={commonStyles.infoCardLecture}>
                         <h2>📡 Live лента сообщений</h2>
                         <div style={{
@@ -945,7 +1059,7 @@ const LectureViewer = () => {
                             Показаны последние 15 сообщений из {liveMessages.length}
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {/* 🆕 ДОБАВЛЕНО: Подробная статистика */}
                 {/* {sessionData && (

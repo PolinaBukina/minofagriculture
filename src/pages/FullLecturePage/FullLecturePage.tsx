@@ -137,8 +137,8 @@ const FullLecturePage = () => {
                 },
                 {
                     label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
-                        path: `/archive/lecture/${id}`,
-                        translationKey: 'lecture_viewer.back_breadcrumb'
+                    path: `/archive/lecture/${id}`,
+                    translationKey: 'lecture_viewer.back_breadcrumb'
                 },
                 ...endItem
             ];
@@ -158,9 +158,9 @@ const FullLecturePage = () => {
                     translationKey: 'recording.session_breadcrumb'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
+                    label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
                     path: '',
-                    translationKey: 'lecture.breadcrumb'
+                    translationKey: 'lecture_viewer.back_breadcrumb'
                 }
             ];
         } else {
@@ -172,9 +172,9 @@ const FullLecturePage = () => {
                     translationKey: 'active_lectures.title'
                 },
                 {
-                    label: t('lecture.breadcrumb', { id: id?.slice(0, 8) }),
+                    label: t('lecture_viewer.back_breadcrumb', { id: id?.slice(0, 8) }),
                     path: `/active/lecture/${id}`,
-                    translationKey: 'lecture.breadcrumb'
+                    translationKey: 'lecture_viewer.back_breadcrumb'
                 },
                 ...endItem
             ];

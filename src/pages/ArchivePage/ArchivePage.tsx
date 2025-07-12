@@ -568,7 +568,7 @@ const ArchivePage = () => {
                     </div>
 
                     <div className={commonStyles.filterStats}>
-                        {isLoading ? t('archive.loading') :
+                        {isLoading ? t('archive.loading_lectures') :
                             error ? error :
                                 t('archive.filters.found', { count: filteredLectures.length })}
                     </div>

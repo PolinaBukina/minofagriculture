@@ -34,15 +34,18 @@
             }
         },
         "lecture": {
-            "title": "Title",
+            "title": "Title:",
             "lecturer": "Lecturer:",
             "start": "Start:",
             "end": "End:",
+            "location": "Location:",
             "duration": "Duration:",
             "analytics": "Analytics",
-            "status": "Status",
+            "status": "Status:",
             "completed": "Completed",
-            "active": "Active"
+            "active": "Active",
+            "not_finished": "-",
+            "not_available": "-"
         },
         "breadcrumbs": {
             "archive": "Lecture Archive"
@@ -82,7 +85,10 @@
         "translation_unavailable": "Translation unavailable",
         "breadcrumb": "Lecture {{id}}",
         "full_text_breadcrumb": "Full text of the lecture",
-        "back_breadcrumb": "Lecture {{id}}"
+        "back_breadcrumb": "Lecture {{id}}",
+        "loading": "Loading lecture",
+        "loading_lecture": "Loading lecture data",
+        "preparing_live": "Preparing to receive data for the first time..."
     },
     "language": {
         "select": "Language Selection",
@@ -182,15 +188,12 @@
         "example_text": {
             "original": "This is an example lecture text...",
             "translated": "Это пример текста лекции..."
-        }
+        },
+        "starting_lecture": "Preparing to record",
+        "starting_message": "Please wait a few seconds, connecting to the server..."
     },
     "confirmation": {
         "title": "Confirmation"
-    },
-    "active_lectures": {
-        "title": "Active Lectures",
-        "subtitle": "Current lectures",
-        "empty": "No active lectures"
     },
     "lecture": {
         "lecturer": "Lecturer",
@@ -384,5 +387,33 @@
             "minor": "Minor interference"
         },
         "refreshing_data": "Refreshing data..."
+    },
+    "active_lectures": {
+        "title": "Active Lectures",
+        "subtitle": "Current Broadcasts",
+        "loading": "Loading active lectures...",
+        "load_error": "Error loading active lectures",
+        "ws_disconnected": "Disconnected",
+        "ws_connected": "Connected to monitoring",
+        "ws_error": "WebSocket error",
+        "ws_connection_error": "Monitoring connection error",
+        "default_title": "Lecture",
+        "unknown_lecturer": "Unknown lecturer",
+        "unknown_time": "unknown",
+        "active_count": "Active lectures: {{count}}",
+        "no_lectures": "No active lectures",
+        "no_lectures_hint": "Active lectures will appear here automatically",
+        "lecturer": "Lecturer",
+        "start_time": "Start time",
+        "participants": "Participants",
+        "session_id": "Session ID",
+        "status_live": "Live",
+        "status_recording": "Recording",
+        "status_paused": "Paused",
+        "info_title": "Information",
+        "info_point1": "The list updates automatically every 30 seconds",
+        "info_point2": "WebSocket connection provides real-time monitoring",
+        "info_point3": "Click on a lecture to connect to the broadcast",
+        "info_point4": "Status \"🔴 LIVE\" means active broadcast"
     }
 }
