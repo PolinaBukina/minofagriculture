@@ -1057,7 +1057,7 @@ const RecordingLecturePage = () => {
                                     </div>
                                     {showFullText && (
                                         <div className={commonStyles.LectureFullText}>
-                                            {originalText?.substring(0, 500) + '...' || t('recording.text_unavailable')}
+                                            {originalText || t('recording.text_unavailable')}
                                         </div>
                                     )}
                                 </div>
