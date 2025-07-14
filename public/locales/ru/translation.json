@@ -51,6 +51,7 @@
     "lecture_viewer": {
         "title": "Лекция {{id}}",
         "details": "Детали лекции",
+        "id": "ID сессии",
         "lecturer": "Лектор",
         "start": "Начало",
         "end": "Окончание",
@@ -155,7 +156,7 @@
         "stop_button": "Завершить лекцию",
         "go_to_archive": "Перейти в архив лекций",
         "original_text": "Исходный текст",
-        "translated_text": "Переведенный текст ({{language}})",
+        "translated_text": "{{language}}",
         "show_full_text": "Показать полный текст",
         "text_unavailable": "Текст лекции недоступен",
         "translation_unavailable": "Перевод недоступен",

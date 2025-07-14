@@ -1250,6 +1250,7 @@ export type Session = {
     name: string;
     title?: string;
     lecturer?: string;
+    location?: string;
     start_time: string;
     end_time?: string;
     status: 'active' | 'completed' | 'failed' | string;
@@ -1336,6 +1337,7 @@ export const apiService = {
                 name: session.session_id,
                 title: session.lecture_title || `Лекция ${session.session_id.split('_')[1]?.substring(0, 8) || 'Unknown'}`,
                 lecturer: session.lecturer_name || 'Неизвестный лектор',
+                location: session.location || 'Не указано',
                 start_time: session.start_time,
                 end_time: session.end_time,
                 status: session.status,
@@ -1384,6 +1386,7 @@ export const apiService = {
                 lecturer: data.session?.lecturer_name || 'Неизвестный лектор',
                 start_time: data.session?.start_time || new Date().toISOString(),
                 end_time: data.session?.end_time,
+                location: data.session?.location || 'Не указано',
                 status: data.session?.status || 'unknown',
                 participants: 1,
                 audio_duration: data.session?.duration_minutes,
@@ -1409,120 +1412,120 @@ export const apiService = {
     },
 
     // 🆕 НОВЫЕ МЕТОДЫ ДЛЯ ПОЛУЧЕНИЯ КОНКРЕТНЫХ ПЕРЕВОДОВ
-    async getSessionTranslationsMulti(sessionId: string): Promise < { en: string[], fr: string[], zh: string[] } > {
-    try {
-        const sessionData = await this.getSessionData(sessionId)
+    async getSessionTranslationsMulti(sessionId: string): Promise<{ en: string[], fr: string[], zh: string[] }> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return sessionData.translations_multi || { en: [], fr: [], zh: [] }
-    } catch(error) {
-        console.warn(`⚠️ Multi translations not available for ${sessionId}:`, (error as Error).message)
-        return { en: [], fr: [], zh: [] }
-    }
-},
+        } catch (error) {
+            console.warn(`⚠️ Multi translations not available for ${sessionId}:`, (error as Error).message)
+            return { en: [], fr: [], zh: [] }
+        }
+    },
 
-    async getSessionEnglishTranslations(sessionId: string): Promise < string[] > {
+    async getSessionEnglishTranslations(sessionId: string): Promise<string[]> {
         try {
             const sessionData = await this.getSessionData(sessionId)
             return sessionData.translations_multi?.en || []
-        } catch(error) {
+        } catch (error) {
             console.warn(`⚠️ English translations not available for ${sessionId}:`, (error as Error).message)
             return []
         }
     },
 
-        async getSessionChineseTranslations(sessionId: string): Promise < string[] > {
-            try {
-                const sessionData = await this.getSessionData(sessionId)
+    async getSessionChineseTranslations(sessionId: string): Promise<string[]> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return sessionData.translations_multi?.zh || []
-            } catch(error) {
-                console.warn(`⚠️ Chinese translations not available for ${sessionId}:`, (error as Error).message)
-                return []
-            }
-        },
+        } catch (error) {
+            console.warn(`⚠️ Chinese translations not available for ${sessionId}:`, (error as Error).message)
+            return []
+        }
+    },
 
-            async getSessionFrenchTranslations(sessionId: string): Promise < string[] > {
-                try {
-                    const sessionData = await this.getSessionData(sessionId)
+    async getSessionFrenchTranslations(sessionId: string): Promise<string[]> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return sessionData.translations_multi?.fr || []
-                } catch(error) {
-                    console.warn(`⚠️ French translations not available for ${sessionId}:`, (error as Error).message)
-                    return []
-                }
-            },
+        } catch (error) {
+            console.warn(`⚠️ French translations not available for ${sessionId}:`, (error as Error).message)
+            return []
+        }
+    },
 
-                async getSession(sessionId: string): Promise < SessionData | null > {
-                    try {
-                        return await this.getSessionData(sessionId)
-                    } catch(error) {
-                        console.warn(`⚠️ Session not available for ${sessionId}:`, (error as Error).message)
-                        return null
-                    }
-                },
+    async getSession(sessionId: string): Promise<SessionData | null> {
+        try {
+            return await this.getSessionData(sessionId)
+        } catch (error) {
+            console.warn(`⚠️ Session not available for ${sessionId}:`, (error as Error).message)
+            return null
+        }
+    },
 
-                    async getSessionResults(sessionId: string): Promise < SessionResults > {
-                        try {
-                            const sessionData = await this.getSessionData(sessionId)
+    async getSessionResults(sessionId: string): Promise<SessionResults> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return {
-                                transcripts: sessionData.transcripts || [],
-                                translations: sessionData.translations || []
-                            }
-                        } catch(error) {
-                            console.warn(`⚠️ Session results not available for ${sessionId}:`, (error as Error).message)
-                            return { transcripts: [], translations: [] }
-                        }
-                    },
+                transcripts: sessionData.transcripts || [],
+                translations: sessionData.translations || []
+            }
+        } catch (error) {
+            console.warn(`⚠️ Session results not available for ${sessionId}:`, (error as Error).message)
+            return { transcripts: [], translations: [] }
+        }
+    },
 
-                        async getSessionTranscripts(sessionId: string): Promise < string[] > {
-                            try {
-                                const sessionData = await this.getSessionData(sessionId)
+    async getSessionTranscripts(sessionId: string): Promise<string[]> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return sessionData.transcripts || []
-                            } catch(error) {
-                                console.warn(`⚠️ Session transcripts not available for ${sessionId}:`, (error as Error).message)
-                                return []
-                            }
-                        },
+        } catch (error) {
+            console.warn(`⚠️ Session transcripts not available for ${sessionId}:`, (error as Error).message)
+            return []
+        }
+    },
 
-                            async getSessionTranslations(sessionId: string): Promise < string[] > {
-                                try {
-                                    const sessionData = await this.getSessionData(sessionId)
+    async getSessionTranslations(sessionId: string): Promise<string[]> {
+        try {
+            const sessionData = await this.getSessionData(sessionId)
             return sessionData.translations || []
-                                } catch(error) {
-                                    console.warn(`⚠️ Session translations not available for ${sessionId}:`, (error as Error).message)
-                                    return []
-                                }
-                            },
+        } catch (error) {
+            console.warn(`⚠️ Session translations not available for ${sessionId}:`, (error as Error).message)
+            return []
+        }
+    },
 
-                                async getStats(): Promise < Stats > {
-                                    try {
-                                        const response = await api.get('/stats')
+    async getStats(): Promise<Stats> {
+        try {
+            const response = await api.get('/stats')
             return response.data
-                                    } catch(error) {
-                                        try {
-                                            const sessions = await this.getSessions()
-                                            return {
-                                                sessions_count: sessions.length,
-                                                active_sessions: sessions.filter(s => s.status === 'active').length,
-                                                avg_session_duration: 0,
-                                                users_online: 0
-                                            }
-                                        } catch {
-                                            throw new Error(`Get stats failed: ${(error as Error).message}`)
-                                        }
-                                    }
-                                },
+        } catch (error) {
+            try {
+                const sessions = await this.getSessions()
+                return {
+                    sessions_count: sessions.length,
+                    active_sessions: sessions.filter(s => s.status === 'active').length,
+                    avg_session_duration: 0,
+                    users_online: 0
+                }
+            } catch {
+                throw new Error(`Get stats failed: ${(error as Error).message}`)
+            }
+        }
+    },
 
-                                    async getWebSocketDiagnostics(): Promise < WebSocketDiagnostics > {
-                                        try {
-                                            const response = await api.get('/diagnostics/websocket')
+    async getWebSocketDiagnostics(): Promise<WebSocketDiagnostics> {
+        try {
+            const response = await api.get('/diagnostics/websocket')
             return response.data
-                                        } catch(error) {
-                                            return {
-                                                status: 'unknown',
-                                                active_connections: 0,
-                                                messages_sent: 0,
-                                                messages_received: 0
-                                            }
-                                        }
-                                    }
+        } catch (error) {
+            return {
+                status: 'unknown',
+                active_connections: 0,
+                messages_sent: 0,
+                messages_received: 0
+            }
+        }
+    }
 }
 
 export const createWebSocketConnection = (endpoint: string, options: WebSocketOptions = {}): WebSocket => {
@@ -1594,6 +1597,7 @@ export class AudioWebSocket {
             title: string;
             lecturer: string;
             location: string;
+            start_time: string;
         }
     ): Promise<string> {
         return new Promise((resolve, reject) => {

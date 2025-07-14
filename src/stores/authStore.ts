@@ -15,13 +15,25 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      login: (username, token, role) => set({
-        user: { username, token, role }
-      }),
-      logout: () => set({ user: null }),
+      login: (username, token, role) => {
+        // Сохраняем роль отдельно в localStorage
+        localStorage.setItem('user-role', role);
+        set({ user: { username, token, role } });
+      },
+      logout: () => {
+        // Удаляем роль при выходе
+        localStorage.removeItem('user-role');
+        localStorage.removeItem('auth-storage');
+        set({ user: null });
+      },
     }),
     {
-      name: 'auth-storage', // Ключ для localStorage
+      name: 'auth-storage',
     }
   )
 );
+
+// Дополнительная функция для быстрого доступа к роли
+export const getUserRole = (): 'admin' | 'lector' | 'student' | null => {
+  return localStorage.getItem('user-role') as 'admin' | 'lector' | 'student' | null;
+};

@@ -66,11 +66,15 @@ const StudentPage = () => {
                         </button>
                     </div>
                     <div className={commonStyles.quickLinks}>
-                        <button className={commonStyles.quickLink} onClick={() => navigate(`/archive`)}>
+                        <button className={commonStyles.quickLink}
+                            onClick={() => navigate(`/archive`)}
+                        >
                             <LectureIcon />
                             <span>{t('student.links.archive')}</span>
                         </button>
-                        <button className={commonStyles.quickLink} onClick={() => navigate(`/active`)}>
+                        <button className={commonStyles.quickLink}
+                            onClick={() => navigate(`/active`)}
+                        >
                             <MonitorIcon />
                             <span>{t('student.links.active')}</span>
                         </button>

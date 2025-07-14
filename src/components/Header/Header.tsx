@@ -120,7 +120,10 @@ const Header: React.FC<HeaderProps> = ({ onLogout, onSupport }) => {
     const navigate = useNavigate();
 
     const handleLogout = (): void => {
-        navigate('/');
+        localStorage.removeItem('user-role');
+        localStorage.removeItem('auth-storage');
+        navigate('/signin');
+        onSupport?.();
     };
 
     const handleSupport = () => {

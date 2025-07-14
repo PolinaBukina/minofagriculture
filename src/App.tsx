@@ -11,12 +11,14 @@ import LectorPage from "./pages/LectorPage/LectorPage";
 import FullLecturePage from "./pages/FullLecturePage/FullLecturePage";
 import RecorderPage from "./pages/RecorderPage/RecorderPage";
 import RecordingLecturePage from "./pages/RecorderPage/RecordingLecturePage";
+import HomePage from "./pages/HomePage/HomePage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/signin" element={<LoginPage />} />
         <Route path="/admin" element={<AdminPage />} />
         {/* <Route path="/admin" element={<AdminPage />} /> KD-systems */}
         <Route path="/listener" element={<StudentPage />} /> {/* Студент */}
