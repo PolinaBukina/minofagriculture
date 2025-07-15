@@ -8,6 +8,13 @@ import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/rol
 import { apiService } from '../../services/api';
 import type { Session, SessionData } from '../../services/api';
 
+// import jsPDF from 'jspdf';
+// import 'jspdf-autotable';
+
+
+import jsPDF from 'jspdf';
+import { registerFonts } from '../../utils/registerFont';
+
 interface Lecture {
     id: string;
     title: string;
@@ -219,8 +226,7 @@ const LectureViewer = () => {
                 setProcessedTexts(prev => {
                     if (!prev.includes(newText)) {
                         const updated = [...prev, newText];
-                        const fullText = updated.join(' ');
-                        setOriginalText(fullText);
+                        setOriginalText(updated.join(' '));
                         return updated;
                     }
                     return prev;
@@ -242,8 +248,6 @@ const LectureViewer = () => {
                     } else if (data.type === 'translated_chinese') {
                         lang = 'zh';
                     } else if (data.type === 'translated_english') {
-                        // Для общего типа 'translated' используем указанный язык
-                        // lang = data.language as keyof Translations;
                         lang = 'en';
                     } else {
                         // Игнорируем другие типы сообщений с переводами
@@ -449,77 +453,548 @@ const LectureViewer = () => {
         }
     };
 
-    // Экспорт лекции в файл
-    const exportLecture = () => {
-        if (!lecture) return;
+    // // Экспорт лекции работает русс, англ и фр
+    // const exportLectureAsPDF = async (
+    //     lecture: { title: string; lecturer: string; start: string; duration: string },
+    //     originalText: string,
+    //     translations: Record<string, string>,
+    //     language: string,
+    //     id: string
+    // ) => {
+    //     try {
+    //         const { jsPDF } = await import('jspdf');
+    //         const doc = new jsPDF();
 
-        const exportText = `ЛЕКЦИЯ: ${lecture.title}
-            Лектор: ${lecture.lecturer}
-            Дата: ${lecture.start}
-            Длительность: ${lecture.duration}
+    //         // Load Roboto font
+    //         const robotoResponse = await fetch('/fonts/Roboto-Regular.ttf');
+    //         const robotoData = await robotoResponse.arrayBuffer();
 
-            ИСХОДНЫЙ ТЕКСТ:
-            ${originalText}
+    //         // Convert ArrayBuffer to Uint8Array
+    //         const robotoUint8Array = new Uint8Array(robotoData);
 
-            ПЕРЕВОД (${language.toUpperCase()}):
-            ${translations[language] || 'Перевод недоступен'}
+    //         // Add font to VFS - convert Uint8Array to string
+    //         const robotoString = Array.from(robotoUint8Array).map(byte => String.fromCharCode(byte)).join('');
+    //         doc.addFileToVFS('Roboto-normal.ttf', robotoString);
 
-            ---
-            Экспортировано из системы транскрипции лекций
-            ID сессии: ${id}
-        `;
+    //         doc.addFont('Roboto-normal.ttf', 'Roboto', 'normal');
+    //         doc.setFont('Roboto', 'normal');
 
-        const blob = new Blob([exportText], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `lecture_${id}_${language}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+    //         // Create PDF content
+    //         let y = 20;
+
+    //         // Title
+    //         doc.setFontSize(16);
+    //         doc.text(`Лекция: ${lecture.title}`, 15, y);
+    //         y += 10;
+
+    //         // Metadata
+    //         doc.setFontSize(12);
+    //         doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Дата: ${lecture.start}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Длительность: ${lecture.duration}`, 15, y);
+    //         y += 15;
+
+    //         // Original text
+    //         doc.setFontSize(14);
+    //         doc.text('Исходный текст:', 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const originalLines = doc.splitTextToSize(originalText, 180);
+    //         doc.text(originalLines, 15, y);
+    //         y += originalLines.length * 7 + 10;
+
+    //         // Translation
+    //         doc.setFontSize(14);
+    //         doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const translatedText = translations[language] || 'Перевод недоступен';
+    //         const translatedLines = doc.splitTextToSize(translatedText, 180);
+    //         doc.text(translatedLines, 15, y);
+    //         y += translatedLines.length * 7 + 10;
+
+    //         // Footer
+    //         doc.setFontSize(10);
+    //         doc.text(`ID сессии: ${id}`, 15, y);
+
+    //         // Save
+
+    //         // Convert Cyrillic lecturer name to Latin for filename
+    //         const transliterateLecturer = (name: string) => {
+    //             const cyrillicToLatin: Record<string, string> = {
+    //                 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    //                 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    //                 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+    //                 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    //                 'я': 'ya',
+    //                 'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+    //                 'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+    //                 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+    //                 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+    //                 'Я': 'Ya'
+    //             };
+
+    //             return name.split('').map(char => cyrillicToLatin[char] || char).join('');
+    //         };
+
+    //         const latinLecturer = transliterateLecturer(lecture.lecturer);
+    //         const rawDate = lecture.start; 
+    //         const day = rawDate.slice(0, 2);     
+    //         const month = rawDate.slice(3, 5);   
+    //         const year = rawDate.slice(6, 10);   
+
+    //         const filename = `lecture_${latinLecturer}_${day}.${month}.${year}_${id}.pdf`;
+    //         doc.save(filename);
+
+    //         // doc.save(`lecture_${lecture.lecturer}_${lecture.start}_${id}.pdf`);
+
+    //     } catch (error) {
+    //         console.error('Export failed:', error);
+    //         alert('Ошибка при экспорте PDF');
+    //     }
+    // };
+
+
+    // const exportLectureAsPDF = async (
+    //     lecture: { title: string; lecturer: string; start: string; duration: string },
+    //     originalText: string,
+    //     translations: Record<string, string>,
+    //     language: string,
+    //     id: string
+    // ) => {
+    //     try {
+    //         const { jsPDF } = await import('jspdf');
+    //         const doc = new jsPDF();
+
+    //         // 1. Загрузка шрифтов
+    //         // Основной шрифт (Roboto для кириллицы/латиницы)
+    //         const robotoResponse = await fetch('/fonts/Roboto-Regular.ttf');
+    //         const robotoData = await robotoResponse.arrayBuffer();
+    //         // doc.addFileToVFS('Roboto-normal.ttf', new Uint8Array(robotoData));
+    // const robotoUint8Array = new Uint8Array(robotoData);
+    // const robotoString = Array.from(robotoUint8Array).map(byte => String.fromCharCode(byte)).join('');
+    // doc.addFileToVFS('Roboto-normal.ttf', robotoString);
+    // doc.addFont('Roboto-normal.ttf', 'Roboto', 'normal');
+
+    //         // Китайский шрифт (Noto Sans SC)
+    //         try {
+    //             const notoSansSCResponse = await fetch('/fonts/NotoSansSC-Regular.ttf');
+    //             const notoSansSCData = await notoSansSCResponse.arrayBuffer();
+    //             const notoSansUint8Array = new Uint8Array(notoSansSCData);
+    //             const natoSansString = Array.from(notoSansUint8Array).map(byte => String.fromCharCode(byte)).join('');
+    //             doc.addFileToVFS('NotoSansSC-normal.ttf', natoSansString);
+    //             doc.addFont('NotoSansSC-normal.ttf', 'NotoSansSC', 'normal');
+    //         } catch (e) {
+    //             console.warn('Не удалось загрузить китайский шрифт', e);
+    //             // Fallback - используем только Roboto
+    //         }
+
+    //         // 2. Установка шрифта по умолчанию
+    //         doc.setFont('Roboto', 'normal');
+
+    //         // 3. Создание содержимого PDF
+    //         let y = 20;
+
+    //         // Заголовок
+    //         doc.setFontSize(16);
+    //         doc.text(`Лекция: ${lecture.title}`, 15, y);
+    //         y += 10;
+
+    //         // Метаданные
+    //         doc.setFontSize(12);
+    //         doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Дата: ${lecture.start}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Длительность: ${lecture.duration}`, 15, y);
+    //         y += 15;
+
+    //         // Исходный текст
+    //         doc.setFontSize(14);
+    //         doc.text('Исходный текст:', 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const originalLines = doc.splitTextToSize(originalText, 180);
+    //         doc.text(originalLines, 15, y);
+    //         y += originalLines.length * 7 + 10;
+
+    //         // Перевод
+    //         doc.setFontSize(14);
+    //         doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const translatedText = translations[language] || 'Перевод недоступен';
+
+    //         // Переключаем шрифт для китайского текста
+    //         if (language === 'zh') {
+    //             try {
+    //                 doc.setFont('NotoSansSC', 'normal');
+    //             } catch (e) {
+    //                 console.warn('Не удалось установить китайский шрифт, используется Roboto', e);
+    //             }
+    //         }
+
+    //         const translatedLines = doc.splitTextToSize(translatedText, 180);
+    //         doc.text(translatedLines, 15, y);
+    //         y += translatedLines.length * 7 + 10;
+
+    //         // Возвращаем основной шрифт
+    //         doc.setFont('Roboto', 'normal');
+
+    //         // Футер
+    //         doc.setFontSize(10);
+    //         doc.text(`ID сессии: ${id}`, 15, y);
+
+    //         // 4. Генерация имени файла
+    //         const transliterateLecturer = (name: string) => {
+    //             const cyrillicToLatin: Record<string, string> = {
+    //                 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    //                 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    //                 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+    //                 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    //                 'я': 'ya',
+    //                 'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+    //                 'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+    //                 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+    //                 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+    //                 'Я': 'Ya'
+    //             };
+    //             return name.split('').map(char => cyrillicToLatin[char] || char).join('');
+    //         };
+
+    //         const latinLecturer = transliterateLecturer(lecture.lecturer);
+    //         const rawDate = lecture.start;
+    //         const day = rawDate.slice(0, 2);
+    //         const month = rawDate.slice(3, 5);
+    //         const year = rawDate.slice(6, 10);
+
+    //         const filename = `lecture_${latinLecturer}_${day}.${month}.${year}_${id}.pdf`;
+
+    //         // 5. Сохранение PDF
+    //         doc.save(filename);
+
+    //     } catch (error) {
+    //         console.error('Export failed:', error);
+    //         alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
+    //     }
+    // };
+
+
+    // const exportLectureAsPDF = async (
+    //     lecture: { title: string; lecturer: string; start: string; duration: string },
+    //     originalText: string,
+    //     translations: Record<string, string>,
+    //     language: string,
+    //     id: string
+    // ) => {
+    //     try {
+    //         const { jsPDF } = await import('jspdf');
+
+    //         // Инициализация PDF с поддержкой UTF-8
+    //         const doc = new jsPDF({
+    //             orientation: 'p',
+    //             unit: 'mm',
+    //             format: 'a4',
+    //             filters: ['ASCIIHexEncode']
+    //         });
+
+    //         // 1. Загрузка и регистрация шрифтов
+    //         // Основной шрифт (Roboto)
+    //         const registerFont = async (fontName: string, fontPath: string) => {
+    //             try {
+    //                 const response = await fetch(fontPath);
+    //                 const fontData = await response.arrayBuffer();
+    //                 const fontArray = new Uint8Array(fontData);
+
+    //                 // Преобразование в формат, который понимает jsPDF
+    //                 let fontString = '';
+    //                 for (let i = 0; i < fontArray.length; i++) {
+    //                     fontString += String.fromCharCode(fontArray[i]);
+    //                 }
+
+    //                 doc.addFileToVFS(`${fontName}-normal.ttf`, fontString);
+    //                 doc.addFont(`${fontName}-normal.ttf`, fontName, 'normal');
+    //                 return true;
+    //             } catch (e) {
+    //                 console.error(`Ошибка загрузки шрифта ${fontName}:`, e);
+    //                 return false;
+    //             }
+    //         };
+
+    //         // Загружаем шрифты
+    //         const robotoLoaded = await registerFont('Roboto', '/fonts/Roboto-Regular.ttf');
+    //         const notoSansLoaded = language === 'zh'
+    //             ? await registerFont('NotoSansSC', '/fonts/NotoSansSC-Regular.ttf')
+    //             : false;
+
+    //         // Установка шрифта по умолчанию
+    //         if (robotoLoaded) {
+    //             doc.setFont('Roboto', 'normal');
+    //         }
+
+    //         // 2. Создание содержимого PDF
+    //         let y = 20;
+
+    //         // Заголовок
+    //         doc.setFontSize(16);
+    //         doc.text(`Лекция: ${lecture.title}`, 15, y);
+    //         y += 10;
+
+    //         // Метаданные
+    //         doc.setFontSize(12);
+    //         doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Дата: ${lecture.start}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Длительность: ${lecture.duration}`, 15, y);
+    //         y += 15;
+
+    //         // Исходный текст
+    //         doc.setFontSize(14);
+    //         doc.text('Исходный текст:', 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const originalLines = doc.splitTextToSize(originalText, 180);
+    //         doc.text(originalLines, 15, y);
+    //         y += originalLines.length * 7 + 10;
+
+    //         // Перевод
+    //         doc.setFontSize(14);
+    //         doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const translatedText = translations[language] || 'Перевод недоступен';
+
+    //         // Переключаем шрифт для китайского текста
+    //         if (language === 'zh' && notoSansLoaded) {
+    //             try {
+    //                 doc.setFont('NotoSansSC', 'normal');
+    //             } catch (e) {
+    //                 console.warn('Не удалось установить китайский шрифт:', e);
+    //                 if (robotoLoaded) doc.setFont('Roboto', 'normal');
+    //             }
+    //         }
+
+    //         try {
+    //             const translatedLines = doc.splitTextToSize(translatedText, 180);
+    //             doc.text(translatedLines, 15, y);
+    //             y += translatedLines.length * 7 + 10;
+    //         } catch (e) {
+    //             console.error('Ошибка при добавлении перевода:', e);
+    //             doc.text(['[Ошибка отображения перевода]'], 15, y);
+    //             y += 20;
+    //         }
+
+    //         // Возвращаем основной шрифт
+    //         if (robotoLoaded) doc.setFont('Roboto', 'normal');
+
+    //         // Футер
+    //         doc.setFontSize(10);
+    //         doc.text(`ID сессии: ${id}`, 15, y);
+
+    // // 3. Генерация имени файла
+    // const transliterateLecturer = (name: string) => {
+    //     const cyrillicToLatin: Record<string, string> = {
+    //         'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    //         'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    //         'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+    //         'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    //         'я': 'ya',
+    //         'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+    //         'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+    //         'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+    //         'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+    //         'Я': 'Ya'
+    //     };
+    //     return name.split('').map(char => cyrillicToLatin[char] || char).join('');
+    // };
+
+    // const latinLecturer = transliterateLecturer(lecture.lecturer);
+    // const [datePart] = lecture.start.split(',');
+    // const [day, month, year] = datePart.trim().split('.');
+    // const filename = `lecture_${latinLecturer}_${day}.${month}.${year}_${id}.pdf`;
+
+    // // 4. Сохранение PDF
+    // doc.save(filename);
+
+    //     } catch (error) {
+    //         console.error('Export failed:', error);
+    //         alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
+    //     }
+    // };
+    const exportLectureAsPDF = async (
+        lecture: { title: string; lecturer: string; start: string; duration: string },
+        originalText: string,
+        translations: Record<string, string>,
+        language: string,
+        id: string
+    ) => {
+        try {
+            // Динамический импорт jsPDF с обработкой ошибок
+            const { jsPDF } = await import('jspdf');
+
+            // Инициализация PDF
+            const doc = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4'
+            });
+
+            // 1. Функция для правильной регистрации шрифта
+            const registerFont = async (fontName: string, fontPath: string) => {
+                try {
+                    const response = await fetch(fontPath);
+                    if (!response.ok) throw new Error(`Font load failed: ${response.status}`);
+
+                    const fontData = await response.arrayBuffer();
+                    const fontString = Array.from(new Uint8Array(fontData))
+                        .map(byte => String.fromCharCode(byte))
+                        .join('');
+
+                    // Добавляем суффикс к имени файла для совместимости
+                    const vfsName = `${fontName}-regular.ttf`;
+                    doc.addFileToVFS(vfsName, fontString);
+                    doc.addFont(vfsName, fontName, 'normal');
+
+                    return true;
+                } catch (e) {
+                    console.error(`Error loading font ${fontName}:`, e);
+                    return false;
+                }
+            };
+
+            // 2. Загрузка шрифтов
+            const robotoLoaded = await registerFont('Roboto', '/fonts/Roboto-Regular.ttf');
+
+            // Загружаем китайский шрифт только если нужен
+            let notoSansLoaded = false;
+            if (language === 'zh') {
+                notoSansLoaded = await registerFont('NotoSansSC', '/fonts/NotoSansSC-Regular.ttf');
+
+                // Альтернативный вариант из CDN если локальный не загрузился
+                if (!notoSansLoaded) {
+                    console.log('Trying to load NotoSansSC from CDN...');
+                    notoSansLoaded = await registerFont(
+                        'NotoSansSC',
+                        'https://cdn.jsdelivr.net/npm/noto-sans-sc@1.0.0/fonts/NotoSansSC-Regular.otf'
+                    );
+                }
+            }
+
+            // Установка шрифта по умолчанию
+            if (robotoLoaded) {
+                doc.setFont('Roboto', 'normal');
+            } else {
+                console.warn('Using default font as Roboto failed to load');
+            }
+
+            // 3. Создание содержимого PDF
+            let y = 20;
+
+            // Заголовок
+            doc.setFontSize(16);
+            doc.text(`Лекция: ${lecture.title}`, 15, y);
+            y += 10;
+
+            // Метаданные
+            doc.setFontSize(12);
+            doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
+            y += 7;
+            doc.text(`Дата: ${lecture.start}`, 15, y);
+            y += 7;
+            doc.text(`Длительность: ${lecture.duration}`, 15, y);
+            y += 15;
+
+            // Исходный текст
+            doc.setFontSize(14);
+            doc.text('Исходный текст:', 15, y);
+            y += 10;
+
+            doc.setFontSize(11);
+            const originalLines = doc.splitTextToSize(originalText, 180);
+            doc.text(originalLines, 15, y);
+            y += originalLines.length * 7 + 10;
+
+            // Перевод
+            doc.setFontSize(14);
+            doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
+            y += 10;
+
+            doc.setFontSize(11);
+            const translatedText = translations[language] || 'Перевод недоступен';
+
+            // Специальная обработка для китайского
+            if (language === 'zh' && notoSansLoaded) {
+                try {
+                    doc.setFont('NotoSansSC', 'normal');
+                    console.log('Chinese font set successfully');
+                } catch (e) {
+                    console.warn('Failed to set Chinese font:', e);
+                }
+            }
+
+            try {
+                const translatedLines = doc.splitTextToSize(translatedText, 180);
+                doc.text(translatedLines, 15, y);
+                y += translatedLines.length * 7 + 10;
+            } catch (e) {
+                console.error('Error rendering translated text:', e);
+                doc.text(['[Translation rendering error]'], 15, y);
+                y += 20;
+            }
+
+            // Возвращаем основной шрифт
+            if (robotoLoaded) doc.setFont('Roboto', 'normal');
+
+            // Футер
+            doc.setFontSize(10);
+            doc.text(`ID сессии: ${id}`, 15, y);
+
+            // 3. Генерация имени файла
+            const transliterateLecturer = (name: string) => {
+                const cyrillicToLatin: Record<string, string> = {
+                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+                    'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+                    'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+                    'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+                    'я': 'ya',
+                    'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+                    'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+                    'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+                    'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+                    'Я': 'Ya'
+                };
+                return name.split('').map(char => cyrillicToLatin[char] || char).join('');
+            };
+
+            const latinLecturer = transliterateLecturer(lecture.lecturer);
+            const [datePart] = lecture.start.split(',');
+            const [day, month, year] = datePart.trim().split('.');
+            const filename = `lecture_${latinLecturer}_${day}-${month}-${year}_${id}.pdf`;
+
+            // 4. Сохранение PDF
+            doc.save(filename);
+
+        } catch (error) {
+            console.error('Export failed:', error);
+            alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
+
+            // Дополнительная диагностика
+            if (error instanceof Error && error.message.includes('Unicode')) {
+                console.error('Unicode error detected - possible font registration issue');
+            }
+        }
     };
 
-    if (isLoading) {
-        return (
-            <div className={commonStyles.appContainer}>
-                <div className={commonStyles.mainContentLecture}>
-                    <Header />
-                    <Breadcrumbs items={getBreadcrumbs()} />
-                    <h1 className={commonStyles.sectionHeader}>{t('lecture_viewer.loading')}</h1>
-                    <div className={commonStyles.infoCardLecture}>
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            height: '300px',
-                            width: '100%',
-                            gap: '20px'
-                        }}>
-                            <div className={commonStyles.loader}></div>
-                            <p style={{
-                                color: '#555',
-                                fontSize: '1.2rem',
-                                fontWeight: '500'
-                            }}>
-                                {t('lecture_viewer.loading_lecture')} {id?.slice(0, 8)}...
-                            </p>
-                            {isLiveMode && (
-                                <div style={{
-                                    marginTop: '12px',
-                                    color: '#0369a1',
-                                    textAlign: 'center'
-                                }}>
-                                    {t('lecture_viewer.preparing_live')}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+
 
     if (error && !lecture) {
         return (
@@ -668,7 +1143,11 @@ const LectureViewer = () => {
                         <div style={{ marginTop: '16px' }}>
                             <button
                                 className={commonStyles.textButton}
-                                onClick={exportLecture}
+                                // onClick={exportLecture}
+                                // onClick={exportLectureAsPDF}
+                                onClick={() =>
+                                    exportLectureAsPDF(lecture, originalText, translations, language, lecture.id)
+                                }
                             >
                                 {t('export')}
                             </button>
@@ -696,7 +1175,7 @@ const LectureViewer = () => {
                 <div className={commonStyles.infoCardLecture}>
                     <div className={commonStyles.listItemLecture}>
                         <div className={commonStyles.textHeaderContainer}>
-                            <h2>{t('lecture_viewer.original_text')} ({originalText.length} символов)</h2>
+                            <h2>{t('lecture_viewer.original_text')}</h2>
                             {isLiveMode && (
                                 <div style={{
                                     fontSize: '12px',

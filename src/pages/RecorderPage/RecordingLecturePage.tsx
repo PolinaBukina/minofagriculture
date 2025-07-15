@@ -3047,7 +3047,11 @@ const RecordingLecturePage = () => {
                                     <>
                                         <button
                                             onClick={handleTogglePause}
-                                            className={commonStyles.refreshButton}
+                                            // className={commonStyles.refreshButton}
+                                            className={` 
+                                            ${isPaused ?
+                                                    commonStyles.primaryButton : commonStyles.refreshButton
+                                                }`}
                                             disabled={isFinished}
                                         >
                                             {isPaused ? t('recording.resume_button') : t('recording.pause_button')}
