@@ -10,7 +10,7 @@ type LectureData = {
     id: string;
     title: string;
     lecturer: string;
-    startTime: string;
+    start_time: string;
     duration: string;
     location: string;
     createdAt: string;
@@ -21,7 +21,7 @@ const RecorderPage = () => {
     const [lectureData, setLectureData] = useState({
         title: '',
         lecturer: '',
-        startTime: '',
+        start_time: new Date().toISOString(),
         duration: '0',
         location: ''
     });
@@ -38,14 +38,14 @@ const RecorderPage = () => {
         const newLecture: LectureData = {
             ...lectureData,
             id: `lecture-${Date.now()}`,
-            startTime: lectureData.startTime || new Date().toISOString(),
+            start_time: lectureData.start_time || new Date().toISOString(),
             createdAt: new Date().toISOString()
         };
         navigate('recording', { state: { lecture: newLecture } });
     };
 
     // const isFormValid = lectureData.title && lectureData.lecturer &&
-    //     lectureData.startTime && lectureData.location;
+    //     lectureData.start_time && lectureData.location;
 
     const isFormValid = lectureData.title && lectureData.lecturer && lectureData.location;
 
@@ -106,8 +106,8 @@ const RecorderPage = () => {
                             <label>{t('recorder.form.start_time')}</label>
                             <input
                                 type="datetime-local"
-                                name="startTime"
-                                value={lectureData.startTime}
+                                name="start_time"
+                                value={lectureData.start_time}
                                 onChange={handleLectureInputChange}
                                 className={commonStyles.filterSelect}
                                 required

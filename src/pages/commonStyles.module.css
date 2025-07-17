@@ -195,7 +195,7 @@
 
 .statusItem :nth-child(2n) {
     display: flex;
-    margin-bottom: 8px;
+    /* margin-bottom: 8px; */
     margin-left: 8px;
     font-size: 14px;
     color: #4a5568;
@@ -717,6 +717,18 @@
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.noteText {
+    text-align: center;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.noteText_text {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Стили для домашней страницы */
@@ -1329,10 +1341,88 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
-    flex-grow: 1;
+    /* flex-grow: 1; */
 }
 
 .editButtons {
     display: flex;
     gap: 4px;
+}
+
+/* Контейнер для элемента статуса (каждой строки) */
+.statusItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Метка перед инпутом */
+.statusItem>span {
+    min-width: 120px;
+    /* Фиксированная ширина для выравнивания */
+    margin-right: 10px;
+    font-weight: 500;
+}
+
+/* Контейнер для поля редактирования и кнопок */
+.editFieldContainer {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* Стили для инпута */
+.editInput {
+    /* flex-grow: 1; */
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    height: 36px;
+    /* Фиксированная высота для выравнивания */
+    box-sizing: border-box;
+}
+
+/* Контейнер для кнопок редактирования */
+.editButtons {
+    display: flex;
+    margin-left: 10px;
+}
+
+/* Стили для кнопок в контейнере редактирования */
+.smallPrimaryButton,
+.smallSecondaryButton {
+    padding: 8px 12px;
+    margin-left: 8px;
+    height: 36px;
+    /* Такая же высота как у инпута */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Стили для отображения поля с кнопкой редактирования */
+.fieldWithEdit {
+    display: flex;
+    align-items: center;
+    /* flex-grow: 1; */
+}
+
+.fieldWithEdit>span {
+    flex-grow: 1;
+}
+
+/* Кнопка редактирования */
+.editButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
 }

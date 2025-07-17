@@ -1392,7 +1392,8 @@ export const apiService = {
                 audio_duration: data.session?.duration_minutes,
 
                 // Транскрипции
-                transcripts: data.transcriptions?.map((t: any) => t.text) || [],
+                // transcripts: data.transcriptions?.map((t: any) => t.text) || [],
+                transcripts: data.processed_texts?.map((t: any) => t.processed_text) || [],
 
                 // 🆕 ВСЕ ПЕРЕВОДЫ
                 translations: englishTranslations, // Старое поле для обратной совместимости
