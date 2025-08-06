@@ -58,17 +58,29 @@
         "duration": "Durée",
         "location": "Lieu",
         "status": "Statut",
-        "original_text": "Texte original",
+        "status_title": {
+            "archive_lecture": "Conférence archivée",
+            "active_lecture": "🟢 Conférence active (connexion en direct)",
+            "active_connect": "🟡 Conférence active (connexion en cours...)",
+            "active": "🟢 Conférence active"
+        },
+        "original_text": "Texte original (RUS)",
         "translated_text": "Texte traduit (FRA)",
         "show_full": "Afficher le texte complet",
-        "text_unavailable": "Le texte de la conférence n'est pas disponible",
+        "text_unavailable": "Aucune donnée disponible",
         "translation_unavailable": "Traduction non disponible",
         "breadcrumb": "Conférence {{id}}",
         "full_text_breadcrumb": "Texte intégral de la conférence",
         "back_breadcrumb": "Conférence {{id}}",
         "loading": "Chargement de la leçon",
         "loading_lecture": "Chargement des données de la leçon",
-        "preparing_live": "Préparation de la première réception des données..."
+        "preparing_live": "Préparation de la première réception des données...",
+        "ws_connected": {
+            "ok": "Mise à jour en temps réel",
+            "err": "En attente de connexion"
+        },
+        "waiting_text": "🟢 Le mode LIVE est actif <br /> En attente du texte du cours...",
+        "waiting_translate": "🟢 Le mode LIVE est actif <br /> En attente du texte du cours..."
     },
     "language": {
         "select": "Sélection de la langue",
@@ -113,7 +125,8 @@
     "common": {
         "close": "Fermer",
         "cancel": "Annuler",
-        "not_specified": "Non spécifié"
+        "not_specified": "Non spécifié",
+        "save": "Sauvegarder"
     },
     "recorder": {
         "title": "Nouvelle conférence",
@@ -155,10 +168,10 @@
         "resume_button": "Reprendre la conférence",
         "stop_button": "Terminer la conférence",
         "go_to_archive": "Aller à l'archive des conférences",
-        "original_text": "Texte original",
+        "original_text": "Texte original (RUS)",
         "translated_text": "Texte traduit (FRA)",
         "show_full_text": "Afficher le texte complet",
-        "text_unavailable": "Le texte de la conférence n'est pas disponible",
+        "text_unavailable": "Aucune donnée disponible",
         "translation_unavailable": "Traduction non disponible",
         "stop_confirmation": "Êtes-vous sûr de vouloir terminer l'enregistrement de la conférence ?",
         "pause_confirmation": "Êtes-vous sûr de vouloir mettre en pause l'enregistrement de la conférence ?",
@@ -169,7 +182,9 @@
             "translated": "This is an example lecture text..."
         },
         "starting_lecture": "Préparation de l'enregistrement",
-        "starting_message": "Veuillez patienter quelques secondes, connexion au serveur..."
+        "starting_message": "Veuillez patienter quelques secondes, connexion au serveur...",
+        "page_changed_title": "Cours interrompu",
+        "page_changed_message": "Vous avez changé de page pendant le cours. L'enregistrement a été automatiquement arrêté."
     },
     "confirmation": {
         "title": "Confirmation"
@@ -393,6 +408,12 @@
         "info_point1": "La liste se met à jour automatiquement toutes les 30 secondes",
         "info_point2": "La connexion WebSocket assure un monitoring en temps réel",
         "info_point3": "Cliquez sur une conférence pour vous connecter à la diffusion",
-        "info_point4": "Le statut \"🔴 LIVE\" signifie une diffusion active"
+        "info_point4": "Le statut \"🟢 LIVE\" signifie une diffusion active"
+    },
+    "language_change": {
+        "title": "Changer de langue",
+        "message": "Pour changer de langue, vous devez interrompre le cours. Continuer ?",
+        "continue": "Continuer",
+        "cancel": "Annuler"
     }
 }

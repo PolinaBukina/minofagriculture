@@ -27,7 +27,7 @@ export const getCurrentLanguage = (): Translations => {
   const lang = localStorage.getItem('i18nextLng') as Translations | null;
   return lang && ['en', 'fr', 'ru', 'zh'].includes(lang)
     ? lang
-    : 'en'; // Язык по умолчанию
+    : 'ru'; // Язык по умолчанию
 };
 
 export const getRoleFromStorage = (): UserRole => {

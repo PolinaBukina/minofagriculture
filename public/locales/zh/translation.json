@@ -58,17 +58,29 @@
         "duration": "时长",
         "location": "地点",
         "status": "状态",
-        "original_text": "原文",
+        "status_title": {
+            "archive_lecture": "已存档讲座",
+            "active_lecture": "🟢 正在进行的讲座（已连接直播）",
+            "active_connect": "🟡 正在进行的讲座（正在连接……）",
+            "active": "🟢 正在进行的讲座"
+        },
+        "original_text": "原文 (RUS)",
         "translated_text": "翻译文本 (CHN)",
         "show_full": "显示全文",
-        "text_unavailable": "讲座文本不可用",
+        "text_unavailable": "无可用数据",
         "translation_unavailable": "翻译不可用",
         "breadcrumb": "讲座 {{id}}",
         "full_text_breadcrumb": "讲座全文",
         "back_breadcrumb": "讲座 {{id}}",
         "loading": "正在加载讲座",
         "loading_lecture": "正在加载讲座数据",
-        "preparing_live": "准备首次接收数据..."
+        "preparing_live": "准备首次接收数据...",
+        "ws_connected": {
+            "ok": "正在实时更新",
+            "err": "正在等待连接"
+        },
+        "waiting_text": "🟢 直播模式已开启 <br /> 等待讲座文本...",
+        "waiting_translate": "🟢 直播模式已开启 <br /> 等待讲座文本..."
     },
     "language": {
         "select": "语言选择",
@@ -102,7 +114,7 @@
             "active": "活跃讲座"
         },
         "instructions": {
-            "title": "💡 使用方法（讲师模式）：",
+            "title": "💡 使用方法（教师模式）：",
             "button": "使用说明",
             "step1": "🎤 点击左侧的“开始录制”",
             "step2": "✅ 在浏览器中允许麦克风访问",
@@ -113,7 +125,8 @@
     "common": {
         "close": "关闭",
         "cancel": "取消",
-        "not_specified": "未指定"
+        "not_specified": "未指定",
+        "save": "节省"
     },
     "recorder": {
         "title": "新讲座",
@@ -155,10 +168,10 @@
         "resume_button": "继续讲座",
         "stop_button": "结束讲座",
         "go_to_archive": "前往讲座存档",
-        "original_text": "原文",
+        "original_text": "原文 (RUS)",
         "translated_text": "翻译文本 (CHN)",
         "show_full_text": "显示全文",
-        "text_unavailable": "讲座文本不可用",
+        "text_unavailable": "无可用数据",
         "translation_unavailable": "翻译不可用",
         "stop_confirmation": "确定要结束讲座录制吗？",
         "pause_confirmation": "确定要暂停讲座录制吗？",
@@ -169,7 +182,9 @@
             "translated": "This is an example lecture text..."
         },
         "starting_lecture": "准备录制",
-        "starting_message": "请等待几秒钟，正在连接服务器..."
+        "starting_message": "请等待几秒钟，正在连接服务器...",
+        "page_changed_title": "讲座已中断",
+        "page_changed_message": "您在讲座期间更改了页面。录制已自动停止。"
     },
     "confirmation": {
         "title": "确认"
@@ -393,6 +408,12 @@
         "info_point1": "列表每30秒自动更新一次",
         "info_point2": "WebSocket连接提供实时监控",
         "info_point3": "点击讲座可连接至直播",
-        "info_point4": "状态\"🔴 LIVE\"表示活跃的直播"
+        "info_point4": "状态\"🟢 LIVE\"表示活跃的直播"
+    },
+    "language_change": {
+        "title": "更改语言",
+        "message": "要更改语言，您需要中断讲座。是否继续？",
+        "continue": "继续",
+        "cancel": "取消"
     }
 }
