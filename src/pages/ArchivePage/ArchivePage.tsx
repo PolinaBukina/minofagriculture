@@ -148,6 +148,7 @@ const ArchivePage = () => {
                 : true;
 
             return matchesStatus && matchesDate && matchesLecturer && matchesTitle && matchesKeywords;
+            // return matchesDate && matchesLecturer && matchesTitle && matchesKeywords;
         });
     }, [lectures, dateFilter, lecturerFilter, searchQuery, keywordFilter]);
 

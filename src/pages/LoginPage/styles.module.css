@@ -5,7 +5,7 @@
     align-items: center;
     min-height: 100vh;
     background-color: #f3f4f6;
-    /* background-image: url('../Dashboard/3.jpg'); */
+    background-image: url('3.jpg');
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -25,7 +25,6 @@
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 20px;
-    margin: 40px;
 }
 
 .logoSvg {
@@ -35,20 +34,15 @@
 }
 
 .logoTitle {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
     color: #1f2937;
-}
-
-.logoSubtitle {
-    font-size: 14px;
-    color: #4b5563;
     margin-bottom: 4px;
 }
 
-.logo {
-    height: 100px;
-    margin-right: 20px;
+.logoSubtitle {
+    font-size: 18px;
+    color: #4b5563;
 }
 
 .formContainer {
@@ -105,7 +99,7 @@
 }
 
 .input:focus {
-    border-color: #31ce41;
+    border-color: #10b981;
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
 }
 
@@ -129,18 +123,18 @@
 
 .link {
     font-size: 14px;
-    color: #31ce41;
+    color: #10b981;
     text-decoration: none;
 }
 
 .link:hover {
-    color: #33822c;
+    color: #059669;
 }
 
 .button {
     width: 100%;
     padding: 10px 16px;
-    background-color: #31ce41;
+    background-color: #10b981;
     color: white;
     border: none;
     border-radius: 6px;
@@ -150,11 +144,11 @@
 }
 
 .button:hover {
-    background-color: #33822c;
+    background-color: #059669;
 }
 
 .button:active {
-    border-color: #31ce41;
+    border-color: #10b981;
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 

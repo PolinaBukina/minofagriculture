@@ -159,7 +159,10 @@ const RecordingLecturePage = () => {
 
         // Обработка оригинального текста
         if (data.type === 'processed' && data.processed_text) {
-            const newText = data.processed_text.trim();
+            const newText = data.processed_text
+                .replace(/\[.*?\]/g, '')
+                .trim();
+
             if (newText) {
                 setProcessedTexts(prev => {
                     if (!prev.includes(newText)) {
@@ -174,7 +177,7 @@ const RecordingLecturePage = () => {
 
         // Обработка переводов
         if (data.translation) {
-            const newTranslation = data.translation.trim();
+            const newTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
             if (newTranslation) {
                 setTranslations(prev => {
                     const updated = { ...prev };

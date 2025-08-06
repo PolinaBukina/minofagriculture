@@ -57,7 +57,7 @@ const ActiveLecturesPage = () => {
             return timestamp?.slice(0, 8) || t('active_lectures.unknown_time');
         }
     };
-    
+
     // const formatTime = (timestamp: string): string => {
     //     try {
     //         const dt = new Date(timestamp);
@@ -266,11 +266,13 @@ const ActiveLecturesPage = () => {
 
                 <div className={commonStyles.infoCard}>
                     {activeLectures.length === 0 ? (
-                        <div className={commonStyles.noteText} style={{ textAlign: 'center', padding: '40px' }}>
+                        <div className={commonStyles.noteText}>
                             <MonitorIcon />
-                            <div>{t('active_lectures.no_lectures')}</div>
-                            <div style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>
-                                {t('active_lectures.no_lectures_hint')}
+                            <div className={commonStyles.noteText_text}>
+                                <div>{t('active_lectures.no_lectures')}</div>
+                                <div style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>
+                                    {t('active_lectures.no_lectures_hint')}
+                                </div>
                             </div>
                         </div>
                     ) : (
@@ -335,7 +337,7 @@ const ActiveLecturesPage = () => {
                                             marginBottom: '8px',
                                             display: 'inline-block'
                                         }}>
-                                            🔴 {getStatusText(lecture.status)}
+                                            🟢 {getStatusText(lecture.status)}
                                         </div>
 
                                         <div style={{

@@ -8,6 +8,13 @@ import { getHomeLabel, getHomePath, getRoleFromStorage } from '../../helpers/rol
 import { apiService } from '../../services/api';
 import type { Session, SessionData } from '../../services/api';
 
+// import jsPDF from 'jspdf';
+// import 'jspdf-autotable';
+
+
+import jsPDF from 'jspdf';
+import { registerFonts } from '../../utils/registerFont';
+
 interface Lecture {
     id: string;
     title: string;
@@ -33,6 +40,17 @@ interface ProcessedText {
     english_translation?: string;
     translation?: string;
 }
+
+// interface WebSocketMessage {
+//     language?: string;
+//     type: string;
+//     timestamp?: string;
+//     text?: string;
+//     processed_text?: string;
+//     translation?: string;
+//     message?: string;
+//     id?: string;
+// }
 
 interface WebSocketMessage {
     language?: string;
@@ -66,22 +84,7 @@ const LectureViewer = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
-    // const [originalText, setOriginalText] = useState('');
-
     const [originalText, setOriginalText] = useState('');
-    const [historyText, setHistoryText] = useState(''); // Отдельное состояние для истории
-
-    // type Translations = {
-    //     en: string;
-    //     fr: string;
-    //     zh: string;
-    // };
-
-    // const [translations, setTranslations] = useState<Translations>({
-    //     en: '',
-    //     fr: '',
-    //     zh: '',
-    // });
 
     type Translations = {
         en: string;
@@ -92,13 +95,7 @@ const LectureViewer = () => {
     const [translations, setTranslations] = useState<Translations>({
         en: '',
         fr: '',
-        zh: ''
-    });
-
-    const [historyTranslations, setHistoryTranslations] = useState<Translations>({
-        en: '',
-        fr: '',
-        zh: ''
+        zh: '',
     });
 
     // Состояние для реального времени
@@ -111,9 +108,6 @@ const LectureViewer = () => {
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const lastMessageIdRef = useRef<Set<string>>(new Set());
-
-    // В начале компонента добавьте новое состояние
-    const [historyLoaded, setHistoryLoaded] = useState(false);
 
     // Определяем, откуда пришел пользователь
     useEffect(() => {
@@ -206,32 +200,10 @@ const LectureViewer = () => {
         }
     }, [id, isLiveMode]);
 
-    const removeDuplicateParts = (prevText: string, newText: string) => {
-        if (!prevText) return newText;
-
-        const prevWords = prevText.split(/\s+/);
-        const newWords = newText.split(/\s+/);
-
-        // Ищем максимальное совпадение в конце предыдущего текста
-        let overlap = 0;
-        for (let i = 1; i <= Math.min(prevWords.length, newWords.length); i++) {
-            const prevEnd = prevWords.slice(-i).join(' ');
-            const newStart = newWords.slice(0, i).join(' ');
-            if (prevEnd === newStart) {
-                overlap = i;
-            }
-        }
-
-        return overlap > 0
-            ? prevText + ' ' + newWords.slice(overlap).join(' ')
-            : prevText + ' ' + newText;
-    };
-
     const handleWebSocketMessage = useCallback((data: WebSocketMessage) => {
         console.log('📨 Обработка WebSocket сообщения:', data.type, data);
 
-        // const messageKey = `${data.type}_${data.timestamp}_${(data.text || data.processed_text || data.translation || '').slice(0, 50)}`;
-        const messageKey = `${data.type}_${data.timestamp}_${(data.processed_text || data.translation || '').slice(0, 50)}`;
+        const messageKey = `${data.type}_${data.timestamp}_${(data.text || data.processed_text || data.translation || '').slice(0, 50)}`;
 
         if (lastMessageIdRef.current.has(messageKey)) {
             console.log('⚠️ Дубликат сообщения игнорирован:', messageKey);
@@ -239,51 +211,61 @@ const LectureViewer = () => {
         }
 
         lastMessageIdRef.current.add(messageKey);
+
+        if (lastMessageIdRef.current.size > 1000) {
+            const keysArray = Array.from(lastMessageIdRef.current);
+            lastMessageIdRef.current.clear();
+            keysArray.slice(-500).forEach(key => lastMessageIdRef.current.add(key));
+        }
+
         setLiveMessages(prev => [...prev, { ...data, id: messageKey }].slice(-50));
 
-        // Обработка текста
-        // if ((data.type === 'processed' && data.processed_text) ||
-        //     (data.type === 'transcription' && data.text)) {
         if (data.type === 'processed' && data.processed_text) {
-
-            // const newText = (data.processed_text || data.text || '')
-            const newText = (data.processed_text || '')
-                .replace(/\[.*?\]/g, '')
-                .trim();
-
+            // const newText = data.processed_text.trim();
+            const newText = data.processed_text.replace(/\[.*?\]/g, '').trim();
             if (newText) {
-                setOriginalText(prev => {
-                    if (!prev) return newText;
-
-                    const prevWords = prev.split(/\s+/);
-                    const newWords = newText.split(/\s+/);
-
-                    // Ищем совпадение в конце предыдущего текста
-                    let overlap = 0;
-                    for (let i = 1; i <= Math.min(prevWords.length, newWords.length); i++) {
-                        const prevEnd = prevWords.slice(-i).join(' ');
-                        const newStart = newWords.slice(0, i).join(' ');
-                        if (prevEnd === newStart) overlap = i;
+                setProcessedTexts(prev => {
+                    if (!prev.includes(newText)) {
+                        const updated = [...prev, newText];
+                        setOriginalText(updated.join(' '));
+                        return updated;
                     }
-
-                    return overlap > 0
-                        ? `${prev} ${newWords.slice(overlap).join(' ')}`
-                        : `${prev} ${newText}`;
+                    return prev;
                 });
             }
         }
 
-        // Обработка переводов
+        // Обработка переведенных сообщений
         if (data.translation) {
-            const lang = data.type === 'translated_french' ? 'fr' :
-                data.type === 'translated_chinese' ? 'zh' : 'en';
+            // const newTranslation = data.translation.trim();
+            const newTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+            if (newTranslation) {
+                setTranslations(prev => {
+                    // Определяем язык перевода
+                    let lang: keyof Translations = 'en'; // по умолчанию
 
-            const cleanTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+                    // Обрабатываем только определенные типы сообщений
+                    if (data.type === 'translated_french') {
+                        lang = 'fr';
+                    } else if (data.type === 'translated_chinese') {
+                        lang = 'zh';
+                    } else if (data.type === 'translated_english') {
+                        lang = 'en';
+                    } else {
+                        // Игнорируем другие типы сообщений с переводами
+                        return prev;
+                    }
 
-            setTranslations(prev => ({
-                ...prev,
-                [lang]: removeDuplicateParts(prev[lang], cleanTranslation)
-            }));
+                    // Проверяем, не добавляли ли мы уже этот перевод
+                    if (!prev[lang].includes(newTranslation)) {
+                        return {
+                            ...prev,
+                            [lang]: (prev[lang] ? prev[lang] + ' ' : '') + newTranslation
+                        };
+                    }
+                    return prev;
+                });
+            }
         }
 
         if (data.type === 'error') {
@@ -311,7 +293,7 @@ const LectureViewer = () => {
         }
     }, [isLiveMode, connectWebSocket]);
 
-    const loadLectureData = useCallback(async () => {
+    const loadLectureData = async () => {
         if (!id) {
             setError('ID лекции не указан');
             setIsLoading(false);
@@ -322,67 +304,21 @@ const LectureViewer = () => {
             setError('');
             setIsLoading(true);
 
-            const combineTexts = (texts: string[] | undefined) => {
-                if (!texts) return '';
-                return texts
-                    .filter(t => t && t.trim() !== '' && t.trim() !== '[ ]')
-                    .map(t => t.trim().replace(/\[.*?\]/g, ''))  // Добавляем замену скобок
-                    .join(' ');
-            };
-
-            // 1. Загружаем историю (даже если она пустая)
-            let historyData: SessionData | null = null;
-            try {
-                historyData = await apiService.getSessionHistory(id);
-                console.log('История загружена:', historyData);
-
-                // Обрабатываем историю отдельно
-                const historyText = combineTexts(historyData?.transcripts);
-                setHistoryText(historyText);
-                setOriginalText(historyText); // Инициализируем originalText историей
-
-                // перевод
-                setHistoryTranslations({
-                    en: combineTexts(historyData?.translations_multi?.en),
-                    fr: combineTexts(historyData?.translations_multi?.fr),
-                    zh: combineTexts(historyData?.translations_multi?.zh)
-                });
-
-                // Инициализируем текущие переводы историей
-                setTranslations({
-                    en: combineTexts(historyData?.translations_multi?.en),
-                    fr: combineTexts(historyData?.translations_multi?.fr),
-                    zh: combineTexts(historyData?.translations_multi?.zh)
-                });
-            } catch (historyError) {
-                console.warn('Не удалось загрузить историю:', historyError);
-                setHistoryText(''); // Явно устанавливаем пустую историю
-            }
-
-            // 2. Загружаем текущее состояние сессии
             const sessionInfo = await apiService.getSession(id);
             if (!sessionInfo) {
                 setError('Сессия не найдена');
                 setIsLoading(false);
                 return;
             }
-            if (sessionInfo?.translations_multi) {
-                setTranslations(prev => ({
-                    en: prev.en + ' ' + combineTexts(sessionInfo.translations_multi?.en),
-                    fr: prev.fr + ' ' + combineTexts(sessionInfo.translations_multi?.fr),
-                    zh: prev.zh + ' ' + combineTexts(sessionInfo.translations_multi?.zh)
-                }));
-            }
 
-            // Добавляем текущие данные к истории (если есть)
-            const currentText = combineTexts(sessionInfo.transcripts);
-            if (currentText) {
-                setOriginalText(prev =>
-                    prev ? `${prev} ${currentText}` : currentText
-                );
-            }
+            // const originalText = sessionInfo.transcripts?.join(' ') || '';
+            const originalText = (sessionInfo.transcripts?.join(' ') || '').replace(/\[.*?\]/g, '');
+            const translations = {
+                en: (sessionInfo.translations_multi?.en?.join(' ') || '').replace(/\[.*?\]/g, ''),
+                fr: (sessionInfo.translations_multi?.fr?.join(' ') || '').replace(/\[.*?\]/g, ''),
+                zh: (sessionInfo.translations_multi?.zh?.join(' ') || '').replace(/\[.*?\]/g, ''),
+            };
 
-            // Обновляем остальные данные лекции
             const lectureData = {
                 id: id,
                 title: sessionInfo.title || `Лекция ${id.slice(0, 8)}`,
@@ -399,15 +335,17 @@ const LectureViewer = () => {
             };
 
             setLecture(lectureData);
+            setOriginalText(originalText);
+            setTranslations(translations);
             setSessionData(sessionInfo);
 
         } catch (err) {
-            console.error('Ошибка загрузки:', err);
+            console.error('❌ Ошибка загрузки лекции:', err);
             setError(`Ошибка загрузки`);
         } finally {
             setIsLoading(false);
         }
-    }, [id]);
+    };
 
     // Расчет длительности
     const calculateDuration = (startTime?: string, endTime?: string): string => {
@@ -445,9 +383,10 @@ const LectureViewer = () => {
         }
     };
 
+    // Загрузка данных при монтировании
     useEffect(() => {
         loadLectureData();
-    }, [loadLectureData]); // Теперь loadLectureData мемоизирована и стабильна
+    }, [id]);
 
     // Функция для формирования хлебных крошек
     const getBreadcrumbs = () => {
@@ -517,7 +456,6 @@ const LectureViewer = () => {
         }
     };
 
-    // Экспорт лекции в pdf, поддерживаются все языки
     const exportLectureAsPDF = async (
         lecture: { title: string; lecturer: string; start: string; duration: string },
         originalText: string,
@@ -682,8 +620,6 @@ const LectureViewer = () => {
         }
     };
 
-
-
     if (error && !lecture) {
         return (
             <div className={commonStyles.appContainer}>
@@ -749,7 +685,7 @@ const LectureViewer = () => {
                                     backgroundColor: wsConnected ? '#16a34a' : '#eab308',
                                     animation: wsConnected ? 'pulse 2s infinite' : 'none'
                                 }}></span>
-                                {wsConnected ? '🟢 LIVE' : ' Подключение...'}
+                                {wsConnected ? '🔴 LIVE' : ' Подключение...'}
                                 {liveMessages.length > 0 && (
                                     <span style={{ fontSize: '12px', opacity: '0.8' }}>
                                         • {liveMessages.length} сообщений
@@ -804,9 +740,9 @@ const LectureViewer = () => {
                         <div className={commonStyles.statusItem}>
                             <span>{t('lecture_viewer.status')}:</span>
                             <span>
-                                {fromArchive ? `${t('lecture_viewer.status_title.archive_lecture')}` :
-                                    isLiveMode ? (wsConnected ? `${t('lecture_viewer.status_title.active_lecture')}` : `${t('lecture_viewer.status_title.active_connect')}`) :
-                                        `${t('lecture_viewer.status_title.active')}`}
+                                {fromArchive ? 'Архивная лекция' :
+                                    isLiveMode ? (wsConnected ? '🔴 Активная лекция (LIVE подключен)' : ' Активная лекция (подключение...)') :
+                                        '🔴 Активная лекция'}
                             </span>
                         </div>
                     </div>
@@ -839,7 +775,7 @@ const LectureViewer = () => {
                             >
                                 {t('export')}
                             </button>
-                            {/* {isLiveMode && (
+                            {isLiveMode && (
                                 <button
                                     className={commonStyles.textButton}
                                     onClick={() => loadLectureData()}
@@ -855,7 +791,7 @@ const LectureViewer = () => {
                                 >
                                     {wsConnected ? `${t('refresh_ws.ok')}` : `${t('refresh_ws.err')}`}
                                 </button>
-                            )} */}
+                            )}
                         </div>
                     </div>
                 </div>
@@ -871,31 +807,23 @@ const LectureViewer = () => {
                                     marginTop: '4px',
                                     fontWeight: '500'
                                 }}>
-                                    {wsConnected ? `${t('lecture_viewer.ws_connected.ok')}` : `${t('lecture_viewer.ws_connected.err')}`}
+                                    {wsConnected ? 'Обновляется в реальном времени' : 'Ожидание подключения...'}
                                 </div>
                             )}
                         </div>
 
                         <div className={commonStyles.ItemLecture}>
                             <div className={commonStyles.LectureFullText}>
-                                {/* Показываем историю (даже если пустую) */}
-                                {historyText !== undefined && (
-                                    <div className="history-text">
-                                        {historyText || 'История трансляции отсутствует'}
-                                    </div>
-                                )}
-
-                                {/* Показываем живой текст (если есть) */}
-                                {originalText !== historyText && (
-                                    <div className="live-text">
-                                        {originalText.replace(historyText, '').trim()}
-                                    </div>
-                                )}
-
-                                {/* Сообщение если вообще нет текста */}
-                                {!historyText && !originalText && (
-                                    <div className="no-text-message">
-                                        Текст пока недоступен
+                                {originalText || 'Исходный текст не найден. Возможно, лекция ещё не была обработана или ID сессии неверен.'}
+                                {isLiveMode && wsConnected && !originalText && (
+                                    <div style={{
+                                        color: '#16a34a',
+                                        fontStyle: 'italic',
+                                        textAlign: 'center',
+                                        padding: '20px'
+                                    }}>
+                                        🔴 LIVE режим активен<br />
+                                        Ожидание текста лекции...
                                     </div>
                                 )}
                             </div>
@@ -911,36 +839,28 @@ const LectureViewer = () => {
                                 marginTop: '4px',
                                 fontWeight: '500'
                             }}>
-                                {wsConnected ? `${t('lecture_viewer.ws_connected.ok')}` : `${t('lecture_viewer.ws_connected.err')}`}
+                                {wsConnected ? 'Обновляется в реальном времени' : 'Ожидание подключения...'}
                             </div>
                         )}
 
                         <div className={commonStyles.ItemLecture}>
                             <div className={commonStyles.LectureFullText}>
-                                {/* История перевода */}
-                                {historyTranslations[language] && (
-                                    <div className="history-translation">
-                                        {historyTranslations[language]}
-                                    </div>
-                                )}
-
-                                {/* Live перевод */}
-                                {translations[language] !== historyTranslations[language] && (
-                                    <div className="live-translation">
-                                        {translations[language].replace(historyTranslations[language], '').trim()}
-                                    </div>
-                                )}
-
-                                {/* Нет перевода */}
-                                {!historyTranslations[language] && !translations[language] && (
-                                    <div className="no-translation">
-                                        {language === 'en' ? 'Translation not available yet' :
-                                            language === 'fr' ? 'Traduction non disponible' :
-                                                '翻译不可用'}
+                                {translations[language] ||
+                                    (language === 'en' ? 'Translation not available yet' :
+                                        language === 'fr' ? 'Traduction non disponible' :
+                                            '翻译不可用')}
+                                {isLiveMode && wsConnected && !translations[language] && (
+                                    <div style={{
+                                        color: '#16a34a',
+                                        fontStyle: 'italic',
+                                        textAlign: 'center',
+                                        padding: '20px'
+                                    }}>
+                                        🔴 LIVE режим активен<br />
+                                        Ожидание переводов...
                                     </div>
                                 )}
                             </div>
-
                             <div className={commonStyles.ItemLectureButtons}>
                                 <button
                                     className={commonStyles.textButton}

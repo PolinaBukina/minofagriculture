@@ -1412,6 +1412,121 @@ export const apiService = {
         }
     },
 
+    // В apiService добавьте этот метод
+    // async getSessionHistory(sessionId: string): Promise<SessionData> {
+    //     try {
+    //         const response = await api.get(`/sessions/${sessionId}/history`);
+    //         const data = response.data;
+
+    //         console.log('ответ', response)
+
+    //         const processedTexts = data.processed_texts || [];
+    //         const transcriptions = data.transcriptions || [];
+
+    //         return {
+    //             id: data.session?._id || sessionId,
+    //             session_id: data.session?.session_id || sessionId,
+    //             name: data.session?.session_id || sessionId,
+    //             title: data.session?.lecture_title || `Лекция ${sessionId.split('_')[1]?.substring(0, 8) || 'Unknown'}`,
+    //             lecturer: data.session?.lecturer_name || 'Неизвестный лектор',
+    //             start_time: data.session?.start_time || new Date().toISOString(),
+    //             end_time: data.session?.end_time,
+    //             location: data.session?.location || 'Не указано',
+    //             status: data.session?.status || 'unknown',
+    //             participants: 1,
+    //             audio_duration: data.session?.duration_minutes,
+    //             transcripts: processedTexts.map((t: any) => t.processed_text || t.text) || [],
+    //             translations: processedTexts.map((p: any) => p.english_translation) || [],
+    //             translations_multi: {
+    //                 en: processedTexts.map((p: any) => p.english_translation).filter(Boolean) || [],
+    //                 fr: processedTexts.map((p: any) => p.french_translation).filter(Boolean) || [],
+    //                 zh: processedTexts.map((p: any) => p.chinese_translation).filter(Boolean) || []
+    //             },
+    //             total_transcriptions: data.total_transcriptions || 0,
+    //             total_processed: data.total_processed || 0
+    //         };
+    //     } catch (error) {
+    //         console.error('❌ getSessionHistory error:', error);
+    //         throw new Error(`Get session history failed: ${(error as Error).message}`);
+    //     }
+    // },
+
+    // async getSessionHistory(sessionId: string): Promise<SessionData> {
+    //     try {
+    //         const response = await api.get(`/sessions/${sessionId}/history`);
+    //         const data = response.data;
+
+    //         console.log('История лекции:', data); // Логируем полный ответ
+
+    //         return {
+    //             id: data.id || data.session_id || sessionId,
+    //             session_id: data.session_id || sessionId,
+    //             name: data.name || data.session_id || sessionId,
+    //             title: data.title || data.session?.lecture_title || `Лекция ${sessionId.split('_')[1]?.substring(0, 8) || 'Unknown'}`,
+    //             lecturer: data.lecturer || data.session?.lecturer_name || 'Неизвестный лектор',
+    //             start_time: data.start_time || data.session?.start_time || new Date().toISOString(),
+    //             end_time: data.end_time || data.session?.end_time,
+    //             location: data.location || data.session?.location || 'Не указано',
+    //             status: data.status || data.session?.status || 'unknown',
+    //             participants: data.participants || 1,
+    //             audio_duration: data.audio_duration || data.session?.duration_minutes,
+    //             transcripts: data.transcripts || [],
+    //             translations: data.translations || [],
+    //             translations_multi: data.translations_multi || {
+    //                 en: [],
+    //                 fr: [],
+    //                 zh: []
+    //             },
+    //             total_transcriptions: data.total_transcriptions || 0,
+    //             total_processed: data.total_processed || 0
+    //         };
+    //     } catch (error) {
+    //         console.error('❌ Ошибка получения истории лекции:', error);
+    //         throw new Error(`Не удалось загрузить историю лекции: ${(error as Error).message}`);
+    //     }
+    // },
+
+
+    async getSessionHistory(sessionId: string): Promise<SessionData> {
+        try {
+            const response = await api.get(`/sessions/${sessionId}/history`);
+            const data = response.data;
+
+            console.log('Полный ответ истории:', data); // Для отладки
+
+            // Извлекаем данные из структуры ответа
+            const session = data.session || {};
+            const transcriptions = data.transcriptions || [];
+            const processedTexts = data.processed_texts || [];
+
+            return {
+                id: session.session_id || sessionId,
+                session_id: session.session_id || sessionId,
+                name: session.session_id || sessionId,
+                title: session.lecture_title || `Лекция ${sessionId.split('_')[1]?.substring(0, 8) || 'Unknown'}`,
+                lecturer: session.lecturer_name || 'Неизвестный лектор',
+                start_time: session.start_time || new Date().toISOString(),
+                end_time: session.end_time,
+                location: session.location || 'Не указано',
+                status: session.status || 'unknown',
+                participants: 1,
+                audio_duration: session.duration_minutes,
+                transcripts: processedTexts.map((t: any) => t.processed_text || t.text).filter(Boolean) || [],
+                translations: processedTexts.map((p: any) => p.english_translation).filter(Boolean) || [],
+                translations_multi: {
+                    en: processedTexts.map((p: any) => p.english_translation).filter(Boolean) || [],
+                    fr: processedTexts.map((p: any) => p.french_translation).filter(Boolean) || [],
+                    zh: processedTexts.map((p: any) => p.chinese_translation).filter(Boolean) || []
+                },
+                total_transcriptions: data.total_transcriptions || 0,
+                total_processed: data.total_processed || 0
+            };
+        } catch (error) {
+            console.error('❌ Ошибка получения истории лекции:', error);
+            throw new Error(`Не удалось загрузить историю лекции: ${(error as Error).message}`);
+        }
+    },
+
     // 🆕 НОВЫЕ МЕТОДЫ ДЛЯ ПОЛУЧЕНИЯ КОНКРЕТНЫХ ПЕРЕВОДОВ
     async getSessionTranslationsMulti(sessionId: string): Promise<{ en: string[], fr: string[], zh: string[] }> {
         try {
