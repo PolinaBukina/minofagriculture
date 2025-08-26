@@ -66,22 +66,15 @@ const LectureViewer = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     const [sessionData, setSessionData] = useState<SessionData | null>(null);
-    // const [originalText, setOriginalText] = useState('');
+    // При добовлении нового текста прокрутка вниз
+    const originalTextContainerRef = useRef<HTMLDivElement>(null);
+    const translatedTextContainerRef = useRef<HTMLDivElement>(null);
+    // В начале компонента добавьте новое состояние
+    const [historyLoaded, setHistoryLoaded] = useState(false);
+    const [isUserScrolled, setIsUserScrolled] = useState(false);
 
     const [originalText, setOriginalText] = useState('');
     const [historyText, setHistoryText] = useState(''); // Отдельное состояние для истории
-
-    // type Translations = {
-    //     en: string;
-    //     fr: string;
-    //     zh: string;
-    // };
-
-    // const [translations, setTranslations] = useState<Translations>({
-    //     en: '',
-    //     fr: '',
-    //     zh: '',
-    // });
 
     type Translations = {
         en: string;
@@ -111,9 +104,6 @@ const LectureViewer = () => {
     const wsRef = useRef<WebSocket | null>(null);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const lastMessageIdRef = useRef<Set<string>>(new Set());
-
-    // В начале компонента добавьте новое состояние
-    const [historyLoaded, setHistoryLoaded] = useState(false);
 
     // Определяем, откуда пришел пользователь
     useEffect(() => {
@@ -354,9 +344,13 @@ const LectureViewer = () => {
                     fr: combineTexts(historyData?.translations_multi?.fr),
                     zh: combineTexts(historyData?.translations_multi?.zh)
                 });
+
+                setHistoryLoaded(true);
+
             } catch (historyError) {
                 console.warn('Не удалось загрузить историю:', historyError);
                 setHistoryText(''); // Явно устанавливаем пустую историю
+                setHistoryLoaded(true);
             }
 
             // 2. Загружаем текущее состояние сессии
@@ -517,7 +511,170 @@ const LectureViewer = () => {
         }
     };
 
-    // Экспорт лекции в pdf, поддерживаются все языки
+    // // Экспорт лекции в pdf, поддерживаются все языки
+    // const exportLectureAsPDF = async (
+    //     lecture: { title: string; lecturer: string; start: string; duration: string },
+    //     originalText: string,
+    //     translations: Record<string, string>,
+    //     language: string,
+    //     id: string
+    // ) => {
+    //     try {
+    //         // Динамический импорт jsPDF с обработкой ошибок
+    //         const { jsPDF } = await import('jspdf');
+
+    //         // Инициализация PDF
+    //         const doc = new jsPDF({
+    //             orientation: 'p',
+    //             unit: 'mm',
+    //             format: 'a4'
+    //         });
+
+    //         // 1. Функция для правильной регистрации шрифта
+    //         const registerFont = async (fontName: string, fontPath: string) => {
+    //             try {
+    //                 const response = await fetch(fontPath);
+    //                 if (!response.ok) throw new Error(`Font load failed: ${response.status}`);
+
+    //                 const fontData = await response.arrayBuffer();
+    //                 const fontString = Array.from(new Uint8Array(fontData))
+    //                     .map(byte => String.fromCharCode(byte))
+    //                     .join('');
+
+    //                 // Добавляем суффикс к имени файла для совместимости
+    //                 const vfsName = `${fontName}-regular.ttf`;
+    //                 doc.addFileToVFS(vfsName, fontString);
+    //                 doc.addFont(vfsName, fontName, 'normal');
+
+    //                 return true;
+    //             } catch (e) {
+    //                 console.error(`Error loading font ${fontName}:`, e);
+    //                 return false;
+    //             }
+    //         };
+
+    //         // 2. Загрузка шрифтов
+    //         const robotoLoaded = await registerFont('Roboto', '/fonts/Roboto-Regular.ttf');
+
+    //         // Загружаем китайский шрифт только если нужен
+    //         let notoSansLoaded = false;
+    //         if (language === 'zh') {
+    //             notoSansLoaded = await registerFont('NotoSansSC', '/fonts/NotoSansSC-Regular.ttf');
+
+    //             // Альтернативный вариант из CDN если локальный не загрузился
+    //             if (!notoSansLoaded) {
+    //                 console.log('Trying to load NotoSansSC from CDN...');
+    //                 notoSansLoaded = await registerFont(
+    //                     'NotoSansSC',
+    //                     'https://cdn.jsdelivr.net/npm/noto-sans-sc@1.0.0/fonts/NotoSansSC-Regular.otf'
+    //                 );
+    //             }
+    //         }
+
+    //         // Установка шрифта по умолчанию
+    //         if (robotoLoaded) {
+    //             doc.setFont('Roboto', 'normal');
+    //         } else {
+    //             console.warn('Using default font as Roboto failed to load');
+    //         }
+
+    //         // 3. Создание содержимого PDF
+    //         let y = 20;
+
+    //         // Заголовок
+    //         doc.setFontSize(16);
+    //         doc.text(`Лекция: ${lecture.title}`, 15, y);
+    //         y += 10;
+
+    //         // Метаданные
+    //         doc.setFontSize(12);
+    //         doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Дата: ${lecture.start}`, 15, y);
+    //         y += 7;
+    //         doc.text(`Длительность: ${lecture.duration}`, 15, y);
+    //         y += 15;
+
+    //         // Исходный текст
+    //         doc.setFontSize(14);
+    //         doc.text('Исходный текст:', 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const originalLines = doc.splitTextToSize(originalText, 180);
+    //         doc.text(originalLines, 15, y);
+    //         y += originalLines.length * 7 + 10;
+
+    //         // Перевод
+    //         doc.setFontSize(14);
+    //         doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
+    //         y += 10;
+
+    //         doc.setFontSize(11);
+    //         const translatedText = translations[language] || 'Перевод недоступен';
+
+    //         // Специальная обработка для китайского
+    //         if (language === 'zh' && notoSansLoaded) {
+    //             try {
+    //                 doc.setFont('NotoSansSC', 'normal');
+    //                 console.log('Chinese font set successfully');
+    //             } catch (e) {
+    //                 console.warn('Failed to set Chinese font:', e);
+    //             }
+    //         }
+
+    //         try {
+    //             const translatedLines = doc.splitTextToSize(translatedText, 180);
+    //             doc.text(translatedLines, 15, y);
+    //             y += translatedLines.length * 7 + 10;
+    //         } catch (e) {
+    //             console.error('Error rendering translated text:', e);
+    //             doc.text(['[Translation rendering error]'], 15, y);
+    //             y += 20;
+    //         }
+
+    //         // Возвращаем основной шрифт
+    //         if (robotoLoaded) doc.setFont('Roboto', 'normal');
+
+    //         // Футер
+    //         doc.setFontSize(10);
+    //         doc.text(`ID сессии: ${id}`, 15, y);
+
+    //         // 3. Генерация имени файла
+    //         const transliterateLecturer = (name: string) => {
+    //             const cyrillicToLatin: Record<string, string> = {
+    //                 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+    //                 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+    //                 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
+    //                 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+    //                 'я': 'ya',
+    //                 'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+    //                 'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+    //                 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
+    //                 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+    //                 'Я': 'Ya'
+    //             };
+    //             return name.split('').map(char => cyrillicToLatin[char] || char).join('');
+    //         };
+
+    //         const latinLecturer = transliterateLecturer(lecture.lecturer);
+    //         const [datePart] = lecture.start.split(',');
+    //         const [day, month, year] = datePart.trim().split('.');
+    //         const filename = `lecture_${latinLecturer}_${day}-${month}-${year}_${id}.pdf`;
+
+    //         // 4. Сохранение PDF
+    //         doc.save(filename);
+
+    //     } catch (error) {
+    //         console.error('Export failed:', error);
+    //         alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
+
+    //         // Дополнительная диагностика
+    //         if (error instanceof Error && error.message.includes('Unicode')) {
+    //             console.error('Unicode error detected - possible font registration issue');
+    //         }
+    //     }
+    // };
     const exportLectureAsPDF = async (
         lecture: { title: string; lecturer: string; start: string; duration: string },
         originalText: string,
@@ -526,32 +683,26 @@ const LectureViewer = () => {
         id: string
     ) => {
         try {
-            // Динамический импорт jsPDF с обработкой ошибок
             const { jsPDF } = await import('jspdf');
 
-            // Инициализация PDF
             const doc = new jsPDF({
                 orientation: 'p',
                 unit: 'mm',
                 format: 'a4'
             });
 
-            // 1. Функция для правильной регистрации шрифта
+            // Упрощенная регистрация шрифтов (оставляем как было)
             const registerFont = async (fontName: string, fontPath: string) => {
                 try {
                     const response = await fetch(fontPath);
                     if (!response.ok) throw new Error(`Font load failed: ${response.status}`);
-
                     const fontData = await response.arrayBuffer();
                     const fontString = Array.from(new Uint8Array(fontData))
                         .map(byte => String.fromCharCode(byte))
                         .join('');
-
-                    // Добавляем суффикс к имени файла для совместимости
                     const vfsName = `${fontName}-regular.ttf`;
                     doc.addFileToVFS(vfsName, fontString);
                     doc.addFont(vfsName, fontName, 'normal');
-
                     return true;
                 } catch (e) {
                     console.error(`Error loading font ${fontName}:`, e);
@@ -559,128 +710,152 @@ const LectureViewer = () => {
                 }
             };
 
-            // 2. Загрузка шрифтов
             const robotoLoaded = await registerFont('Roboto', '/fonts/Roboto-Regular.ttf');
+            if (robotoLoaded) doc.setFont('Roboto', 'normal');
 
-            // Загружаем китайский шрифт только если нужен
             let notoSansLoaded = false;
             if (language === 'zh') {
                 notoSansLoaded = await registerFont('NotoSansSC', '/fonts/NotoSansSC-Regular.ttf');
-
-                // Альтернативный вариант из CDN если локальный не загрузился
-                if (!notoSansLoaded) {
-                    console.log('Trying to load NotoSansSC from CDN...');
-                    notoSansLoaded = await registerFont(
-                        'NotoSansSC',
-                        'https://cdn.jsdelivr.net/npm/noto-sans-sc@1.0.0/fonts/NotoSansSC-Regular.otf'
-                    );
-                }
             }
 
-            // Установка шрифта по умолчанию
-            if (robotoLoaded) {
-                doc.setFont('Roboto', 'normal');
-            } else {
-                console.warn('Using default font as Roboto failed to load');
-            }
-
-            // 3. Создание содержимого PDF
+            // Основные параметры
+            const margin = 15;
+            const pageHeight = 297; // A4 height in mm
             let y = 20;
+            const lineHeight = 5; // Уменьшенный межстрочный интервал
 
-            // Заголовок
+            // Функция для добавления текста с автоматическим переносом страниц
+            const addTextWithPageBreak = (text: string, fontSize: number, isBold = false) => {
+                doc.setFontSize(fontSize);
+                if (isBold) doc.setFont(robotoLoaded ? 'Roboto' : 'helvetica', 'bold');
+
+                const lines = doc.splitTextToSize(text, 180);
+                const textHeight = lines.length * lineHeight;
+
+                // Проверяем, помещается ли текст на текущей странице
+                if (y + textHeight > pageHeight - margin) {
+                    doc.addPage();
+                    y = margin;
+                }
+
+                doc.text(lines, margin, y);
+                y += textHeight + 2; // Маленький отступ после текста
+            };
+
+            // Заголовок и метаданные
             doc.setFontSize(16);
-            doc.text(`Лекция: ${lecture.title}`, 15, y);
+            doc.text(`Лекция: ${lecture.title}`, margin, y);
             y += 10;
 
-            // Метаданные
             doc.setFontSize(12);
-            doc.text(`Лектор: ${lecture.lecturer}`, 15, y);
-            y += 7;
-            doc.text(`Дата: ${lecture.start}`, 15, y);
-            y += 7;
-            doc.text(`Длительность: ${lecture.duration}`, 15, y);
-            y += 15;
+            doc.text(`Лектор: ${lecture.lecturer}`, margin, y);
+            y += 6;
+            doc.text(`Дата: ${lecture.start}`, margin, y);
+            y += 6;
+            doc.text(`Длительность 111: ${lecture.duration}`, margin, y);
+            y += 12;
 
             // Исходный текст
-            doc.setFontSize(14);
-            doc.text('Исходный текст:', 15, y);
-            y += 10;
+            doc.setFontSize(13);
+            doc.text('Исходный текст:', margin, y);
+            y += 6; // Минимальный отступ
 
-            doc.setFontSize(11);
-            const originalLines = doc.splitTextToSize(originalText, 180);
-            doc.text(originalLines, 15, y);
-            y += originalLines.length * 7 + 10;
+            addTextWithPageBreak(originalText, 10);
+            y += 4; // Очень маленький отступ после оригинала
 
             // Перевод
-            doc.setFontSize(14);
-            doc.text(`Перевод (${language.toUpperCase()}):`, 15, y);
-            y += 10;
+            doc.setFontSize(13);
+            // Проверяем, нужно ли добавить новую страницу для заголовка перевода
+            if (y + 10 > pageHeight - margin) {
+                doc.addPage();
+                y = margin;
+            }
+            doc.text(`Перевод (${language.toUpperCase()}):`, margin, y);
+            y += 6; // Минимальный отступ
 
-            doc.setFontSize(11);
             const translatedText = translations[language] || 'Перевод недоступен';
 
-            // Специальная обработка для китайского
+            // Устанавливаем специальный шрифт для китайского если нужно
             if (language === 'zh' && notoSansLoaded) {
-                try {
-                    doc.setFont('NotoSansSC', 'normal');
-                    console.log('Chinese font set successfully');
-                } catch (e) {
-                    console.warn('Failed to set Chinese font:', e);
-                }
+                doc.setFont('NotoSansSC', 'normal');
             }
 
-            try {
-                const translatedLines = doc.splitTextToSize(translatedText, 180);
-                doc.text(translatedLines, 15, y);
-                y += translatedLines.length * 7 + 10;
-            } catch (e) {
-                console.error('Error rendering translated text:', e);
-                doc.text(['[Translation rendering error]'], 15, y);
-                y += 20;
-            }
+            addTextWithPageBreak(translatedText, 10);
 
             // Возвращаем основной шрифт
             if (robotoLoaded) doc.setFont('Roboto', 'normal');
 
-            // Футер
-            doc.setFontSize(10);
-            doc.text(`ID сессии: ${id}`, 15, y);
+            // Футер на последней странице
+            doc.setFontSize(9);
+            doc.text(`ID сессии: ${id}`, margin, pageHeight - 10);
 
-            // 3. Генерация имени файла
-            const transliterateLecturer = (name: string) => {
-                const cyrillicToLatin: Record<string, string> = {
-                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
-                    'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
-                    'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts',
-                    'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
-                    'я': 'ya',
-                    'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
-                    'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
-                    'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts',
-                    'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Sch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
-                    'Я': 'Ya'
-                };
-                return name.split('').map(char => cyrillicToLatin[char] || char).join('');
-            };
+            // Генерация имени файла
+            const filename = `lecture_${lecture.lecturer.replace(/\s+/g, '_')}_${id.slice(-8)}.pdf`;
 
-            const latinLecturer = transliterateLecturer(lecture.lecturer);
-            const [datePart] = lecture.start.split(',');
-            const [day, month, year] = datePart.trim().split('.');
-            const filename = `lecture_${latinLecturer}_${day}-${month}-${year}_${id}.pdf`;
-
-            // 4. Сохранение PDF
             doc.save(filename);
 
         } catch (error) {
             console.error('Export failed:', error);
             alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
-
-            // Дополнительная диагностика
-            if (error instanceof Error && error.message.includes('Unicode')) {
-                console.error('Unicode error detected - possible font registration issue');
-            }
         }
     };
+    
+    // // Эффект для автоматической прокрутки
+    // // Эффект для оригинального текста
+    // Эффект для автоматической прокрутки оригинального текста
+    // Эффект для автоматической прокрутки оригинального текста
+    useEffect(() => {
+        const container = originalTextContainerRef.current;
+        if (!container || isUserScrolled) return; // Не прокручиваем, если пользователь уже сделал это
+
+        if (originalText !== historyText || !historyLoaded) {
+            setTimeout(() => {
+                // Проверяем еще раз, не прокрутил ли пользователь за время таймаута
+                if (!isUserScrolled) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 100);
+        }
+    }, [originalText, historyText, historyLoaded, isUserScrolled]); // Добавили isUserScrolled в зависимости
+
+    // Эффект для автоматической прокрутки переведенного текста
+    useEffect(() => {
+        const container = translatedTextContainerRef.current;
+        if (!container || isUserScrolled || !historyLoaded) return; // Добавили проверку !historyLoaded
+
+        if (translations[language]) {
+            setTimeout(() => {
+                if (!isUserScrolled) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 100);
+        }
+    }, [translations, language, isUserScrolled, historyLoaded]); // Добавили historyLoaded в зависимости
+
+    // Обработчик события прокрутки пользователя
+    useEffect(() => {
+        const originalContainer = originalTextContainerRef.current;
+        const translatedContainer = translatedTextContainerRef.current;
+
+        const handleScroll = () => {
+            // Если пользователь прокручивает вручную, устанавливаем флаг
+            // Можно добавить небольшую погрешность (e.g., 10px), чтобы не считать за пользовательское действие небольшие расхождения
+            if (originalContainer) {
+                const isAtBottom = originalContainer.scrollHeight - originalContainer.scrollTop <= originalContainer.clientHeight + 10;
+                setIsUserScrolled(!isAtBottom);
+            }
+        };
+
+        originalContainer?.addEventListener('scroll', handleScroll);
+        translatedContainer?.addEventListener('scroll', handleScroll); // Следим за прокруткой в обоих контейнерах
+
+        return () => {
+            originalContainer?.removeEventListener('scroll', handleScroll);
+            translatedContainer?.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+
 
 
 
@@ -877,7 +1052,10 @@ const LectureViewer = () => {
                         </div>
 
                         <div className={commonStyles.ItemLecture}>
-                            <div className={commonStyles.LectureFullText}>
+                            <div
+                                ref={originalTextContainerRef}
+                                className={commonStyles.LectureFullText}
+                            >
                                 {/* Показываем историю (даже если пустую) */}
                                 {historyText !== undefined && (
                                     <div className="history-text">
@@ -916,7 +1094,10 @@ const LectureViewer = () => {
                         )}
 
                         <div className={commonStyles.ItemLecture}>
-                            <div className={commonStyles.LectureFullText}>
+                            <div
+                                ref={translatedTextContainerRef}
+                                className={commonStyles.LectureFullText}
+                            >
                                 {/* История перевода */}
                                 {historyTranslations[language] && (
                                     <div className="history-translation">

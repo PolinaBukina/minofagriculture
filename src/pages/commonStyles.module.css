@@ -923,19 +923,17 @@
 }
 
 .LectureFullText {
+    display: block;
     width: 75%;
     height: 250px;
     overflow-y: auto;
-    /* Добавляет вертикальную прокрутку при необходимости */
     padding: 15px;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     background-color: #f9f9f9;
     line-height: 1.5;
     white-space: pre-wrap;
-    /* Сохраняет переносы строк и форматирование */
     word-wrap: break-word;
-    /* Переносит длинные слова */
     font-family: inherit;
     margin: 10px 0;
 }

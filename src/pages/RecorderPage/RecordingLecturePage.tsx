@@ -86,6 +86,13 @@ const RecordingLecturePage = () => {
     const webSocketRef = useRef<AudioWebSocket | null>(null);
     const isRecordingRef = useRef(false);
 
+    // Автоматическая прокрутка добавляемого текста
+    const originalTextContainerRef = useRef<HTMLDivElement>(null);
+    const translatedTextContainerRef = useRef<HTMLDivElement>(null);
+    const [historyLoaded, setHistoryLoaded] = useState(false);
+    // Состояние для отслеживания ручной прокрутки
+    const [isUserScrolled, setIsUserScrolled] = useState(false);
+
     type Translations = {
         en: string;
         fr: string;
@@ -587,6 +594,53 @@ const RecordingLecturePage = () => {
         };
     }, [isRecording, stopRecording]);
 
+    useEffect(() => {
+        const container = originalTextContainerRef.current;
+        if (!container || isUserScrolled) return;
+
+        if (originalText) {
+            setTimeout(() => {
+                if (!isUserScrolled) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 100);
+        }
+    }, [originalText, isUserScrolled]);
+
+    useEffect(() => {
+        const container = translatedTextContainerRef.current;
+        if (!container || isUserScrolled) return;
+
+        if (translations[language]) {
+            setTimeout(() => {
+                if (!isUserScrolled) {
+                    container.scrollTop = container.scrollHeight;
+                }
+            }, 100);
+        }
+    }, [translations, language, isUserScrolled]);
+
+    // Обработчик события прокрутки
+    useEffect(() => {
+        const originalContainer = originalTextContainerRef.current;
+        const translatedContainer = translatedTextContainerRef.current;
+
+        const handleScroll = () => {
+            if (originalContainer) {
+                const isAtBottom = originalContainer.scrollHeight - originalContainer.scrollTop <= originalContainer.clientHeight + 10;
+                setIsUserScrolled(!isAtBottom);
+            }
+        };
+
+        originalContainer?.addEventListener('scroll', handleScroll);
+        translatedContainer?.addEventListener('scroll', handleScroll);
+
+        return () => {
+            originalContainer?.removeEventListener('scroll', handleScroll);
+            translatedContainer?.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     if (!state?.lecture) {
         navigate('/recorder', { replace: true });
         return null;
@@ -888,49 +942,15 @@ const RecordingLecturePage = () => {
                             </div>
                             <div className={commonStyles.ItemLecture}>
                                 {showFullText && (
-                                    <div className={commonStyles.LectureFullText}>
+                                    <div
+                                        ref={originalTextContainerRef}
+                                        className={commonStyles.LectureFullText}
+                                    >
                                         {originalText || t('recording.text_unavailable')}
                                     </div>
                                 )}
                             </div>
                         </div>
-                        {/* <div className={commonStyles.listItemLecture}>
-                        <h2>{t('recording.translated_text', {
-                            language: t(`language.${language}`)
-                        })}</h2>
-
-                        <select
-                            className={commonStyles.filterSelect}
-                            value={language}
-                            onChange={(e) => setLanguage(e.target.value as 'en' | 'fr' | 'zh')}
-                            style={{ marginBottom: '15px' }}
-                        >
-                            <option value="en">{t('language.english')}</option>
-                            <option value="fr">{t('language.french')}</option>
-                            <option value="zh">{t('language.chinese')}</option>
-                        </select>
-
-                        <div className={commonStyles.ItemLecture}>
-                            {showFullText && (
-                                <div className={commonStyles.LectureFullText}>
-                                    {translations[language] || t('recording.translation_unavailable')}
-                                </div>
-                            )}
-                            <div className={commonStyles.ItemLectureButtons}>
-                                {showFullText && (
-                                    <button
-                                        className={commonStyles.textButton}
-                                        onClick={() => translations[language] &&
-                                            speakText(translations[language], language)}
-                                        title={t('speech.synthesize')}
-                                        disabled={!translations[language]}
-                                    >
-                                        {t('speech.synthesize')}
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    </div> */}
 
                         <div className={commonStyles.listItemLecture}>
                             <h2>{t('recording.translated_text', {
@@ -950,7 +970,10 @@ const RecordingLecturePage = () => {
 
                             <div className={commonStyles.ItemLecture}>
                                 {showFullText && (
-                                    <div className={commonStyles.LectureFullText}>
+                                    <div
+                                        ref={translatedTextContainerRef}
+                                        className={commonStyles.LectureFullText}
+                                    >
                                         {translations[language] || t('recording.translation_unavailable')}
                                     </div>
                                 )}
