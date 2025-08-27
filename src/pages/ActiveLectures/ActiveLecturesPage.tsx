@@ -201,7 +201,7 @@ const ActiveLecturesPage = () => {
                             height: '60px',
                             borderRadius: '50%',
                             border: '6px solid rgba(0, 0, 0, 0.1)',
-                            borderTop: '6px solid #3498db',
+                            borderTop: '6px solid #10b981',
                             animation: 'spin 1s linear infinite'
                         }}></div>
                         <p style={{

@@ -956,7 +956,8 @@
 }
 
 .textButton {
-    background: linear-gradient(135deg, #4a6fa5 0%, #3f5e8a 100%);
+    /* background: linear-gradient(135deg, #4a6fa5 0%, #3f5e8a 100%); */
+    background: linear-gradient(135deg, #10b981 0%, #0ea371 100%);
     color: white;
     width: 100%;
     padding: 8px 2px;
@@ -986,7 +987,8 @@
 .textButton:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(74, 111, 165, 0.3);
-    background: linear-gradient(135deg, #4a6fa5 0%, #334b73 100%);
+    /* background: linear-gradient(135deg, #4a6fa5 0%, #334b73 100%); */
+    background: linear-gradient(135deg, #0fab77 0%, #0d9467 100%);
 }
 
 .textButton:active {
@@ -1260,7 +1262,7 @@
     height: 60px;
     border-radius: 50%;
     border: 6px solid rgba(0, 0, 0, 0.1);
-    border-top: 6px solid #3498db;
+    border-top: 6px solid #34db85;
     animation: spin 1s linear infinite;
 }
 
@@ -1272,7 +1274,7 @@
 
 .loader {
     border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
+    border-top: 4px solid #34db85;
     border-radius: 50%;
     width: 30px;
     height: 30px;
