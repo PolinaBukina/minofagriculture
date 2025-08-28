@@ -1124,7 +1124,7 @@ const LectureViewer = () => {
 
                             <div className={commonStyles.ItemLectureButtons}>
                                 <button
-                                    className={commonStyles.textButton}
+                                    className={`${commonStyles.textButton} ${commonStyles.synthesizeButton}`}
                                     onClick={() => translations[language] && speakText(translations[language], language)}
                                     title={t('speech.synthesize')}
                                     disabled={!translations[language]}

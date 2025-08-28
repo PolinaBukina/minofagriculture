@@ -980,7 +980,7 @@ const RecordingLecturePage = () => {
                                 <div className={commonStyles.ItemLectureButtons}>
                                     {showFullText && translations[language] && (
                                         <button
-                                            className={commonStyles.textButton}
+                                            className={`${commonStyles.textButton} ${commonStyles.synthesizeButton}`}
                                             onClick={() => speakText(translations[language], language)}
                                             title={t('speech.synthesize')}
                                         >
