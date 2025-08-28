@@ -977,7 +977,7 @@ const RecordingLecturePage = () => {
                                         {translations[language] || t('recording.translation_unavailable')}
                                     </div>
                                 )}
-                                <div className={commonStyles.ItemLectureButtons}>
+                                {/* <div className={commonStyles.ItemLectureButtons}>
                                     {showFullText && translations[language] && (
                                         <button
                                             className={`${commonStyles.textButton} ${commonStyles.synthesizeButton}`}
@@ -987,7 +987,7 @@ const RecordingLecturePage = () => {
                                             {t('speech.synthesize')}
                                         </button>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

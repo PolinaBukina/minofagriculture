@@ -1081,7 +1081,7 @@ const LectureViewer = () => {
                                     </div>
                                 )}
                             </div>
-                            <div className={commonStyles.ItemLectureButtons}>
+                            {/* <div className={commonStyles.ItemLectureButtons}>
                                 <button
                                     className={`${commonStyles.textButton} ${commonStyles.synthesizeButton}`}
                                     onClick={() => translations[language] && speakText(translations[language], language)}
@@ -1090,7 +1090,7 @@ const LectureViewer = () => {
                                 >
                                     {t('speech.synthesize')}
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
