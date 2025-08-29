@@ -237,9 +237,17 @@ const LectureViewer = () => {
         if (data.type === 'processed' && data.processed_text) {
 
             // const newText = (data.processed_text || data.text || '')
-            const newText = (data.processed_text || '')
+            let newText = (data.processed_text || '')
                 .replace(/\[.*?\]/g, '')
                 .trim();
+
+            if (data.processed_text.includes("   ")) {
+                newText = "   " + newText;
+            }
+
+            if (data.processed_text.includes("\n ")) {
+                newText = "\n" + newText;
+            }
 
             if (newText) {
                 setOriginalText(prev => {
@@ -268,7 +276,15 @@ const LectureViewer = () => {
             const lang = data.type === 'translated_french' ? 'fr' :
                 data.type === 'translated_chinese' ? 'zh' : 'en';
 
-            const cleanTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+            let cleanTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+
+            // Полная обработка форматирования как в оригинале
+            if (data.translation.includes("   ")) {
+                cleanTranslation = "   " + cleanTranslation;
+            }
+            if (data.translation.includes("\n ")) {
+                cleanTranslation = "\n" + cleanTranslation;
+            }
 
             setTranslations(prev => ({
                 ...prev,
@@ -316,7 +332,20 @@ const LectureViewer = () => {
                 if (!texts) return '';
                 return texts
                     .filter(t => t && t.trim() !== '' && t.trim() !== '[ ]')
-                    .map(t => t.trim().replace(/\[.*?\]/g, ''))  // Добавляем замену скобок
+                    // .map(t => t.trim().replace(/\[.*?\]/g, ''))  // Добавляем замену скобок
+                    .map(t => {
+                        let cleanedText = t.trim().replace(/\[.*?\]/g, '');
+
+                        // Добавляем обработку форматирования как в WebSocket
+                        if (t.includes("   ")) {
+                            cleanedText = "   " + cleanedText;
+                        }
+                        if (t.includes("\n ")) {
+                            cleanedText = "\n" + cleanedText;
+                        }
+
+                        return cleanedText;
+                    })
                     .join(' ');
             };
 
@@ -332,10 +361,31 @@ const LectureViewer = () => {
                 setOriginalText(historyText); // Инициализируем originalText историей
 
                 // перевод
+                // setHistoryTranslations({
+                //     en: combineTexts(historyData?.translations_multi?.en),
+                //     fr: combineTexts(historyData?.translations_multi?.fr),
+                //     zh: combineTexts(historyData?.translations_multi?.zh)
+                // });
+
                 setHistoryTranslations({
-                    en: combineTexts(historyData?.translations_multi?.en),
-                    fr: combineTexts(historyData?.translations_multi?.fr),
-                    zh: combineTexts(historyData?.translations_multi?.zh)
+                    en: combineTexts(historyData?.translations_multi?.en?.map(t => {
+                        let formatted = t.trim().replace(/\[.*?\]/g, '');
+                        if (t.includes("   ")) formatted = "   " + formatted;
+                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        return formatted;
+                    })),
+                    fr: combineTexts(historyData?.translations_multi?.fr?.map(t => {
+                        let formatted = t.trim().replace(/\[.*?\]/g, '');
+                        if (t.includes("   ")) formatted = "   " + formatted;
+                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        return formatted;
+                    })),
+                    zh: combineTexts(historyData?.translations_multi?.zh?.map(t => {
+                        let formatted = t.trim().replace(/\[.*?\]/g, '');
+                        if (t.includes("   ")) formatted = "   " + formatted;
+                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        return formatted;
+                    }))
                 });
 
                 // Инициализируем текущие переводы историей
@@ -799,7 +849,7 @@ const LectureViewer = () => {
             alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
         }
     };
-    
+
     // // Эффект для автоматической прокрутки
     // // Эффект для оригинального текста
     // Эффект для автоматической прокрутки оригинального текста
@@ -1055,6 +1105,7 @@ const LectureViewer = () => {
                             <div
                                 ref={originalTextContainerRef}
                                 className={commonStyles.LectureFullText}
+                                style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                             >
                                 {/* Показываем историю (даже если пустую) */}
                                 {historyText !== undefined && (
@@ -1097,6 +1148,7 @@ const LectureViewer = () => {
                             <div
                                 ref={translatedTextContainerRef}
                                 className={commonStyles.LectureFullText}
+                                style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                             >
                                 {/* История перевода */}
                                 {historyTranslations[language] && (

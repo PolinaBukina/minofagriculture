@@ -165,16 +165,42 @@ const RecordingLecturePage = () => {
         setLiveMessages(prev => [...prev, { ...data, id: messageKey }].slice(-50));
 
         // Обработка оригинального текста
+        // if (data.type === 'processed' && data.processed_text) {
+        //     const newText = data.processed_text
+        //         .replace(/\[.*?\]/g, '')
+        //         .trim();
+
+        //     if (newText) {
+        //         setProcessedTexts(prev => {
+        //             if (!prev.includes(newText)) {
+        //                 const updated = [...prev, newText];
+        //                 setOriginalText(updated.join(' '));
+        //                 return updated;
+        //             }
+        //             return prev;
+        //         });
+        //     }
+        // }
+
         if (data.type === 'processed' && data.processed_text) {
-            const newText = data.processed_text
+            let newText = data.processed_text
                 .replace(/\[.*?\]/g, '')
                 .trim();
+
+            if (data.processed_text.includes("   ")) {
+                newText = "   " + newText;
+            }
+
+            if (data.processed_text.includes("\n ")) {
+                newText = "\n" + newText;
+            }
 
             if (newText) {
                 setProcessedTexts(prev => {
                     if (!prev.includes(newText)) {
                         const updated = [...prev, newText];
-                        setOriginalText(updated.join(' '));
+                        // Объединяем, сохраняя символы переноса строк
+                        setOriginalText(updated.join('').replace(/\n+/g, '\n'));
                         return updated;
                     }
                     return prev;
@@ -184,7 +210,16 @@ const RecordingLecturePage = () => {
 
         // Обработка переводов
         if (data.translation) {
-            const newTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+            let newTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
+
+            // Полная обработка форматирования как в оригинале
+            if (data.translation.includes("   ")) {
+                newTranslation = "   " + newTranslation; 
+            }
+            if (data.translation.includes("\n ")) {
+                newTranslation = "\n" + newTranslation; 
+            }
+
             if (newTranslation) {
                 setTranslations(prev => {
                     const updated = { ...prev };
@@ -945,6 +980,7 @@ const RecordingLecturePage = () => {
                                     <div
                                         ref={originalTextContainerRef}
                                         className={commonStyles.LectureFullText}
+                                        style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                     >
                                         {originalText || t('recording.text_unavailable')}
                                     </div>
@@ -973,6 +1009,7 @@ const RecordingLecturePage = () => {
                                     <div
                                         ref={translatedTextContainerRef}
                                         className={commonStyles.LectureFullText}
+                                        style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                     >
                                         {translations[language] || t('recording.translation_unavailable')}
                                     </div>
