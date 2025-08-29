@@ -182,25 +182,77 @@ const RecordingLecturePage = () => {
         //     }
         // }
 
+        // if (data.type === 'processed' && data.processed_text) {
+        //     let newText = data.processed_text
+        //         .replace(/\[.*?\]/g, '')
+        //         .trim();
+
+        //     if (data.processed_text.includes("    ")) {
+        //         newText = "    " + newText;
+        //     }
+
+        //     if (data.processed_text.includes("\n\n    ")) {
+        //         newText = "\n\n" + newText;
+        //     }
+
+        //     if (newText) {
+        //         setProcessedTexts(prev => {
+        //             if (!prev.includes(newText)) {
+        //                 const updated = [...prev, newText];
+        //                 // Объединяем, сохраняя символы переноса строк
+        //                 setOriginalText(updated.join('').replace(/\n+/g, '\n'));
+        //                 return updated;
+        //             }
+        //             return prev;
+        //         });
+        //     }
+        // }
+
+        // if (data.type === 'processed' && data.processed_text) {
+        //     let newText = data.processed_text
+        //         .replace(/\[.*?\]/g, '')
+        //         .trim();
+
+        //     if (data.processed_text.includes("    ")) {
+        //         newText = "    " + newText;
+        //     }
+        //     if (data.processed_text.includes("\n\n    ")) {
+        //         newText = "\n\n" + newText;
+        //     }
+
+        //     if (newText) {
+        //         setProcessedTexts(prev => {
+        //             if (!prev.includes(newText)) {
+        //                 const updated = [...prev, newText];
+        //                 // Объединяем без лишних пробелов
+        //                 setOriginalText(updated.join('').replace(/\n+/g, '\n'));
+        //                 return updated;
+        //             }
+        //             return prev;
+        //         });
+        //     }
+        // }
+
         if (data.type === 'processed' && data.processed_text) {
-            let newText = data.processed_text
-                .replace(/\[.*?\]/g, '')
-                .trim();
+            // Сохраняем оригинальное форматирование
+            let newText = data.processed_text.replace(/\[.*?\]/g, '');
 
-            if (data.processed_text.includes("   ")) {
-                newText = "   " + newText;
-            }
-
-            if (data.processed_text.includes("\n ")) {
-                newText = "\n" + newText;
+            // Определяем тип форматирования по префиксам
+            if (data.processed_text.startsWith("\n\n    ")) {
+                newText = "\n\n    " + newText.trim();
+            } else if (data.processed_text.startsWith("    ")) {
+                newText = "    " + newText.trim();
+            } else {
+                newText = newText.trim();
             }
 
             if (newText) {
                 setProcessedTexts(prev => {
-                    if (!prev.includes(newText)) {
+                    // Проверяем по содержанию, а не по полному совпадению
+                    const alreadyExists = prev.some(text => text.includes(newText) || newText.includes(text));
+                    if (!alreadyExists) {
                         const updated = [...prev, newText];
-                        // Объединяем, сохраняя символы переноса строк
-                        setOriginalText(updated.join('').replace(/\n+/g, '\n'));
+                        setOriginalText(updated.join(''));
                         return updated;
                     }
                     return prev;
@@ -213,11 +265,11 @@ const RecordingLecturePage = () => {
             let newTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
 
             // Полная обработка форматирования как в оригинале
-            if (data.translation.includes("   ")) {
-                newTranslation = "   " + newTranslation; 
+            if (data.translation.includes("    ")) {
+                newTranslation = "    " + newTranslation;
             }
-            if (data.translation.includes("\n ")) {
-                newTranslation = "\n" + newTranslation; 
+            if (data.translation.includes("\n\n    ")) {
+                newTranslation = "\n\n" + newTranslation;
             }
 
             if (newTranslation) {

@@ -241,12 +241,12 @@ const LectureViewer = () => {
                 .replace(/\[.*?\]/g, '')
                 .trim();
 
-            if (data.processed_text.includes("   ")) {
-                newText = "   " + newText;
+            if (data.processed_text.includes("    ")) {
+                newText = "    " + newText;
             }
 
-            if (data.processed_text.includes("\n ")) {
-                newText = "\n" + newText;
+            if (data.processed_text.includes("\n\n    ")) {
+                newText = "\n\n" + newText;
             }
 
             if (newText) {
@@ -279,11 +279,11 @@ const LectureViewer = () => {
             let cleanTranslation = data.translation.replace(/\[.*?\]/g, '').trim();
 
             // Полная обработка форматирования как в оригинале
-            if (data.translation.includes("   ")) {
-                cleanTranslation = "   " + cleanTranslation;
+            if (data.translation.includes("    ")) {
+                cleanTranslation = "    " + cleanTranslation;
             }
-            if (data.translation.includes("\n ")) {
-                cleanTranslation = "\n" + cleanTranslation;
+            if (data.translation.includes("\n\n    ")) {
+                cleanTranslation = "\n\n" + cleanTranslation;
             }
 
             setTranslations(prev => ({
@@ -337,11 +337,11 @@ const LectureViewer = () => {
                         let cleanedText = t.trim().replace(/\[.*?\]/g, '');
 
                         // Добавляем обработку форматирования как в WebSocket
-                        if (t.includes("   ")) {
-                            cleanedText = "   " + cleanedText;
+                        if (t.includes("    ")) {
+                            cleanedText = "    " + cleanedText;
                         }
-                        if (t.includes("\n ")) {
-                            cleanedText = "\n" + cleanedText;
+                        if (t.includes("\n\n    ")) {
+                            cleanedText = "\n\n" + cleanedText;
                         }
 
                         return cleanedText;
@@ -370,20 +370,20 @@ const LectureViewer = () => {
                 setHistoryTranslations({
                     en: combineTexts(historyData?.translations_multi?.en?.map(t => {
                         let formatted = t.trim().replace(/\[.*?\]/g, '');
-                        if (t.includes("   ")) formatted = "   " + formatted;
-                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        if (t.includes("    ")) formatted = "    " + formatted;
+                        if (t.includes("\n\n    ")) formatted = "\n\n" + formatted;
                         return formatted;
                     })),
                     fr: combineTexts(historyData?.translations_multi?.fr?.map(t => {
                         let formatted = t.trim().replace(/\[.*?\]/g, '');
-                        if (t.includes("   ")) formatted = "   " + formatted;
-                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        if (t.includes("    ")) formatted = "    " + formatted;
+                        if (t.includes("\n\n    ")) formatted = "\n\n" + formatted;
                         return formatted;
                     })),
                     zh: combineTexts(historyData?.translations_multi?.zh?.map(t => {
                         let formatted = t.trim().replace(/\[.*?\]/g, '');
-                        if (t.includes("   ")) formatted = "   " + formatted;
-                        if (t.includes("\n ")) formatted = "\n" + formatted;
+                        if (t.includes("    ")) formatted = "    " + formatted;
+                        if (t.includes("\n\n    ")) formatted = "\n\n" + formatted;
                         return formatted;
                     }))
                 });
