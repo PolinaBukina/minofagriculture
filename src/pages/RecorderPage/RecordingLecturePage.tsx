@@ -164,75 +164,6 @@ const RecordingLecturePage = () => {
 
         setLiveMessages(prev => [...prev, { ...data, id: messageKey }].slice(-50));
 
-        // Обработка оригинального текста
-        // if (data.type === 'processed' && data.processed_text) {
-        //     const newText = data.processed_text
-        //         .replace(/\[.*?\]/g, '')
-        //         .trim();
-
-        //     if (newText) {
-        //         setProcessedTexts(prev => {
-        //             if (!prev.includes(newText)) {
-        //                 const updated = [...prev, newText];
-        //                 setOriginalText(updated.join(' '));
-        //                 return updated;
-        //             }
-        //             return prev;
-        //         });
-        //     }
-        // }
-
-        // if (data.type === 'processed' && data.processed_text) {
-        //     let newText = data.processed_text
-        //         .replace(/\[.*?\]/g, '')
-        //         .trim();
-
-        //     if (data.processed_text.includes("    ")) {
-        //         newText = "    " + newText;
-        //     }
-
-        //     if (data.processed_text.includes("\n\n    ")) {
-        //         newText = "\n\n" + newText;
-        //     }
-
-        //     if (newText) {
-        //         setProcessedTexts(prev => {
-        //             if (!prev.includes(newText)) {
-        //                 const updated = [...prev, newText];
-        //                 // Объединяем, сохраняя символы переноса строк
-        //                 setOriginalText(updated.join('').replace(/\n+/g, '\n'));
-        //                 return updated;
-        //             }
-        //             return prev;
-        //         });
-        //     }
-        // }
-
-        // if (data.type === 'processed' && data.processed_text) {
-        //     let newText = data.processed_text
-        //         .replace(/\[.*?\]/g, '')
-        //         .trim();
-
-        //     if (data.processed_text.includes("    ")) {
-        //         newText = "    " + newText;
-        //     }
-        //     if (data.processed_text.includes("\n\n    ")) {
-        //         newText = "\n\n" + newText;
-        //     }
-
-        //     if (newText) {
-        //         setProcessedTexts(prev => {
-        //             if (!prev.includes(newText)) {
-        //                 const updated = [...prev, newText];
-        //                 // Объединяем без лишних пробелов
-        //                 setOriginalText(updated.join('').replace(/\n+/g, '\n'));
-        //                 return updated;
-        //             }
-        //             return prev;
-        //         });
-        //     }
-        // }
-
         if (data.type === 'processed' && data.processed_text) {
             // Сохраняем оригинальное форматирование
             let newText = data.processed_text.replace(/\[.*?\]/g, '');
@@ -252,7 +183,7 @@ const RecordingLecturePage = () => {
                     const alreadyExists = prev.some(text => text.includes(newText) || newText.includes(text));
                     if (!alreadyExists) {
                         const updated = [...prev, newText];
-                        setOriginalText(updated.join(''));
+                        setOriginalText(updated.join(' '));
                         return updated;
                     }
                     return prev;
@@ -1032,7 +963,7 @@ const RecordingLecturePage = () => {
                                     <div
                                         ref={originalTextContainerRef}
                                         className={commonStyles.LectureFullText}
-                                        style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+                                        style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', marginTop: '60px' }}
                                     >
                                         {originalText || t('recording.text_unavailable')}
                                     </div>

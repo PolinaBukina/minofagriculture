@@ -1110,7 +1110,8 @@ const LectureViewer = () => {
                                 {/* Показываем историю (даже если пустую) */}
                                 {historyText !== undefined && (
                                     <div className="history-text">
-                                        {historyText || 'История трансляции отсутствует'}
+                                        {/* {historyText || 'История трансляции отсутствует'} */}
+                                        {historyText}
                                     </div>
                                 )}
 
