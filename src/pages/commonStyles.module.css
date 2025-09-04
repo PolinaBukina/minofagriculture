@@ -57,6 +57,22 @@
         margin-right: 0;
         margin-bottom: 10px;
     }
+
+    .headerTitle h1 {
+        font-size: 0.9rem;
+    }
+
+    .headerTitle p {
+        font-size: 0.7rem;
+    }
+}
+
+
+@media (max-width: 350px) {
+    .appContainer {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* Стили для блока действий в хедере */
@@ -185,7 +201,6 @@
     gap: 8px;
 }
 
-/* Элементы статуса */
 .statusItem {
     display: flex;
     margin-bottom: 8px;
@@ -195,7 +210,6 @@
 
 .statusItem :nth-child(2n) {
     display: flex;
-    /* margin-bottom: 8px; */
     margin-left: 8px;
     font-size: 14px;
     color: #4a5568;
@@ -849,7 +863,7 @@
     }
 
     .sidePanel {
-        width: 100%;
+        width: auto;
         border-right: none;
         border-bottom: 1px solid #e2e8f0;
     }
@@ -1358,6 +1372,10 @@
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+}
+
+.statusItem>span:nth-child(1) {
+    width: 15%;
 }
 
 /* Метка перед инпутом */

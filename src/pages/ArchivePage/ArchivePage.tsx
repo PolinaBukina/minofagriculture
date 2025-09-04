@@ -14,7 +14,7 @@ type Lecture = {
     start: string;
     end: string;
     duration: string;
-    lecturer: string; // Убедитесь, что это поле обязательное
+    lecturer: string;
     location: string;
     server_id: string;
     duration_minutes: number;
@@ -70,15 +70,22 @@ const ArchivePage = () => {
                     let duration = '';
                     if (endDate) {
                         const diffMs = endDate.getTime() - startDate.getTime();
-                        const diffMins = Math.round(diffMs / 60000);
-                        const hours = Math.floor(diffMins / 60);
-                        const mins = diffMins % 60;
-                        duration = `${hours}ч ${mins}м`;
+                        // const diffMinutes = Math.floor(diffMs / 60000);
+                        const diffMinutes = Math.round(diffMs / 60000);
+                        const hours = Math.floor(diffMinutes / 60);
+                        const minutes = diffMinutes % 60;
+                        duration = hours > 0 ? `${hours}ч ${minutes}м` : `${minutes}м`;
+
                     } else if (session.duration_minutes > 0) {
                         // Use duration_minutes if available and no end time
                         const hours = Math.floor(session.duration_minutes / 60);
-                        const mins = Math.round(session.duration_minutes % 60);
-                        duration = `${hours}ч ${mins}м`;
+                        // const minutes = Math.floor(session.duration_minutes % 60);
+                        const minutes = Math.round(session.duration_minutes % 60);
+                        // const diffMs = endDate.getTime() - startDate.getTime();
+                        // const diffMinutes = Math.round(diffMs / 60000);
+                        // const hours = Math.floor(diffMinutes / 60);
+                        // const minutes = diffMinutes % 60;
+                        duration = hours > 0 ? `${hours}ч ${minutes}м` : `${minutes}м`;
                     }
 
                     return {
@@ -282,7 +289,7 @@ const ArchivePage = () => {
                                     className={commonStyles.listItem}
                                     onClick={() => navigate(`/archive/lecture/${lecture.id}`)}
                                 >
-                                    <h3>{lecture.title}</h3>
+                                    {/* <h3>{lecture.title}</h3> */}
                                     <div className={commonStyles.statusItem}>
                                         <span>{t('archive.lecture.status')}</span>
                                         <span style={{
