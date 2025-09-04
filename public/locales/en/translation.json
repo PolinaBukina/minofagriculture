@@ -98,11 +98,11 @@
     "language": {
         "select": "Language Selection",
         "english": "English",
-        "en": "Translated text (English)",
+        "en": "(English)",
         "french": "French",
-        "fr": "Texte traduit (Français)",
+        "fr": "(Français)",
         "chinese": "Chinese",
-        "zh": "翻译文本（中文）"
+        "zh": "（中文）"
     },
     "export": "Export lecture",
     "refresh": "Update data",

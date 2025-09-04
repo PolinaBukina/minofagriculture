@@ -84,11 +84,11 @@
     "language": {
         "select": "Sélection de la langue",
         "english": "Anglais",
-        "en": "Translated text (English)",
+        "en": "(English)",
         "french": "Français",
-        "fr": "Texte traduit (Français)",
+        "fr": "(Français)",
         "chinese": "Chinois",
-        "zh": "翻译文本（中文）"
+        "zh": "(中文）"
     },
     "export": "Exporter la conférence",
     "refresh": "Mettre à jour les données",

@@ -85,11 +85,11 @@
     "language": {
         "select": "语言选择",
         "english": "英语",
-        "en": "Translated text (English)",
+        "en": "(English)",
         "french": "法语",
-        "fr": "Texte traduit (Français)",
+        "fr": "(Français)",
         "chinese": "中文",
-        "zh": "翻译文本（中文）"
+        "zh": "(中文）"
     },
     "export": "导出讲座 (Dǎochū jiǎngzuò)",
     "refresh": "更新数据 (Gēngxīn shùjù)",

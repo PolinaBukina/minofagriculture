@@ -693,7 +693,7 @@ const LectureViewer = () => {
             alert(`Ошибка при экспорте PDF: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}`);
         }
     };
-    
+
     // Эффект для автоматической прокрутки оригинального текста
     useEffect(() => {
         const container = originalTextContainerRef.current;
@@ -839,7 +839,10 @@ const LectureViewer = () => {
                 </div>
 
                 <div className={commonStyles.infoCardLecture}>
-                    <div className={commonStyles.listItemLecture}>
+                    <div
+                        className={commonStyles.listItemLecture}
+                        style={{ width: '100%' }}
+                    >
                         <h2>{t('lecture_viewer.details')}</h2>
                         <div className={commonStyles.statusItem}>
                             <span>{t('lecture_viewer.id')}:</span>
@@ -877,7 +880,7 @@ const LectureViewer = () => {
                         </div>
                     </div>
 
-                    <div className={commonStyles.listItemLecture}>
+                    {/* <div className={commonStyles.listItemLecture}>
                         <h2>{t('language.select')}</h2>
                         <select
                             className={commonStyles.filterSelect}
@@ -897,33 +900,14 @@ const LectureViewer = () => {
                         <div style={{ marginTop: '16px' }}>
                             <button
                                 className={commonStyles.textButton}
-                                // onClick={exportLecture}
-                                // onClick={exportLectureAsPDF}
                                 onClick={() =>
                                     exportLectureAsPDF(lecture, originalText, translations, language, lecture.id)
                                 }
                             >
                                 {t('export')}
                             </button>
-                            {/* {isLiveMode && (
-                                <button
-                                    className={commonStyles.textButton}
-                                    onClick={() => loadLectureData()}
-                                >
-                                    {t('refresh')}
-                                </button>
-                            )}
-                            {isLiveMode && (
-                                <button
-                                    className={commonStyles.textButton}
-                                    onClick={connectWebSocket}
-                                    disabled={wsConnected}
-                                >
-                                    {wsConnected ? `${t('refresh_ws.ok')}` : `${t('refresh_ws.err')}`}
-                                </button>
-                            )} */}
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className={commonStyles.infoCardLecture}>
@@ -934,7 +918,7 @@ const LectureViewer = () => {
                                 <div style={{
                                     fontSize: '12px',
                                     color: '#16a34a',
-                                    marginTop: '4px',
+                                    marginTop: '59px',
                                     fontWeight: '500'
                                 }}>
                                     {wsConnected ? `${t('lecture_viewer.ws_connected.ok')}` : `${t('lecture_viewer.ws_connected.err')}`}
@@ -974,7 +958,28 @@ const LectureViewer = () => {
                     </div>
 
                     <div className={commonStyles.listItemLecture}>
-                        <h2>{t('lecture_viewer.translated_text', { language: t(`language.${language}`) })}</h2>
+                        {/* <h2>{t('lecture_viewer.translated_text', { language: t(`language.${language}`) })}</h2> */}
+                        <h2>
+                            {language === 'zh' ? '翻译文本' :
+                                language === 'fr' ? 'Texte traduit' :
+                                    'Translated Text'} {t(`language.${language}`)}
+                        </h2>
+
+                        <select
+                            className={commonStyles.filterSelect}
+                            value={language}
+                            onChange={(e) => {
+                                const lang = e.target.value;
+                                if (lang === 'en' || lang === 'fr' || lang === 'zh') {
+                                    setLanguage(lang);
+                                }
+                            }}
+                        >
+                            <option value="en">{t('language.english')}</option>
+                            <option value="fr">{t('language.french')}</option>
+                            <option value="zh">{t('language.chinese')}</option>
+                        </select>
+
                         {isLiveMode && (
                             <div style={{
                                 fontSize: '12px',
@@ -982,7 +987,15 @@ const LectureViewer = () => {
                                 marginTop: '4px',
                                 fontWeight: '500'
                             }}>
-                                {wsConnected ? `${t('lecture_viewer.ws_connected.ok')}` : `${t('lecture_viewer.ws_connected.err')}`}
+                                {/* {wsConnected ? `${t('lecture_viewer.ws_connected.ok')}` : `${t('lecture_viewer.ws_connected.err')}`} */}
+                                {wsConnected ?
+                                    (language === 'fr' ? 'Mise à jour en temps réel' :
+                                        language === 'zh' ? '正在实时更新' :
+                                            'Updating in real time') :
+                                    (language === 'fr' ? 'En attente de connexion' :
+                                        language === 'zh' ? '正在等待连接' :
+                                            'Waiting for connection')
+                                }
                             </div>
                         )}
 
