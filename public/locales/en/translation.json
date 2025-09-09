@@ -400,7 +400,7 @@
         "title": "Active Lectures",
         "subtitle": "Current Broadcasts",
         "loading": "Loading active lectures...",
-        "load_error": "Error loading active lectures",
+        "load_error": "Failed to load list of active lectures. Please reload the page",
         "ws_disconnected": "Disconnected",
         "ws_connected": "Connected to monitoring",
         "ws_error": "WebSocket error",

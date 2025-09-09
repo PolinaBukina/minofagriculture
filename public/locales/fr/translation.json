@@ -385,7 +385,7 @@
         "title": "Conférences actives",
         "subtitle": "Diffusions en cours",
         "loading": "Chargement des conférences actives...",
-        "load_error": "Erreur de chargement des conférences actives",
+        "load_error": "Échec du chargement de la liste des cours actifs. Veuillez actualiser la page",
         "ws_disconnected": "Déconnecté",
         "ws_connected": "Connecté au monitoring",
         "ws_error": "Erreur WebSocket",

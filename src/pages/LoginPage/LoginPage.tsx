@@ -31,7 +31,7 @@ const LoginPage = () => {
             login(username, 'dummy-token', 'student');
             navigate('/listener');
             return;
-        } else if (username === 'lector' && password === '123456') {
+        } else if (username === 'lector' && password === 'SecurePass123') {
             login(username, 'dummy-token', 'lector');
             navigate('/lector');
             return;

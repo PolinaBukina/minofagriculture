@@ -73,7 +73,8 @@ const ActiveLecturesPage = () => {
 
     const loadActiveSessions = useCallback(async () => {
         try {
-            setError('');
+            // setError('');
+            setError(t('active_lectures.load_error'));
             const sessions = await apiService.getSessions();
 
             if (sessions && sessions.length > 0) {
@@ -260,7 +261,7 @@ const ActiveLecturesPage = () => {
                         border: '1px solid #fecaca',
                         marginBottom: '20px'
                     }}>
-                        <div style={{ color: '#dc2626' }}>❌ {error}</div>
+                        <div style={{ color: '#dc2626', textAlign: 'center' }}> {error}</div>
                     </div>
                 )}
 

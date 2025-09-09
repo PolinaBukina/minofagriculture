@@ -386,7 +386,7 @@
         "title": "活跃讲座",
         "subtitle": "当前直播",
         "loading": "正在加载活跃讲座...",
-        "load_error": "加载活跃讲座时出错",
+        "load_error": "无法加载当前课程列表。请重新加载页面",
         "ws_disconnected": "已断开连接",
         "ws_connected": "已连接至监控",
         "ws_error": "WebSocket错误",
