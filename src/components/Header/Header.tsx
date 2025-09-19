@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import commonStyles from '../../pages/commonStyles.module.css';
-import logo from './Rus_Ministry_of_Agriculture_logo.png';
+import logo from './KdLogo.jpg';
 import { useNavigate } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import SupportIcon from '../../icons/SupportIcon';
