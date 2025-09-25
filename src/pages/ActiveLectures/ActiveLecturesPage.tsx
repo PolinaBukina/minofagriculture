@@ -74,7 +74,7 @@ const ActiveLecturesPage = () => {
     const loadActiveSessions = useCallback(async () => {
         try {
             // setError('');
-            setError(t('active_lectures.load_error'));
+            // setError(t('active_lectures.load_error'));
             const sessions = await apiService.getSessions();
 
             if (sessions && sessions.length > 0) {

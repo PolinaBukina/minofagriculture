@@ -119,6 +119,7 @@
 .sidePanel {
     width: 280px;
     padding: 20px;
+    box-sizing: border-box;
     background-color: #ffffff;
     border-right: 1px solid #e2e8f0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
@@ -245,56 +246,6 @@
     margin: 20px 0;
     justify-content: space-between;
 }
-
-/* .primaryButton {
-    background-color: #31ce41;
-    color: white;
-    padding: 10px 16px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.primaryButton:hover {
-    background-color: #33822c;
-}
-
-.primaryButton:disabled {
-    background-color: #a0aec0;
-    cursor: not-allowed;
-}
-
-.secondaryButton {
-    background-color: #ff5858;
-    color: #f5f5f5;
-    padding: 10px 16px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.secondaryButton:hover {
-    background-color: rgb(237, 26, 26);
-}
-
-.refreshButton {
-    background-color: #3182ce;
-    color: #f5f5f5;
-    padding: 10px 16px;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s;
-}
-
-.refreshButton:hover {
-    background-color: #2c5282;
-} */
 
 .primaryButton {
     background: linear-gradient(135deg, #31ce41 0%, #2dba3a 100%);
@@ -905,6 +856,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .listItemLecture {
@@ -1013,48 +965,6 @@
 .synthesizeButton {
     margin-left: 10px;
 }
-
-/* Стили для модального окна */
-/* .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 90%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.modal h3 {
-    margin-top: 0;
-    color: #333;
-}
-
-.modal p {
-    margin-bottom: 20px;
-}
-
-.modalButtons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.cancelModalButton {}
-
-.okModalButton {} */
 
 .modalOverlay {
     position: fixed;
@@ -1374,16 +1284,16 @@
     margin-bottom: 15px;
 }
 
-.statusItem>span:nth-child(1) {
+/* .statusItem>span:nth-child(1) {
     width: 15%;
-}
+} */
 
 /* Метка перед инпутом */
 .statusItem>span {
     min-width: 120px;
-    /* Фиксированная ширина для выравнивания */
     margin-right: 10px;
     font-weight: 500;
+    font-size: 12px;
 }
 
 /* Контейнер для поля редактирования и кнопок */
@@ -1447,4 +1357,298 @@
     align-items: center;
     justify-content: center;
     padding: 5px;
+}
+
+
+
+
+
+
+/* АДАПТИВНОСТЬ */
+
+/* Планшеты (768px и меньше) */
+@media (max-width: 768px) {
+    .appContainer {
+        flex-direction: column;
+    }
+
+    .sidePanel {
+        width: 100%;
+        min-width: auto;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .mainContent,
+    .mainContentLecture {
+        padding: 20px;
+    }
+
+    .appHeader {
+        padding: 15px 20px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .headerContent {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+    }
+
+    .logo {
+        margin-right: 0;
+        margin-bottom: 10px;
+        height: 50px;
+    }
+
+    .headerTitle h1 {
+        font-size: 1.3rem;
+    }
+
+    .headerTitle p {
+        font-size: 0.8rem;
+    }
+
+    .headerActions {
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .buttonText {
+        display: none;
+    }
+
+    .actionButton {
+        padding: 8px;
+    }
+
+    .mainTitle {
+        font-size: 1.8rem;
+    }
+
+    .roleButtons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .roleButton {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .quickLinks {
+        grid-template-columns: 1fr;
+    }
+
+    .buttonGroup {
+        flex-direction: column;
+    }
+
+    .primaryButton,
+    .secondaryButton,
+    .refreshButton {
+        width: 100%;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .description {
+        flex-direction: column;
+    }
+
+    .quickLink1 {
+        min-width: auto;
+    }
+
+    .infoCardLecture {
+        flex-direction: column;
+    }
+
+    .listItemLecture {
+        width: auto;
+    }
+
+    .listItem div:nth-child(1) {
+        flex-direction: column;
+    }
+}
+
+/* Мобильные устройства (480px и меньше) */
+@media (max-width: 480px) {
+    .appHeader {
+        padding: 12px 15px;
+        border-radius: 10px;
+    }
+
+    .mainContent,
+    .mainContentLecture {
+        padding: 15px;
+    }
+
+    .sidePanel {
+        padding: 15px;
+    }
+
+    .mainTitle {
+        font-size: 1.5rem;
+    }
+
+    .subTitle {
+        font-size: 1rem;
+    }
+
+    .sectionHeader {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    .infoCard,
+    .infoCardLecture {
+        padding: 15px;
+    }
+
+    .quickLink {
+        padding: 20px 15px;
+    }
+
+    .roleButton {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .modal {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .modalButtons {
+        flex-direction: column;
+    }
+
+    .cancelModalButton,
+    .okModalButton {
+        width: 100%;
+    }
+
+    .filterSelect {
+        padding: 10px 12px;
+    }
+
+    .primaryButton,
+    .secondaryButton,
+    .refreshButton {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .statusItem {
+        /* flex-direction: column; */
+        align-items: flex-start;
+        gap: 5px;
+        font-size: 12px;
+    }
+
+    .statusItem span:nth-child(2n) {
+        font-size: 12px;
+    }
+
+    .editFieldContainer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .fieldWithEdit {
+        min-width: auto;
+    }
+
+    .editInput {
+        min-width: auto;
+    }
+}
+
+/* Очень маленькие экраны (320px и меньше) */
+@media (max-width: 320px) {
+    .appHeader {
+        padding: 10px;
+    }
+
+    .mainContent,
+    .mainContentLecture {
+        padding: 10px;
+    }
+
+    .sidePanel {
+        padding: 10px;
+    }
+
+    .mainTitle {
+        font-size: 1.3rem;
+    }
+
+    .infoCard,
+    .infoCardLecture {
+        padding: 12px;
+    }
+
+    .quickLink {
+        padding: 15px 10px;
+    }
+
+    .modal {
+        padding: 15px;
+    }
+
+    .sectionHeader {
+        font-size: 16px;
+    }
+}
+
+/* Landscape ориентация для мобильных */
+@media (max-height: 500px) and (orientation: landscape) {
+    .appContainer {
+        min-height: auto;
+        height: auto;
+    }
+
+    .sidePanel {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .mainContent,
+    .mainContentLecture {
+        padding: 15px;
+    }
+}
+
+/* Большие экраны (1200px и больше) */
+@media (min-width: 1200px) {
+    .sidePanel {
+        width: 320px;
+        min-width: 320px;
+    }
+
+    .mainContent {
+        padding: 40px;
+    }
+}
+
+/* Анимации */
+@media (prefers-reduced-motion: no-preference) {
+
+    .quickLink,
+    .quickLink1,
+    .listItem {
+        transition: all 0.3s ease;
+    }
 }
