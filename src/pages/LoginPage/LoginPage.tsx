@@ -27,11 +27,11 @@ const LoginPage = () => {
             login(username, 'dummy-token', 'admin');
             navigate('/admin');
             return;
-        } else if (username === 'student' && password === 'student123') {
+        } else if (username === 'student' && password === '123student') {
             login(username, 'dummy-token', 'student');
             navigate('/listener');
             return;
-        } else if (username === 'lector' && password === 'SecurePass123') {
+        } else if (username === 'lector' && password === '123lector') {
             login(username, 'dummy-token', 'lector');
             navigate('/lector');
             return;

@@ -342,17 +342,6 @@
     }
 }
 
-/* Улучшения для темной темы */
-@media (prefers-color-scheme: dark) {
-    .logoTitle {
-        color: #f9fafb;
-    }
-
-    .logoSubtitle {
-        color: #d1d5db;
-    }
-}
-
 /* Анимации */
 @media (prefers-reduced-motion: no-preference) {
     .logoWrapper {
