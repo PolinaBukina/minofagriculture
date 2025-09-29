@@ -303,14 +303,14 @@ const RecordingLecturePage = () => {
                 const totalSamples = audioBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0);
                 const durationSeconds = totalSamples / 16000;
 
-                if (durationSeconds >= 0.2) {
+                if (durationSeconds >= 15) {
                     forceFlushBuffer();
                 }
             };
 
             source.connect(processor);
             processor.connect(audioContext.destination);
-            flushIntervalRef.current = setInterval(forceFlushBuffer, 10000);
+            flushIntervalRef.current = setInterval(forceFlushBuffer, 15000);
 
             setIsRecording(true);
             isRecordingRef.current = true;
