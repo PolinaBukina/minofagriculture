@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import commonStyles from '../commonStyles.module.css';
-import { CogIcon } from '../../icons/CogIcon';
 import { CheckCircleIcon } from '../../icons/CheckIcon';
 import NotCheckIcon from '../../icons/NotCheckIcon';
 import { LectureIcon } from '../../icons/LectureIcon';
@@ -27,12 +26,12 @@ const AdminPage = () => {
         navigate('/sessions');
     }
 
-    const toListener = () => {
-        navigate('/listener');
-    }
-    const toRecorder = () => {
-        navigate('/lector/recorder');
-    }
+    // const toListener = () => {
+    //     navigate('/listener');
+    // }
+    // const toRecorder = () => {
+    //     navigate('/lector/recorder');
+    // }
 
     return (
         <div className={commonStyles.appContainer}>

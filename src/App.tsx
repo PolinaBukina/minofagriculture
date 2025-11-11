@@ -11,19 +11,15 @@ import LectorPage from "./pages/LectorPage/LectorPage";
 import FullLecturePage from "./pages/FullLecturePage/FullLecturePage";
 import RecorderPage from "./pages/RecorderPage/RecorderPage";
 import RecordingLecturePage from "./pages/RecorderPage/RecordingLecturePage";
-import HomePage from "./pages/HomePage/HomePage";
 import LectureViewerArchive from "./pages/LectureViewer/LectureViewerArchive";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<HomePage />} />
-        <Route path="/signin" element={<LoginPage />} /> */}
         <Route path="/" element={<Navigate to="/signin" replace />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/admin" element={<AdminPage />} />
-        {/* <Route path="/admin" element={<AdminPage />} /> KD-systems */}
         <Route path="/listener" element={<StudentPage />} /> {/* Студент */}
         <Route path="/monitor" element={<MonitoringPage />} /> {/* Мониторинг */}
         <Route path="/lector" element={<LectorPage />} />
