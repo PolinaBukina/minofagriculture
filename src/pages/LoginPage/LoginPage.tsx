@@ -1,6 +1,5 @@
-import React, { useState, useRef, KeyboardEvent } from 'react';
+import { useState, useRef, KeyboardEvent } from 'react';
 import styles from './styles.module.css';
-import logo from '../../components/Header/logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import LogoIcon from '../../icons/LogoIcon';

@@ -44,9 +44,6 @@ const RecorderPage = () => {
         navigate('recording', { state: { lecture: newLecture } });
     };
 
-    // const isFormValid = lectureData.title && lectureData.lecturer &&
-    //     lectureData.start_time && lectureData.location;
-
     const isFormValid = lectureData.title && lectureData.lecturer && lectureData.location;
 
     return (
@@ -101,32 +98,6 @@ const RecorderPage = () => {
                                 placeholder={t('recorder.form.lecturer_placeholder')}
                             />
                         </div>
-
-                        {/* <div className={commonStyles.filterControl}>
-                            <label>{t('recorder.form.start_time')}</label>
-                            <input
-                                type="datetime-local"
-                                name="start_time"
-                                value={lectureData.start_time}
-                                onChange={handleLectureInputChange}
-                                className={commonStyles.filterSelect}
-                                required
-                            />
-                        </div>
-
-                        <div className={commonStyles.filterControl}>
-                            <label>{t('recorder.form.duration')}</label>
-                            <input
-                                type="number"
-                                name="duration"
-                                min="1"
-                                value={lectureData.duration}
-                                onChange={handleLectureInputChange}
-                                className={commonStyles.filterSelect}
-                                required
-                                placeholder={t('recorder.form.duration_placeholder')}
-                            />
-                        </div> */}
 
                         <div className={commonStyles.filterControl}>
                             <label>{t('recorder.form.location')}</label>

@@ -14,7 +14,6 @@ type LectureData = {
 type WebSocketMessage = {
     type: string;
     processed_text?: string;
-    // добавьте другие поля по необходимости
 };
 
 type RecordingManagerProps = {
@@ -110,8 +109,7 @@ const RecordingManager: React.FC<RecordingManagerProps> = ({
             state.mediaStream = stream;
             onStatusChange('connecting_ws');
 
-            // Здесь должна быть ваша реализация WebSocket
-            state.webSocket = new WebSocket('wss://your-websocket-url');
+            state.webSocket = new WebSocket('wss://audio.minofagriculture.ru/ws/audio');
             const ws = state.webSocket;
 
             ws.onmessage = (event) => {

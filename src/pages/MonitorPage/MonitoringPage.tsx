@@ -29,10 +29,6 @@ const MonitoringPage = () => {
         setIsMonitoring(false);
     };
 
-    const handleClearHistory = () => {
-        setMessageCount(0);
-    };
-
     const featureItemsLite = [
         t('monitoring.features.lite.update_interval'),
         t('monitoring.features.lite.message_limit'),

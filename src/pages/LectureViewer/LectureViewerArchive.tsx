@@ -11,7 +11,6 @@ import type { Session, SessionData } from '../../services/api';
 // import jsPDF from 'jspdf';
 // import 'jspdf-autotable';
 
-
 import jsPDF from 'jspdf';
 import { registerFonts } from '../../utils/registerFont';
 
